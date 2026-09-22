@@ -1,0 +1,25 @@
+{
+  "scope": "Structural checks only; not full OpenAPI spec validator or implemented API behavior.",
+  "checksPassed": 13,
+  "checks": [
+    "All internal OpenAPI references resolve",
+    "Operation IDs unique; all path variables declared",
+    "All component schemas satisfy JSON Schema 2020-12 syntax",
+    "RunCreate accepts a valid typed request",
+    "RunCreate rejects role/source/grants/tools and unsupported adaptive mode",
+    "SQLite schema creates and integrity check passes",
+    "Two independent owner fixtures and self-rooted Runs can be inserted",
+    "Conversation cannot refer to another owner workspace",
+    "A Run cannot attach to another owner budget root",
+    "Task parent must have the same owner",
+    "Background resource cannot be bound to another owner root Run",
+    "Internal result Run requires an origin reference",
+    "Foreign-key check remains clean after fixtures and negative cases"
+  ],
+  "paths": 26,
+  "operations": 31,
+  "schemas": 43,
+  "resolvedReferenceOccurrences": 310,
+  "sqliteTables": 24,
+  "sqliteVersion": "3.46.1"
+}

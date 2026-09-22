@@ -1,0 +1,2992 @@
+openapi: 3.1.0
+info:
+  title: MyPI Gateway API — design contract
+  version: 1.0.0-design
+  description: Draft contract for implementation. No backend is included. Identity/role/grants/cwd
+    are server-owned. All external calls are owner checked.
+servers:
+- url: /api/v1
+paths:
+  /guest-sessions:
+    post:
+      summary: Create or reuse anonymous browser identity
+      operationId: post__guest_sessions
+      security: []
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GuestBootstrap'
+        '400':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '413':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Workspace
+  /me:
+    get:
+      summary: Current principal and effective quota
+      operationId: get__me
+      security:
+      - GuestCookie: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Me'
+        '400':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '413':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Workspace
+  /conversations:
+    get:
+      summary: List own conversations
+      operationId: get__conversations
+      security:
+      - GuestCookie: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConversationPage'
+        '400':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '413':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Workspace
+      parameters:
+      - name: cursor
+        in: query
+        schema: &id002
+          type: string
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 20
+    post:
+      summary: Create conversation with approved template
+      operationId: post__conversations
+      security:
+      - GuestCookie: []
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Conversation'
+        '400':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '413':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Workspace
+      parameters:
+      - name: X-CSRF-Token
+        in: header
+        required: true
+        schema:
+          type: string
+          minLength: 16
+      - name: Idempotency-Key
+        in: header
+        required: true
+        schema:
+          type: string
+          minLength: 16
+          maxLength: 128
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConversationCreate'
+  /conversations/{id}:
+    get:
+      summary: Restore conversation snapshot
+      operationId: get__conversations_id
+      security:
+      - GuestCookie: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConversationSnapshot'
+        '400':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '413':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Workspace
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema: &id001
+          type: string
+          format: uuid
+          description: Budget root human Run ID; internal summaries retain this root.
+    patch:
+      summary: Change metadata; mode applies to next run
+      operationId: patch__conversations_id
+      security:
+      - GuestCookie: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Conversation'
+        '400':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '413':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Workspace
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema: *id001
+      - name: X-CSRF-Token
+        in: header
+        required: true
+        schema:
+          type: string
+          minLength: 16
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConversationPatch'
+    delete:
+      summary: Cancel resources and enqueue deletion
+      operationId: delete__conversations_id
+      security:
+      - GuestCookie: []
+      responses:
+        '202':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CancelResult'
+        '400':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '413':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Workspace
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema: *id001
+      - name: X-CSRF-Token
+        in: header
+        required: true
+        schema:
+          type: string
+          minLength: 16
+  /conversations/{id}/runs:
+    post:
+      summary: Submit authentic user text once
+      operationId: post__conversations_id_runs
+      security:
+      - GuestCookie: []
+      responses:
+        '202':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RunAccepted'
+        '400':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '413':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Workspace
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema: *id001
+      - name: X-CSRF-Token
+        in: header
+        required: true
+        schema:
+          type: string
+          minLength: 16
+      - name: Idempotency-Key
+        in: header
+        required: true
+        schema:
+          type: string
+          minLength: 16
+          maxLength: 128
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RunCreate'
+  /conversations/{id}/events:
+    get:
+      summary: Replay authenticated conversation event stream
+      operationId: get__conversations_id_events
+      security:
+      - GuestCookie: []
+      responses:
+        '200':
+          description: Success
+          content:
+            text/event-stream:
+              schema:
+                type: string
+                description: See contracts/events.ts; sequence is used for deduplication.
+        '400':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '413':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Workspace
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema: *id001
+      - name: Last-Event-ID
+        in: header
+        schema: *id002
+      - name: after
+        in: query
+        schema: &id003
+          type: integer
+          minimum: 0
+  /runs/{id}:
+    get:
+      summary: Get run snapshot (no recurring polling required)
+      operationId: get__runs_id
+      security:
+      - GuestCookie: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Run'
+        '400':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '413':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Workspace
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema: *id001
+  /runs/{id}/cancel:
+    post:
+      summary: Revoke execution tree; terminal state is not reversed
+      operationId: post__runs_id_cancel
+      security:
+      - GuestCookie: []
+      responses:
+        '202':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CancelResult'
+        '400':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '413':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Workspace
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema: *id001
+      - name: X-CSRF-Token
+        in: header
+        required: true
+        schema:
+          type: string
+          minLength: 16
+  /conversations/{id}/tasks:
+    get:
+      summary: Restore task snapshots
+      operationId: get__conversations_id_tasks
+      security:
+      - GuestCookie: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaskList'
+        '400':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '413':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Workspace
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema: *id001
+  /tasks/{id}/cancel:
+    post:
+      summary: Cancel own child task
+      operationId: post__tasks_id_cancel
+      security:
+      - GuestCookie: []
+      responses:
+        '202':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CancelResult'
+        '400':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '413':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Workspace
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema: *id001
+      - name: X-CSRF-Token
+        in: header
+        required: true
+        schema:
+          type: string
+          minLength: 16
+  /conversations/{id}/workspace:
+    get:
+      summary: Bounded workspace file tree
+      operationId: get__conversations_id_workspace
+      security:
+      - GuestCookie: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkspaceTree'
+        '400':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '413':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Workspace
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema: *id001
+  /conversations/{id}/file:
+    get:
+      summary: Safe text preview
+      operationId: get__conversations_id_file
+      security:
+      - GuestCookie: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FilePreview'
+        '400':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '413':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Workspace
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema: *id001
+      - name: path
+        in: query
+        required: true
+        schema:
+          type: string
+          maxLength: 512
+  /artifacts/{id}/download:
+    get:
+      summary: Download owner-checked immutable artifact
+      operationId: get__artifacts_id_download
+      security:
+      - GuestCookie: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '413':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Workspace
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema: *id001
+  /admin/login:
+    post:
+      summary: Authenticate administrator; Origin validation required
+      operationId: post__admin_login
+      security: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AdminLoginResult'
+        '400':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '413':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminLogin'
+  /admin/logout:
+    post:
+      summary: Invalidate admin credential
+      operationId: post__admin_logout
+      security:
+      - AdminCookie: []
+      responses:
+        '204':
+          description: Success
+        '400':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '413':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Admin
+      parameters:
+      - name: X-CSRF-Token
+        in: header
+        required: true
+        schema:
+          type: string
+          minLength: 16
+  /admin/overview:
+    get:
+      summary: Operator metrics with usage quality
+      operationId: get__admin_overview
+      security:
+      - AdminCookie: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Overview'
+        '400':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '413':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Admin
+  /admin/models:
+    get:
+      summary: Model metadata; no key material
+      operationId: get__admin_models
+      security:
+      - AdminCookie: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelList'
+        '400':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '413':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Admin
+    post:
+      summary: Create model in approved endpoint catalogue
+      operationId: post__admin_models
+      security:
+      - AdminCookie: []
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelConfig'
+        '400':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '413':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Admin
+      parameters:
+      - name: X-CSRF-Token
+        in: header
+        required: true
+        schema:
+          type: string
+          minLength: 16
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelConfigWrite'
+  /admin/models/{id}:
+    patch:
+      summary: Version-checked model update; apiKey is write-only
+      operationId: patch__admin_models_id
+      security:
+      - AdminCookie: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelConfig'
+        '400':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '413':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Admin
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema: *id001
+      - name: X-CSRF-Token
+        in: header
+        required: true
+        schema:
+          type: string
+          minLength: 16
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelConfigWrite'
+  /admin/models/{id}/test:
+    post:
+      summary: Bounded provider connectivity test
+      operationId: post__admin_models_id_test
+      security:
+      - AdminCookie: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelTest'
+        '400':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '413':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Admin
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema: *id001
+      - name: X-CSRF-Token
+        in: header
+        required: true
+        schema:
+          type: string
+          minLength: 16
+  /admin/visitors:
+    get:
+      summary: List anonymous principals
+      operationId: get__admin_visitors
+      security:
+      - AdminCookie: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VisitorList'
+        '400':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '413':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Admin
+  /admin/visitors/{id}:
+    patch:
+      summary: Ban or unban with audit reason
+      operationId: patch__admin_visitors_id
+      security:
+      - AdminCookie: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Visitor'
+        '400':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '413':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Admin
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema: *id001
+      - name: X-CSRF-Token
+        in: header
+        required: true
+        schema:
+          type: string
+          minLength: 16
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VisitorPatch'
+  /admin/policy:
+    get:
+      summary: Effective versioned policy
+      operationId: get__admin_policy
+      security:
+      - AdminCookie: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Policy'
+        '400':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '413':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Admin
+    put:
+      summary: Compare version and publish policy
+      operationId: put__admin_policy
+      security:
+      - AdminCookie: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Policy'
+        '400':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '413':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Admin
+      parameters:
+      - name: X-CSRF-Token
+        in: header
+        required: true
+        schema:
+          type: string
+          minLength: 16
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Policy'
+  /admin/rules/test:
+    post:
+      summary: Dry-run rule evaluation; creates no grant
+      operationId: post__admin_rules_test
+      security:
+      - AdminCookie: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RuleDecision'
+        '400':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '413':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Admin
+      parameters:
+      - name: X-CSRF-Token
+        in: header
+        required: true
+        schema:
+          type: string
+          minLength: 16
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RuleTestInput'
+  /admin/executions:
+    get:
+      summary: Operator execution snapshots
+      operationId: get__admin_executions
+      security:
+      - AdminCookie: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExecutionList'
+        '400':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '413':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Admin
+  /admin/emergency-stop:
+    post:
+      summary: Pause public execution and optionally revoke in-flight resources
+      operationId: post__admin_emergency_stop
+      security:
+      - AdminCookie: []
+      responses:
+        '202':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmergencyStopResult'
+        '400':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '413':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Admin
+      parameters:
+      - name: X-CSRF-Token
+        in: header
+        required: true
+        schema:
+          type: string
+          minLength: 16
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmergencyStopInput'
+  /admin/audit:
+    get:
+      summary: Read redacted audit records
+      operationId: get__admin_audit
+      security:
+      - AdminCookie: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditPage'
+        '400':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '413':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: Application error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Admin
+components:
+  securitySchemes:
+    GuestCookie:
+      type: apiKey
+      in: cookie
+      name: __Host-mypi_guest
+    AdminCookie:
+      type: apiKey
+      in: cookie
+      name: __Host-mypi_admin
+  schemas:
+    Error:
+      type: object
+      properties:
+        code: *id002
+        message: *id002
+        requestId: *id002
+        retryable: &id005
+          type: boolean
+        details:
+          type: object
+      required:
+      - code
+      - message
+      - requestId
+      - retryable
+      additionalProperties: false
+    Mode:
+      type: string
+      enum:
+      - native
+      - explicit
+    Group:
+      type: string
+      enum:
+      - search
+      - delegate
+      - workflow
+      - background
+      - session
+    RunStatus:
+      type: string
+      enum:
+      - accepted
+      - queued
+      - running
+      - waiting_children
+      - succeeded
+      - cancelling
+      - cancelled
+      - failed
+      - timed_out
+      - budget_exceeded
+      - interrupted
+    TaskStatus:
+      type: string
+      enum:
+      - queued
+      - running
+      - succeeded
+      - failed
+      - timed_out
+      - cancelled
+      - interrupted
+    Quota:
+      type: object
+      properties:
+        dailyRootRuns: *id003
+        usedRootRuns: *id003
+        dailyTokens: *id003
+        usedTokens: *id003
+        reservedTokens: *id003
+        resetAt: &id004
+          type: string
+          format: date-time
+      required:
+      - dailyRootRuns
+      - usedRootRuns
+      - dailyTokens
+      - usedTokens
+      - reservedTokens
+      - resetAt
+      additionalProperties: false
+    Me:
+      type: object
+      properties:
+        principalId: *id001
+        kind:
+          type: string
+          enum:
+          - guest
+          - admin
+        expiresAt: *id004
+        quota:
+          $ref: '#/components/schemas/Quota'
+        allowedModels:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicModel'
+        publicExecutionEnabled: *id005
+        csrfToken: *id002
+      required:
+      - principalId
+      - kind
+      - expiresAt
+      - quota
+      - allowedModels
+      - publicExecutionEnabled
+      - csrfToken
+      additionalProperties: false
+    PublicModel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        displayName: *id002
+        enabled: *id005
+        maxOutputTokens: *id003
+      required:
+      - id
+      - displayName
+      - enabled
+      - maxOutputTokens
+      additionalProperties: false
+    GuestBootstrap:
+      type: object
+      properties:
+        principalId: *id001
+        expiresAt: *id004
+        csrfToken: *id002
+        reused: *id005
+      required:
+      - principalId
+      - expiresAt
+      - csrfToken
+      - reused
+      additionalProperties: false
+    ConversationCreate:
+      type: object
+      properties:
+        title:
+          type: string
+          maxLength: 100
+        mode:
+          $ref: '#/components/schemas/Mode'
+        templateId:
+          type: string
+          enum:
+          - typescript-starter
+          - python-starter
+          - blank-offline
+      required:
+      - mode
+      - templateId
+      additionalProperties: false
+    ConversationPatch:
+      type: object
+      properties:
+        title:
+          type: string
+          maxLength: 100
+        mode:
+          $ref: '#/components/schemas/Mode'
+        archived: *id005
+        expectedVersion: *id003
+      required:
+      - expectedVersion
+      additionalProperties: false
+    Conversation:
+      type: object
+      properties:
+        id: *id001
+        title: *id002
+        mode:
+          $ref: '#/components/schemas/Mode'
+        status:
+          type: string
+          enum:
+          - active
+          - archived
+          - deleting
+          - deleted
+        version: *id003
+        createdAt: *id004
+        lastSequence: *id003
+      required:
+      - id
+      - title
+      - mode
+      - status
+      - version
+      - createdAt
+      - lastSequence
+      additionalProperties: false
+    Message:
+      type: object
+      properties:
+        id: *id001
+        runId: *id001
+        role:
+          type: string
+          enum:
+          - user
+          - assistant
+          - tool
+          - system_notice
+        text: *id002
+        createdAt: *id004
+      required:
+      - id
+      - runId
+      - role
+      - text
+      - createdAt
+      additionalProperties: false
+    ConversationSnapshot:
+      type: object
+      properties:
+        conversation:
+          $ref: '#/components/schemas/Conversation'
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+        runs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Run'
+        tasks:
+          type: array
+          items:
+            $ref: '#/components/schemas/Task'
+        lastSequence: *id003
+      required:
+      - conversation
+      - messages
+      - runs
+      - tasks
+      - lastSequence
+      additionalProperties: false
+    ConversationPage:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Conversation'
+        nextCursor:
+          type:
+          - string
+          - 'null'
+      required:
+      - items
+      - nextCursor
+      additionalProperties: false
+    RunCreate:
+      type: object
+      properties:
+        text:
+          type: string
+          minLength: 1
+          maxLength: 16384
+          description: Server additionally enforces UTF-8 byte length <= 16384.
+        mode:
+          $ref: '#/components/schemas/Mode'
+        modelId:
+          type: string
+          format: uuid
+      required:
+      - text
+      - mode
+      additionalProperties: false
+    RunAccepted:
+      type: object
+      properties:
+        runId: *id001
+        conversationId: *id001
+        status:
+          type: string
+          enum:
+          - accepted
+          - queued
+        queuePosition: *id003
+        effectiveMode:
+          $ref: '#/components/schemas/Mode'
+        configVersion: *id003
+      required:
+      - runId
+      - conversationId
+      - status
+      - queuePosition
+      - effectiveMode
+      - configVersion
+      additionalProperties: false
+    Run:
+      type: object
+      properties:
+        id: *id001
+        conversationId: *id001
+        status:
+          $ref: '#/components/schemas/RunStatus'
+        mode:
+          $ref: '#/components/schemas/Mode'
+        createdAt: *id004
+        rootRunId: *id001
+        modelCallCount: *id003
+        errorCode:
+          type:
+          - string
+          - 'null'
+        originRunId:
+          type:
+          - string
+          - 'null'
+          format: uuid
+          description: Originating human Run for an internal result summary; null
+            for human roots.
+      required:
+      - id
+      - conversationId
+      - status
+      - mode
+      - createdAt
+      - rootRunId
+      - modelCallCount
+      - errorCode
+      - originRunId
+      additionalProperties: false
+    CancelResult:
+      type: object
+      properties:
+        resourceId: *id001
+        status:
+          type: string
+          enum:
+          - cancelling
+          - cancelled
+          - terminal
+        resourcesCleanupPending: *id005
+      required:
+      - resourceId
+      - status
+      - resourcesCleanupPending
+      additionalProperties: false
+    Task:
+      type: object
+      properties:
+        id: *id001
+        originRunId: *id001
+        title: *id002
+        role:
+          type: string
+          enum:
+          - explorer
+          - reviewer
+          - implementer
+        status:
+          $ref: '#/components/schemas/TaskStatus'
+        attempt: *id003
+        resultId:
+          type:
+          - string
+          - 'null'
+      required:
+      - id
+      - originRunId
+      - title
+      - role
+      - status
+      - attempt
+      - resultId
+      additionalProperties: false
+    TaskList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Task'
+      required:
+      - items
+      additionalProperties: false
+    FileEntry:
+      type: object
+      properties:
+        path: *id002
+        kind:
+          type: string
+          enum:
+          - file
+          - directory
+        size: *id003
+      required:
+      - path
+      - kind
+      - size
+      additionalProperties: false
+    WorkspaceTree:
+      type: object
+      properties:
+        revision: *id002
+        files:
+          type: array
+          items:
+            $ref: '#/components/schemas/FileEntry'
+        truncated: *id005
+      required:
+      - revision
+      - files
+      - truncated
+      additionalProperties: false
+    FilePreview:
+      type: object
+      properties:
+        path: *id002
+        revision: *id002
+        content: *id002
+        truncated: *id005
+        binary: *id005
+      required:
+      - path
+      - revision
+      - content
+      - truncated
+      - binary
+      additionalProperties: false
+    AdminLogin:
+      type: object
+      properties:
+        username:
+          type: string
+          maxLength: 100
+        password:
+          type: string
+          minLength: 1
+          maxLength: 1024
+      required:
+      - username
+      - password
+      additionalProperties: false
+    AdminLoginResult:
+      type: object
+      properties:
+        principalId: *id001
+        csrfToken: *id002
+        expiresAt: *id004
+      required:
+      - principalId
+      - csrfToken
+      - expiresAt
+      additionalProperties: false
+    Overview:
+      type: object
+      properties:
+        activeVisitors: *id003
+        runningRoots: *id003
+        modelCallsToday: *id003
+        knownTokensToday: *id003
+        unknownUsageCalls: *id003
+        publicExecutionEnabled: *id005
+        asOf: *id004
+      required:
+      - activeVisitors
+      - runningRoots
+      - modelCallsToday
+      - knownTokensToday
+      - unknownUsageCalls
+      - publicExecutionEnabled
+      - asOf
+      additionalProperties: false
+    ModelConfigWrite:
+      type: object
+      properties:
+        displayName:
+          type: string
+          minLength: 1
+          maxLength: 100
+        providerType: *id002
+        modelId: *id002
+        approvedEndpointId: *id002
+        apiKey:
+          type: string
+          writeOnly: true
+          maxLength: 8192
+        enabled: *id005
+        publicSelectable: *id005
+        maxOutputTokens:
+          type: integer
+          minimum: 1
+          maximum: 16384
+        expectedVersion: *id003
+      required:
+      - displayName
+      - providerType
+      - modelId
+      - approvedEndpointId
+      - enabled
+      - publicSelectable
+      - maxOutputTokens
+      additionalProperties: false
+    ModelConfig:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        displayName: *id002
+        providerType: *id002
+        modelId: *id002
+        approvedEndpointId: *id002
+        keyConfigured: *id005
+        enabled: *id005
+        publicSelectable: *id005
+        version: *id003
+      required:
+      - id
+      - displayName
+      - providerType
+      - modelId
+      - approvedEndpointId
+      - keyConfigured
+      - enabled
+      - publicSelectable
+      - version
+      additionalProperties: false
+    ModelList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ModelConfig'
+      required:
+      - items
+      additionalProperties: false
+    ModelTest:
+      type: object
+      properties:
+        ok: *id005
+        latencyMs: *id003
+        usageKnown: *id005
+        errorCode:
+          type:
+          - string
+          - 'null'
+      required:
+      - ok
+      - latencyMs
+      - usageKnown
+      - errorCode
+      additionalProperties: false
+    Visitor:
+      type: object
+      properties:
+        id: *id001
+        displayId: *id002
+        status:
+          type: string
+          enum:
+          - active
+          - banned
+          - deleted
+        usedRootRuns: *id003
+        usedTokens: *id003
+        lastSeenAt: *id004
+        version: *id003
+      required:
+      - id
+      - displayId
+      - status
+      - usedRootRuns
+      - usedTokens
+      - lastSeenAt
+      - version
+      additionalProperties: false
+    VisitorList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Visitor'
+        nextCursor:
+          type:
+          - string
+          - 'null'
+      required:
+      - items
+      - nextCursor
+      additionalProperties: false
+    VisitorPatch:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - active
+          - banned
+        reason:
+          type: string
+          minLength: 3
+          maxLength: 500
+        cancelActive: *id005
+        dailyRootRuns:
+          type: integer
+          minimum: 0
+          maximum: 1000
+        expectedVersion: *id003
+      required:
+      - status
+      - reason
+      - cancelActive
+      - expectedVersion
+      additionalProperties: false
+    Policy:
+      type: object
+      properties:
+        version: *id003
+        publicExecutionEnabled: *id005
+        dailyRootRuns:
+          type: integer
+          minimum: 0
+          maximum: 1000
+        dailyTokens:
+          type: integer
+          minimum: 0
+          maximum: 10000000
+        globalModelConcurrency:
+          type: integer
+          minimum: 1
+          maximum: 16
+        rootDeadlineSeconds:
+          type: integer
+          minimum: 10
+          maximum: 600
+        allowedGroups:
+          type: array
+          items:
+            $ref: '#/components/schemas/Group'
+          maxItems: 5
+      required:
+      - version
+      - publicExecutionEnabled
+      - dailyRootRuns
+      - dailyTokens
+      - globalModelConcurrency
+      - rootDeadlineSeconds
+      - allowedGroups
+      additionalProperties: false
+    RuleTestInput:
+      type: object
+      properties:
+        text:
+          type: string
+          maxLength: 16384
+        mode:
+          $ref: '#/components/schemas/Mode'
+        simulatedSource:
+          type: string
+          enum:
+          - human
+          - tool
+          - task_result
+      required:
+      - text
+      - mode
+      additionalProperties: false
+    RuleDecision:
+      type: object
+      properties:
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/Group'
+          maxItems: 5
+        reasons:
+          type: array
+          items: *id002
+        ruleVersion: *id002
+      required:
+      - groups
+      - reasons
+      - ruleVersion
+      additionalProperties: false
+    Execution:
+      type: object
+      properties:
+        id: *id001
+        kind:
+          type: string
+          enum:
+          - run
+          - task
+          - process
+          - sandbox
+        status: *id002
+        ownerDisplayId: *id002
+        ageSeconds: *id003
+      required:
+      - id
+      - kind
+      - status
+      - ownerDisplayId
+      - ageSeconds
+      additionalProperties: false
+    ExecutionList:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Execution'
+      required:
+      - items
+      additionalProperties: false
+    EmergencyStopInput:
+      type: object
+      properties:
+        reason:
+          type: string
+          minLength: 3
+          maxLength: 500
+        cancelActive: *id005
+      required:
+      - reason
+      - cancelActive
+      additionalProperties: false
+    EmergencyStopResult:
+      type: object
+      properties:
+        publicExecutionEnabled: *id005
+        cancellationRequested: *id003
+        policyVersion: *id003
+      required:
+      - publicExecutionEnabled
+      - cancellationRequested
+      - policyVersion
+      additionalProperties: false
+    AuditEntry:
+      type: object
+      properties:
+        id: *id001
+        actorDisplayId: *id002
+        action: *id002
+        resourceId: *id002
+        result: *id002
+        occurredAt: *id004
+      required:
+      - id
+      - actorDisplayId
+      - action
+      - resourceId
+      - result
+      - occurredAt
+      additionalProperties: false
+    AuditPage:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditEntry'
+        nextCursor:
+          type:
+          - string
+          - 'null'
+      required:
+      - items
+      - nextCursor
+      additionalProperties: false

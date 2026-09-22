@@ -1,0 +1,119 @@
+{
+  "scope": "Offline prototype UI only. NOT backend/SDK/security verification.",
+  "loadMethod": "page.set_content assembled index.html; runtime blocks file and localhost navigation",
+  "browser": "144.0.7559.96",
+  "passed": 27,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "初始直接进入匿名 Mock 对话，四原生 + 零扩展",
+      "status": "PASS"
+    },
+    {
+      "name": "1440×1000 桌面无横向溢出，输入框完整可见",
+      "status": "PASS"
+    },
+    {
+      "name": "明确搜索请求在请求期间激活五个搜索工具",
+      "status": "PASS"
+    },
+    {
+      "name": "搜索主请求完成后扩展工具卸载归零",
+      "status": "PASS"
+    },
+    {
+      "name": "否定表达不激活 MyPI 工具",
+      "status": "PASS"
+    },
+    {
+      "name": "原生模式忽略扩展请求，不启动子代理",
+      "status": "PASS"
+    },
+    {
+      "name": "主请求结束后扩展归零，两个独立 Mock 子任务继续",
+      "status": "PASS"
+    },
+    {
+      "name": "子任务并行时主会话可接受新请求，结果按来源 Run 汇总",
+      "status": "PASS"
+    },
+    {
+      "name": "子结果回传不会重新开启扩展工具",
+      "status": "PASS"
+    },
+    {
+      "name": "后台进程演示可在主请求结束后独立取消",
+      "status": "PASS"
+    },
+    {
+      "name": "会话工作项单独创建与勾选，不混同子任务",
+      "status": "PASS"
+    },
+    {
+      "name": "示例文件预览与 Blob 文件导出",
+      "status": "PASS"
+    },
+    {
+      "name": "后台入口明确展示非真实认证提示",
+      "status": "PASS"
+    },
+    {
+      "name": "添加模型并呈现管理列表",
+      "status": "PASS"
+    },
+    {
+      "name": "模型模拟测试完成，明确不调用真实接口",
+      "status": "PASS"
+    },
+    {
+      "name": "模型启用状态可修改",
+      "status": "PASS"
+    },
+    {
+      "name": "规则测试台拒绝否定、条件与引用表达",
+      "status": "PASS"
+    },
+    {
+      "name": "规则测试台隔离子任务来源，不能因文本授权",
+      "status": "PASS"
+    },
+    {
+      "name": "管理员能力策略与聊天工具预览联动",
+      "status": "PASS"
+    },
+    {
+      "name": "封禁当前游客后拒绝新请求且不扣额度",
+      "status": "PASS"
+    },
+    {
+      "name": "暂停公开体验后聊天拒绝请求",
+      "status": "PASS"
+    },
+    {
+      "name": "管理员动作形成可查看的本地审计记录",
+      "status": "PASS"
+    },
+    {
+      "name": "用户文本以转义文本呈现，没有执行样例 HTML",
+      "status": "PASS"
+    },
+    {
+      "name": "390×844 移动端无横向溢出，输入框完整可见",
+      "status": "PASS"
+    },
+    {
+      "name": "移动端抽屉导航可以打开关闭",
+      "status": "PASS"
+    },
+    {
+      "name": "移动端执行面板可展开与关闭",
+      "status": "PASS"
+    },
+    {
+      "name": "本次场景无未捕获页面异常、无外部网络请求",
+      "status": "PASS"
+    }
+  ],
+  "pageErrors": [],
+  "networkRequests": []
+}

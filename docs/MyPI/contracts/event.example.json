@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "eventId": "00000000-0000-4000-8000-000000000107",
+  "sequence": 107,
+  "type": "tool.surface.changed",
+  "conversationId": "00000000-0000-4000-8000-000000000001",
+  "runId": "00000000-0000-4000-8000-000000000002",
+  "occurredAt": "2026-09-22T09:00:00Z",
+  "payload": {
+    "mode": "explicit",
+    "baseCount": 4,
+    "extensionCount": 5,
+    "activeNames": [
+      "read",
+      "write",
+      "edit",
+      "bash",
+      "mypi_search_files",
+      "mypi_search_content",
+      "mypi_git_show",
+      "mypi_git_diff",
+      "mypi_git_log"
+    ],
+    "groups": [
+      "search"
+    ],
+    "ruleVersion": "explicit-v1",
+    "reason": "明确使用搜索工具"
+  }
+}

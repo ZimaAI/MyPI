@@ -1,0 +1,45 @@
+# 设计配置示例；不是可直接启动的已实现服务。
+profile: public-demo
+publicExecutionEnabled: false
+agent:
+  mode: explicit
+  baseTools: [read, write, edit, bash]
+  capabilityGroups: [search, delegate, workflow, background, session]
+  grantScope: user-run
+  autoSummaryTools: []
+  maxSubagentDepth: 1
+limits:
+  dailyRootRuns: 20
+  dailyTokens: 50000
+  modelCallsPerRoot: 12
+  perPrincipalModelConcurrency: 2
+  globalModelConcurrency: 3
+  globalSandboxes: 2
+  rootDeadlineSeconds: 240
+  backgroundTtlSeconds: 600
+  maxPromptBytes: 16384
+  toolOutputBytes: 16384
+  maxWorkflowNodes: 6
+  maxWorkflowDepth: 3
+sandbox:
+  required: true
+  allowHostFallback: false
+  runtimeProfile: rootless-hardened
+  network: none
+  totalMemoryMiB: 2048
+  totalCpu: 2
+  pidsPerSandbox: 128
+  workspaceMiB: 256
+storage:
+  sqlitePath: /var/lib/mypi/private/mypi.db
+  sessionRoot: /var/lib/mypi/private/sessions
+  workspaceRoot: /var/lib/mypi/workspaces
+  artifactRoot: /var/lib/mypi/private/artifacts
+retention:
+  guestHours: 24
+  idleSandboxMinutes: 30
+  runLogDays: 7
+  auditDays: 30
+stream:
+  heartbeatSeconds: 15
+  maxConnectionsPerPrincipal: 3
