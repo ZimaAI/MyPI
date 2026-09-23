@@ -776,7 +776,10 @@ export default function Chat({
                 <div className="execution-note">{disabledReason}。你仍可浏览模板、准备任务。</div>
               )}
               <p className="composer-footer">
-                勿提交生产凭据或敏感数据 · 临时工作区默认保留 24 小时
+                勿提交生产凭据或敏感数据 · 临时工作区默认保留 24 小时 ·{' '}
+                <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener noreferrer">
+                  浙ICP备2026076087号-1
+                </a>
               </p>
             </div>
           </section>

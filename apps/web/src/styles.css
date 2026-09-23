@@ -788,6 +788,11 @@ strong {
   color: var(--soft);
   margin-top: 5px;
 }
+.composer-footer a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
 .running-strip {
   display: flex;
   align-items: center;
