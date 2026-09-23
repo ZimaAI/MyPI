@@ -29,6 +29,10 @@ pnpm dev
 
 前端开发时，保持 `pnpm dev` 运行，再执行 `pnpm web`，访问 `http://localhost:5173`。Vite 默认把 `/api` 和 `/health` 代理到 3000 端口；改变 Gateway 地址时需同步修改 `apps/web/vite.config.ts`。正式构建由 Gateway 从 `dist/web` 提供。
 
+### VS Code 调试
+
+用 VS Code 打开仓库根目录。首次调试先执行 `pnpm install --frozen-lockfile` 和 `pnpm setup`；`.env` 由 setup 在本机生成，不提交到 Git。在“运行和调试”中选择 **MyPI: Full Stack** 并按 F5，可同时调试 Broker、Worker、Gateway 的 TypeScript 源码，并在 Vite 就绪后打开浏览器调试前端。浏览器地址为 `http://127.0.0.1:5173`，Vite 会将 API 请求代理到 Gateway。若只需单独调试一个服务，可选择对应的配置；**MyPI: CLI** 默认运行 `doctor`，可在 `.vscode/launch.json` 中修改 `args` 来调试其他 CLI 命令。不要在同一状态目录同时运行 `pnpm dev` 和 VS Code 的完整调试配置。
+
 ## 独立 CLI
 
 CLI 不要求启动 Web、Gateway 或 Broker，也不要求管理员账号。它在指定目录中以当前系统用户权限执行工具；启动时会显示 `trusted-local` 和实际工作目录。请使用自己信任的项目目录。
