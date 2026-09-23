@@ -79,6 +79,46 @@ test('clearing cookies does not bypass IP bootstrap cap or replenish an existing
     await f.close();
   }
 });
+test('public proxy separates visitor limits and ignores forwarded IPs from other peers', async () => {
+  const store = new SqliteStore();
+  const publicOrigin = 'https://mypi.zimagent.top';
+  const app = await createGateway({
+    store,
+    origin: publicOrigin,
+    publicProfile: true,
+    secureCookies: true,
+    masterKey: Buffer.alloc(32, 2).toString('base64'),
+    cookieSecret: 'quota-regression-cookie-secret-at-least-32',
+    services: {
+      async submit() {
+        throw Error('not used');
+      },
+      async cancel() {
+        return {};
+      },
+    },
+  });
+  const bootstrap = (remoteAddress: string, forwardedFor: string) =>
+    app.inject({
+      method: 'POST',
+      url: '/api/v1/guest-sessions',
+      remoteAddress,
+      headers: { origin: publicOrigin, 'x-forwarded-for': forwardedFor },
+      payload: {},
+    });
+  try {
+    for (let i = 0; i < 20; i++)
+      assert.equal((await bootstrap('127.0.0.1', '203.0.113.10')).statusCode, 201);
+    assert.equal((await bootstrap('127.0.0.1', '203.0.113.10')).statusCode, 429);
+    assert.equal((await bootstrap('127.0.0.1', '203.0.113.11')).statusCode, 201);
+    for (let i = 0; i < 20; i++)
+      assert.equal((await bootstrap('198.51.100.20', `203.0.113.${i + 30}`)).statusCode, 201);
+    assert.equal((await bootstrap('198.51.100.20', '203.0.113.99')).statusCode, 429);
+  } finally {
+    await app.close();
+    store.close();
+  }
+});
 test('published quota tightening updates existing buckets without discarding spending or reservations', async () => {
   const f = await fixture();
   try {

@@ -95,7 +95,7 @@ export async function createGateway(options: GatewayOptions): Promise<FastifyIns
     logger: options.logger ?? false,
     bodyLimit: 32768,
     ajv: { customOptions: { removeAdditional: false } },
-    trustProxy: false,
+    trustProxy: options.publicProfile ? '127.0.0.1' : false,
   });
   await app.register(cookie);
   const models = new ModelRepository(store, new SecretBox(options.masterKey));
