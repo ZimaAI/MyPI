@@ -287,7 +287,7 @@ export default function Admin({ navigate }: { navigate: (path: string) => void }
         </button>
         <div className="adm-login-card">
           <div className="adm-brand">
-            <span className="adm-brand-symbol">π</span>
+            <img className="adm-brand-symbol" src="/logo.svg" alt="" width="36" height="36" />
             <strong>MyPI</strong>
             <span className="adm-brand-caption">管理控制台</span>
           </div>
@@ -337,7 +337,7 @@ export default function Admin({ navigate }: { navigate: (path: string) => void }
       )}
       <aside className={`adm-sidebar ${mobile ? 'open' : ''}`}>
         <button className="adm-brand" onClick={() => changePage('/')} aria-label="返回 MyPI 对话">
-          <span className="adm-brand-symbol">π</span>
+          <img className="adm-brand-symbol" src="/logo.svg" alt="" width="36" height="36" />
           <span>
             <strong>MyPI</strong>
             <small>CONTROL CENTER</small>

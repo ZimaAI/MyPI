@@ -41,18 +41,9 @@
   cursor: pointer;
 }
 .adm-brand-symbol {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   width: 36px;
   height: 36px;
-  border-radius: 11px;
-  background: #137d64;
-  color: white;
-  font-size: 28px;
-  font-family: Georgia, serif;
-  font-weight: 700;
-  line-height: 1;
+  flex: none;
 }
 .adm-brand strong {
   font-size: 22px;

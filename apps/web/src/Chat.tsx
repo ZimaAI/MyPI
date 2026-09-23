@@ -383,7 +383,7 @@ export default function Chat({
             navigate('/');
           }}
         >
-          <span className="brand-mark">M</span>
+          <img className="brand-mark" src="/logo.svg" alt="" width="35" height="35" />
           <span>
             <strong>MyPI</strong>
             <small>CODING AGENT</small>

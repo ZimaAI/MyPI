@@ -261,16 +261,9 @@ strong {
   color: var(--text);
 }
 .brand-mark {
-  display: grid;
-  place-items: center;
   width: 35px;
   height: 35px;
-  border-radius: 10px;
-  background: var(--primary);
-  color: #fff;
-  font-weight: 800;
-  font-size: 21px;
-  font-family: ui-monospace, monospace;
+  flex: none;
 }
 .brand strong {
   display: block;
