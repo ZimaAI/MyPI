@@ -1,0 +1,5 @@
+{
+  "private": true,
+  "type": "commonjs",
+  "description": "Keep the original prototype's CommonJS verification scripts independent of the application ESM package."
+}

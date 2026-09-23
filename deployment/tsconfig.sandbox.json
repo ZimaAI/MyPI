@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "target": "ES2023", "module": "NodeNext", "moduleResolution": "NodeNext",
+    "strict": true, "skipLibCheck": true, "esModuleInterop": true,
+    "rootDir": "..", "outDir": "../dist-sandbox", "types": ["node"]
+  },
+  "include": ["../apps/execution-broker/src/runner.ts", "../packages/sandbox-client/src/engine.ts", "../packages/sandbox-client/src/types.ts"]
+}

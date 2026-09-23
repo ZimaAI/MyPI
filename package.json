@@ -1,0 +1,57 @@
+{
+  "name": "mypi",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "bin": {
+    "mypi": "apps/cli/bin/mypi.mjs"
+  },
+  "packageManager": "pnpm@11.5.0",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "scripts": {
+    "setup": "node scripts/setup.mjs",
+    "dev": "node --env-file-if-exists=.env scripts/dev.mjs",
+    "gateway": "node --env-file-if-exists=.env --import tsx apps/gateway/src/main.ts",
+    "worker": "node --env-file-if-exists=.env --import tsx apps/worker/src/main.ts",
+    "broker": "node --env-file-if-exists=.env --import tsx apps/execution-broker/src/main.ts",
+    "cli": "node --env-file-if-exists=.env --import tsx apps/cli/src/main.ts",
+    "lint": "node scripts/check-boundaries.mjs && pnpm format:check",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test --test-concurrency=1 tests/*.test.ts packages/storage-sqlite/test/*.test.ts apps/gateway/test/*.test.ts",
+    "test:e2e": "playwright test",
+    "build": "pnpm typecheck && vite build --config apps/web/vite.config.ts",
+    "web": "vite --config apps/web/vite.config.ts",
+    "verify": "pnpm lint && pnpm typecheck && pnpm test && pnpm build",
+    "format": "prettier --write apps packages scripts tests package.json tsconfig.json playwright.config.ts pnpm-workspace.yaml .github .prettierrc.json",
+    "format:check": "prettier --check apps packages scripts tests package.json tsconfig.json playwright.config.ts pnpm-workspace.yaml .github .prettierrc.json"
+  },
+  "dependencies": {
+    "@earendil-works/pi-ai": "0.87.1",
+    "@earendil-works/pi-coding-agent": "0.87.1",
+    "@fastify/cookie": "11.0.2",
+    "@fastify/static": "8.3.0",
+    "@sinclair/typebox": "0.34.41",
+    "@tanstack/react-query": "5.90.21",
+    "fastify": "5.8.2",
+    "lucide-react": "0.577.0",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "react-markdown": "10.1.0",
+    "yauzl": "3.4.0",
+    "zod": "4.3.6"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.58.2",
+    "@types/node": "24.12.0",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "@types/yauzl": "3.4.0",
+    "@vitejs/plugin-react": "5.1.4",
+    "prettier": "3.6.2",
+    "tsx": "4.21.0",
+    "typescript": "5.9.3",
+    "vite": "7.3.1"
+  }
+}

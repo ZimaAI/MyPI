@@ -1,11 +1,9 @@
 # 项目状态
 
-当前：SPECIFIED_WITH_INTERACTIVE_PROTOTYPE。
+2026-09-23：本设计包已进入实际实现，后端及前端代码位于仓库根目录的 `packages/` 和 `apps/`，后续以根目录 [STATE.md](../../STATE.md) 为准。
 
-已提供：产品/设计/架构/安全/契约/评测/交付文档；离线可交互 HTML 原型；小规模确定性匹配样例与测试；结构检查和浏览器检查记录（见 evidence）。
+已实现独立 CLI、真实 Pi SDK 适配、五组能力、SQLite/Gateway/SSE、游客与管理员身份、模型密钥管理、配额与审计、隔离 Broker、React 工作台与管理后台、规则版本管理及受控项目导入。前端规范沉淀在根目录 [design.md](../../design.md)。
 
-尚未实现：真实 Pi SDK backend、Agent CLI、Gateway、Cookie 身份、模型管理安全存储、持久队列、沙箱 Broker、真实工具执行、真实费用结算及生产部署。
+实际验证命令及结果见 [实施记录](../evidence/implementation.md)，逐项边界见 [验收追踪](../evidence/acceptance.md)。本目录保留原始需求、契约草案与交互原型；草案与实际实现差异见 [契约映射](../evidence/implemented-contracts.md)。
 
-下一阶段：S0，核验可安装 Pi 版本并锁定，做生命周期/动态工具/基础工具重定向的高风险 Spike。通过后按 docs/15 后端先行。
-
-本次未取得可验证的上游 commit SHA，不编造。协议与 SQL 为设计草案，后端实现必须做契约测试及迁移。
+公网执行默认关闭。本机不具备要求的 rootless Docker/runsc 隔离环境，专用环境安全验收和付费模型效果/成本评测尚未运行；本地测试成功不代表已经公网发布。

@@ -1,0 +1,3122 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-09-23",
+  "annotation": "Agent-authored regression expectations plus all provided prototype cases. Not independently human-labelled; no held-out evaluation claim.",
+  "split": "regression-development",
+  "cases": [
+    {
+      "id": "intent-001",
+      "category": "prototype-regression",
+      "text": "不使用搜索工具",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-002",
+      "category": "prototype-regression",
+      "text": "不调用子代理",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-003",
+      "category": "prototype-regression",
+      "text": "不启用工作流",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-004",
+      "category": "prototype-regression",
+      "text": "请勿使用搜索工具",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-005",
+      "category": "prototype-regression",
+      "text": "不希望使用子代理",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-006",
+      "category": "prototype-regression",
+      "text": "不能使用工作流",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-007",
+      "category": "prototype-regression",
+      "text": "不得使用搜索工具",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-008",
+      "category": "prototype-regression",
+      "text": "不可使用后台工具",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-009",
+      "category": "prototype-regression",
+      "text": "若测试失败，使用子代理",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-010",
+      "category": "prototype-regression",
+      "text": "仅当测试失败，使用搜索工具",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-011",
+      "category": "prototype-regression",
+      "text": "只有需要时，使用工作流",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-012",
+      "category": "prototype-regression",
+      "text": "只在失败时，使用子代理",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-013",
+      "category": "prototype-regression",
+      "text": "等到明天，使用搜索工具",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-014",
+      "category": "prototype-regression",
+      "text": "no need to use search tools",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-015",
+      "category": "prototype-regression",
+      "text": "don’t use search tools",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-016",
+      "category": "prototype-regression",
+      "text": "mustn’t use background tools",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-017",
+      "category": "prototype-regression",
+      "text": "when necessary, use search tools",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-018",
+      "category": "prototype-regression",
+      "text": "provided it fails, use a subagent",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-019",
+      "category": "prototype-regression",
+      "text": "帮我解释这段代码",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-020",
+      "category": "prototype-regression",
+      "text": "你好",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-021",
+      "category": "prototype-regression",
+      "text": "搜索工具是什么",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-022",
+      "category": "prototype-regression",
+      "text": "子代理",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-023",
+      "category": "prototype-regression",
+      "text": "workflow",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-024",
+      "category": "prototype-regression",
+      "text": "search",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-025",
+      "category": "prototype-regression",
+      "text": "使用搜索工具查找登录入口",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search"
+      ],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-026",
+      "category": "prototype-regression",
+      "text": "请用 rg 搜索 token",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search"
+      ],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-027",
+      "category": "prototype-regression",
+      "text": "用 fd 搜索文件",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search"
+      ],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-028",
+      "category": "prototype-regression",
+      "text": "使用 git diff 比较变更",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search"
+      ],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-029",
+      "category": "prototype-regression",
+      "text": "use search tools to find login",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search"
+      ],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-030",
+      "category": "prototype-regression",
+      "text": "Use git log to inspect history",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search"
+      ],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-031",
+      "category": "prototype-regression",
+      "text": "使用子代理检查代码",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "delegate"
+      ],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-032",
+      "category": "prototype-regression",
+      "text": "使用两个子代理检查代码",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "delegate"
+      ],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-033",
+      "category": "prototype-regression",
+      "text": "请用 subagents 检查模块",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "delegate"
+      ],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-034",
+      "category": "prototype-regression",
+      "text": "spawn two subagents to check code",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "delegate"
+      ],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-035",
+      "category": "prototype-regression",
+      "text": "Use a subagent to review",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "delegate"
+      ],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-036",
+      "category": "prototype-regression",
+      "text": "使用工作流编排检查",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "workflow"
+      ],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-037",
+      "category": "prototype-regression",
+      "text": "启动工作流审查",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "workflow"
+      ],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-038",
+      "category": "prototype-regression",
+      "text": "run a workflow to inspect code",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "workflow"
+      ],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-039",
+      "category": "prototype-regression",
+      "text": "在后台运行测试",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "background"
+      ],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-040",
+      "category": "prototype-regression",
+      "text": "使用后台工具停止进程",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "background"
+      ],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-041",
+      "category": "prototype-regression",
+      "text": "run tests in the background",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "background"
+      ],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-042",
+      "category": "prototype-regression",
+      "text": "use background tools to stop task",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "background"
+      ],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-043",
+      "category": "prototype-regression",
+      "text": "使用任务管理工具创建待办",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "session"
+      ],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-044",
+      "category": "prototype-regression",
+      "text": "创建待办清单",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "session"
+      ],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-045",
+      "category": "prototype-regression",
+      "text": "记录会话目标",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "session"
+      ],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-046",
+      "category": "prototype-regression",
+      "text": "use task management tools to create items",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "session"
+      ],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-047",
+      "category": "prototype-regression",
+      "text": "使用搜索工具查找，并使用子代理检查测试",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search",
+        "delegate"
+      ],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-048",
+      "category": "prototype-regression",
+      "text": "使用工作流编排；在后台运行测试",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "workflow",
+        "background"
+      ],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-049",
+      "category": "prototype-regression",
+      "text": "不要使用搜索工具",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-050",
+      "category": "prototype-regression",
+      "text": "不用子代理",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-051",
+      "category": "prototype-regression",
+      "text": "不需要使用子代理",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-052",
+      "category": "prototype-regression",
+      "text": "无需使用工作流",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-053",
+      "category": "prototype-regression",
+      "text": "别使用后台工具",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-054",
+      "category": "prototype-regression",
+      "text": "do not use search tools",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-055",
+      "category": "prototype-regression",
+      "text": "never spawn subagents",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-056",
+      "category": "prototype-regression",
+      "text": "不要不使用搜索工具",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-057",
+      "category": "prototype-regression",
+      "text": "如果测试失败，再使用子代理检查",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-058",
+      "category": "prototype-regression",
+      "text": "如果需要，使用工作流",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-059",
+      "category": "prototype-regression",
+      "text": "假如可以，使用搜索工具",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-060",
+      "category": "prototype-regression",
+      "text": "除非出错，使用后台工具",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-061",
+      "category": "prototype-regression",
+      "text": "稍后使用搜索工具",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-062",
+      "category": "prototype-regression",
+      "text": "以后在后台运行测试",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-063",
+      "category": "prototype-regression",
+      "text": "if needed, use search tools",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-064",
+      "category": "prototype-regression",
+      "text": "could you use a subagent",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-065",
+      "category": "prototype-regression",
+      "text": "搜索工具和子代理有什么区别？",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-066",
+      "category": "prototype-regression",
+      "text": "如何使用搜索工具",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-067",
+      "category": "prototype-regression",
+      "text": "解释“使用子代理检查代码”这句话",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-068",
+      "category": "prototype-regression",
+      "text": "\"使用搜索工具\"",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-069",
+      "category": "prototype-regression",
+      "text": "`使用搜索工具`",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-070",
+      "category": "prototype-regression",
+      "text": "```\n使用子代理\n```",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-071",
+      "category": "prototype-regression",
+      "text": "> 使用搜索工具\n普通问题",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-072",
+      "category": "prototype-regression",
+      "text": "不要使用搜索工具；使用子代理审查测试",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "delegate"
+      ],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-073",
+      "category": "prototype-regression",
+      "text": "如果需要，使用搜索工具；使用任务管理工具创建待办",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "session"
+      ],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-074",
+      "category": "prototype-regression",
+      "text": "使用搜索工具好吗？",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-075",
+      "category": "prototype-regression",
+      "text": "什么是工作流？",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-076",
+      "category": "prototype-regression",
+      "text": "“使用子代理",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-077",
+      "category": "prototype-regression",
+      "text": "```使用搜索工具",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-078",
+      "category": "prototype-regression",
+      "text": "使用​搜索工具查找入口",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search"
+      ],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-079",
+      "category": "prototype-regression",
+      "text": "Ｕｓｅ search tools",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search"
+      ],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-080",
+      "category": "prototype-regression",
+      "text": "使用搜索工具查找文件 \"auth.ts\"",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search"
+      ],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-081",
+      "category": "prototype-regression",
+      "text": "使用搜索工具查找",
+      "mode": "native",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-082",
+      "category": "prototype-regression",
+      "text": "使用子代理",
+      "mode": "explicit",
+      "source": "tool",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-083",
+      "category": "prototype-regression",
+      "text": "使用工作流",
+      "mode": "explicit",
+      "source": "task_result",
+      "expectedGroups": [],
+      "provenance": "provided-prototype"
+    },
+    {
+      "id": "intent-084",
+      "category": "explicit-search",
+      "text": "调用搜索工具定位 Cookie 的定义",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-085",
+      "category": "explicit-search",
+      "text": "启用搜索能力定位数据库迁移入口",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-086",
+      "category": "explicit-search",
+      "text": "用文件搜索列出组件目录中的样式文件",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-087",
+      "category": "explicit-search",
+      "text": "使用内容搜索查找废弃的配置字段",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-088",
+      "category": "explicit-search",
+      "text": "调用检索工具定位所有待办注释",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-089",
+      "category": "explicit-search",
+      "text": "请使用 rg 查找权限检查函数",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-090",
+      "category": "explicit-search",
+      "text": "使用 fd 列出文档中的图片",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-091",
+      "category": "explicit-search",
+      "text": "调用 git show 查看上一个提交",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-092",
+      "category": "explicit-search",
+      "text": "用 git log 查看模型配置的历史",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-093",
+      "category": "explicit-search",
+      "text": "请用 git diff 对比工作区与 HEAD",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-094",
+      "category": "explicit-search",
+      "text": "先使用搜索工具定位服务入口，再阅读文件",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-095",
+      "category": "explicit-search",
+      "text": "使用搜索工具，查找包含 CSRF 的模块",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-096",
+      "category": "explicit-search",
+      "text": "使用搜索工具查找名为“workflow”的文件",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-097",
+      "category": "explicit-search",
+      "text": "使用搜索工具查找文件 'client.ts'",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-098",
+      "category": "explicit-search",
+      "text": "use the file search to locate the migration directory",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-099",
+      "category": "explicit-search",
+      "text": "Use rg to find authorization guards",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-100",
+      "category": "explicit-search",
+      "text": "use git show to inspect the tagged release",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-101",
+      "category": "explicit-search",
+      "text": "use the search tool to locate rate limit settings",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-102",
+      "category": "explicit-delegate",
+      "text": "调用子代理检查数据模型",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "delegate"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-103",
+      "category": "explicit-delegate",
+      "text": "启用多个子代理分别审查接口和文档",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "delegate"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-104",
+      "category": "explicit-delegate",
+      "text": "用两个子智能体分别检查迁移与回滚",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "delegate"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-105",
+      "category": "explicit-delegate",
+      "text": "使用2个子代理核对不同模块的边界",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "delegate"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-106",
+      "category": "explicit-delegate",
+      "text": "请用子代理审查错误处理分支",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "delegate"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-107",
+      "category": "explicit-delegate",
+      "text": "使用 subagent 检查新增加的日志逻辑",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "delegate"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-108",
+      "category": "explicit-delegate",
+      "text": "调用多个子代理分别评估 CLI 和 Web 的一致性",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "delegate"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-109",
+      "category": "explicit-delegate",
+      "text": "使用子代理审查后将证据返回给主会话",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "delegate"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-110",
+      "category": "explicit-delegate",
+      "text": "使用两个子代理，一个读接口，一个读存储层",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "delegate"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-111",
+      "category": "explicit-delegate",
+      "text": "spawn a subagent to audit workspace boundaries",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "delegate"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-112",
+      "category": "explicit-delegate",
+      "text": "launch two subagents to review frontend and backend",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "delegate"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-113",
+      "category": "explicit-delegate",
+      "text": "use multiple subagents to inspect access policies",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "delegate"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-114",
+      "category": "explicit-delegate",
+      "text": "use the subagent to review cancellation",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "delegate"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-115",
+      "category": "explicit-delegate",
+      "text": "launch subagents to inspect release documentation",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "delegate"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-116",
+      "category": "explicit-delegate",
+      "text": "spawn 2 subagents to compare session handling",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "delegate"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-117",
+      "category": "explicit-workflow",
+      "text": "调用工作流完成检查和修复",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "workflow"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-118",
+      "category": "explicit-workflow",
+      "text": "启动工作流，先检查类型再运行测试",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "workflow"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-119",
+      "category": "explicit-workflow",
+      "text": "执行工作流验证存储迁移",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "workflow"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-120",
+      "category": "explicit-workflow",
+      "text": "用工作流编排独立模块的审查",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "workflow"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-121",
+      "category": "explicit-workflow",
+      "text": "使用 workflow 完成接口检查",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "workflow"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-122",
+      "category": "explicit-workflow",
+      "text": "执行工作流并保留每个节点的结果",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "workflow"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-123",
+      "category": "explicit-workflow",
+      "text": "请启动工作流检查 CLI 的打包结果",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "workflow"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-124",
+      "category": "explicit-workflow",
+      "text": "使用工作流编排搜索、检查和汇总",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "workflow"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-125",
+      "category": "explicit-workflow",
+      "text": "run the workflow to verify release artifacts",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "workflow"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-126",
+      "category": "explicit-workflow",
+      "text": "start a workflow for schema validation",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "workflow"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-127",
+      "category": "explicit-workflow",
+      "text": "use workflows to coordinate the review",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "workflow"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-128",
+      "category": "explicit-workflow",
+      "text": "run workflow to inspect migrations",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "workflow"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-129",
+      "category": "explicit-workflow",
+      "text": "start the workflow for build verification",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "workflow"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-130",
+      "category": "explicit-background",
+      "text": "在后台启动类型检查",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "background"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-131",
+      "category": "explicit-background",
+      "text": "在后台执行离线测试",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "background"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-132",
+      "category": "explicit-background",
+      "text": "用后台进程启动耗时检查",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "background"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-133",
+      "category": "explicit-background",
+      "text": "调用后台工具查看现有测试进程",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "background"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-134",
+      "category": "explicit-background",
+      "text": "启用后台终端执行格式检查",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "background"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-135",
+      "category": "explicit-background",
+      "text": "使用后台工具停止刚才的进程",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "background"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-136",
+      "category": "explicit-background",
+      "text": "在后台运行构建，并把结果保存为日志",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "background"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-137",
+      "category": "explicit-background",
+      "text": "使用后台进程读取错误日志",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "background"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-138",
+      "category": "explicit-background",
+      "text": "run the unit tests in the background",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "background"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-139",
+      "category": "explicit-background",
+      "text": "start the local build in the background",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "background"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-140",
+      "category": "explicit-background",
+      "text": "launch the formatter in the background",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "background"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-141",
+      "category": "explicit-background",
+      "text": "use the background terminal to inspect logs",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "background"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-142",
+      "category": "explicit-background",
+      "text": "use background tools to list existing processes",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "background"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-143",
+      "category": "explicit-session",
+      "text": "调用会话管理工具创建本次目标",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "session"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-144",
+      "category": "explicit-session",
+      "text": "启用目标管理工具登记完成条件",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "session"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-145",
+      "category": "explicit-session",
+      "text": "用任务管理记录这次审查的工作项",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "session"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-146",
+      "category": "explicit-session",
+      "text": "使用会话管理列出当前待办",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "session"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-147",
+      "category": "explicit-session",
+      "text": "创建任务清单，包含编译和测试",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "session"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-148",
+      "category": "explicit-session",
+      "text": "建立待办清单并添加文档验收",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "session"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-149",
+      "category": "explicit-session",
+      "text": "记录会话目标：修复 Cookie 解析",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "session"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-150",
+      "category": "explicit-session",
+      "text": "建立会话目标：实现独立命令行",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "session"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-151",
+      "category": "explicit-session",
+      "text": "使用目标管理工具更新验收标准",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "session"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-152",
+      "category": "explicit-session",
+      "text": "使用任务管理工具把接口检查标记为完成",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "session"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-153",
+      "category": "explicit-session",
+      "text": "use goal management tools to record success criteria",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "session"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-154",
+      "category": "explicit-session",
+      "text": "use session tools to list the current goals",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "session"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-155",
+      "category": "explicit-session",
+      "text": "use the task tools to update the checklist",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "session"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-156",
+      "category": "explicit-session",
+      "text": "use task management tool to add a review item",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "session"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-157",
+      "category": "ordinary-input",
+      "text": "检查鉴权函数里的类型错误",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-158",
+      "category": "ordinary-input",
+      "text": "修复今天新增的测试失败",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-159",
+      "category": "ordinary-input",
+      "text": "总结这次提交修改了哪些文件",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-160",
+      "category": "ordinary-input",
+      "text": "给这个组件增加空状态",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-161",
+      "category": "ordinary-input",
+      "text": "把日志里的堆栈逐行说明",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-162",
+      "category": "ordinary-input",
+      "text": "先看看项目结构，再给出修改建议",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-163",
+      "category": "ordinary-input",
+      "text": "直接运行 npm test 并报告失败项",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-164",
+      "category": "ordinary-input",
+      "text": "打开 README，补上安装说明",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-165",
+      "category": "ordinary-input",
+      "text": "查找调用链中最早出现空值的地方",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-166",
+      "category": "ordinary-input",
+      "text": "搜索所有设置了过期时间的 Cookie",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-167",
+      "category": "ordinary-input",
+      "text": "列出目录里的 TypeScript 文件",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-168",
+      "category": "ordinary-input",
+      "text": "我想知道任务管理界面的入口",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-169",
+      "category": "ordinary-input",
+      "text": "这个后台页面的间距看起来太大",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-170",
+      "category": "ordinary-input",
+      "text": "现有工作流有三个步骤",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-171",
+      "category": "ordinary-input",
+      "text": "子代理的运行记录在哪里",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-172",
+      "category": "ordinary-input",
+      "text": "Session 的目标状态是什么",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-173",
+      "category": "ordinary-input",
+      "text": "请写一个不依赖外部服务的示例",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-174",
+      "category": "ordinary-input",
+      "text": "打印执行器的健康状态",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-175",
+      "category": "negation",
+      "text": "禁止使用搜索工具读取这份仓库",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-176",
+      "category": "negation",
+      "text": "不允许调用子代理检查配置",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-177",
+      "category": "negation",
+      "text": "不希望在后台运行测试",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-178",
+      "category": "negation",
+      "text": "请勿执行工作流",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-179",
+      "category": "negation",
+      "text": "切勿启用目标管理工具",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-180",
+      "category": "negation",
+      "text": "不得调用检索工具查找密钥",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-181",
+      "category": "negation",
+      "text": "不必使用文件搜索",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-182",
+      "category": "negation",
+      "text": "无需使用会话管理工具",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-183",
+      "category": "negation",
+      "text": "不打算使用工作流",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-184",
+      "category": "negation",
+      "text": "别再使用子代理",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-185",
+      "category": "negation",
+      "text": "不是让你使用搜索工具",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-186",
+      "category": "negation",
+      "text": "不愿使用后台进程",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-187",
+      "category": "negation",
+      "text": "不想使用任务管理工具",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-188",
+      "category": "negation",
+      "text": "避免使用搜索工具",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-189",
+      "category": "negation",
+      "text": "拒绝使用子代理",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-190",
+      "category": "negation",
+      "text": "停止使用后台工具",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-191",
+      "category": "negation",
+      "text": "取消使用工作流",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-192",
+      "category": "negation",
+      "text": "没有必要使用搜索工具",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-193",
+      "category": "negation",
+      "text": "不要不使用子代理",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-194",
+      "category": "negation",
+      "text": "不能不使用工作流",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-195",
+      "category": "negation",
+      "text": "without using search tools, explain the module",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-196",
+      "category": "negation",
+      "text": "avoid use of background tools",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-197",
+      "category": "negation",
+      "text": "refrain from using task management tools",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-198",
+      "category": "negation",
+      "text": "Do not use the search tool",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-199",
+      "category": "negation",
+      "text": "never launch two subagents",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-200",
+      "category": "conditional-future",
+      "text": "假设接口变了，就使用搜索工具",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-201",
+      "category": "conditional-future",
+      "text": "除非有失败，否则使用子代理",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-202",
+      "category": "conditional-future",
+      "text": "倘若日志还不完整，在后台运行测试",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-203",
+      "category": "conditional-future",
+      "text": "只有审查通过，才使用工作流",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-204",
+      "category": "conditional-future",
+      "text": "只在管理员同意时使用目标管理工具",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-205",
+      "category": "conditional-future",
+      "text": "等到配额恢复再使用子代理",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-206",
+      "category": "conditional-future",
+      "text": "必要时使用搜索工具定位问题",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-207",
+      "category": "conditional-future",
+      "text": "需要时使用后台工具启动测试",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-208",
+      "category": "conditional-future",
+      "text": "稍后执行工作流",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-209",
+      "category": "conditional-future",
+      "text": "将来使用任务管理工具记录目标",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-210",
+      "category": "conditional-future",
+      "text": "到时候在后台启动构建",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-211",
+      "category": "conditional-future",
+      "text": "可能使用检索工具查找记录",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-212",
+      "category": "conditional-future",
+      "text": "若没有冲突就使用 git diff",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-213",
+      "category": "conditional-future",
+      "text": "如果不需要重构，就使用子代理",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-214",
+      "category": "conditional-future",
+      "text": "如果出错；使用后台工具？",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-215",
+      "category": "conditional-future",
+      "text": "I might use search tools later",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-216",
+      "category": "conditional-future",
+      "text": "if the build fails, spawn a subagent",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-217",
+      "category": "conditional-future",
+      "text": "unless approved, do not start a workflow",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-218",
+      "category": "conditional-future",
+      "text": "when the queue is empty, run tests in the background",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-219",
+      "category": "conditional-future",
+      "text": "provided the budget allows it, use task management tools",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-220",
+      "category": "conditional-future",
+      "text": "would you use search tools for this task",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-221",
+      "category": "conditional-future",
+      "text": "could you launch a subagent",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-222",
+      "category": "discussion-question",
+      "text": "解释使用搜索工具的含义",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-223",
+      "category": "discussion-question",
+      "text": "介绍调用子代理的基本方式",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-224",
+      "category": "discussion-question",
+      "text": "讨论在后台运行测试的限制",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-225",
+      "category": "discussion-question",
+      "text": "什么是使用工作流的最佳时机",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-226",
+      "category": "discussion-question",
+      "text": "如何用任务管理工具创建目标",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-227",
+      "category": "discussion-question",
+      "text": "怎么使用目标管理工具",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-228",
+      "category": "discussion-question",
+      "text": "能否使用文件搜索",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-229",
+      "category": "discussion-question",
+      "text": "是否使用子代理比较合适",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-230",
+      "category": "discussion-question",
+      "text": "使用后台工具安全吗？",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-231",
+      "category": "discussion-question",
+      "text": "使用搜索工具定位入口可以吗?",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-232",
+      "category": "discussion-question",
+      "text": "告诉我使用子代理与执行工作流的区别",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-233",
+      "category": "discussion-question",
+      "text": "explain use of search tools",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-234",
+      "category": "discussion-question",
+      "text": "how do I use background tools",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-235",
+      "category": "discussion-question",
+      "text": "what happens when I use task tools",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-236",
+      "category": "discussion-question",
+      "text": "can you use a subagent",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-237",
+      "category": "discussion-question",
+      "text": "should we run a workflow",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-238",
+      "category": "quoted-content",
+      "text": "“使用搜索工具定位入口”",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-239",
+      "category": "quoted-content",
+      "text": "「使用子代理检查配置」",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-240",
+      "category": "quoted-content",
+      "text": "『执行工作流验证接口』",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-241",
+      "category": "quoted-content",
+      "text": "'在后台运行测试'",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-242",
+      "category": "quoted-content",
+      "text": "\"使用任务管理工具创建待办\"",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-243",
+      "category": "quoted-content",
+      "text": "‘使用子代理检查代码’",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-244",
+      "category": "quoted-content",
+      "text": "«使用搜索工具查找密码»",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-245",
+      "category": "quoted-content",
+      "text": "代码字符串是“调用后台工具停止任务”",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-246",
+      "category": "quoted-content",
+      "text": "文档标题为「使用目标管理工具」",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-247",
+      "category": "quoted-content",
+      "text": "请翻译 'use search tools to find files'",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-248",
+      "category": "quoted-content",
+      "text": "日志内容：『spawn two subagents』",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-249",
+      "category": "quoted-content",
+      "text": "测试输入为“在后台启动构建”",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-250",
+      "category": "quoted-content",
+      "text": "读取文本 \"run a workflow\"",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-251",
+      "category": "ambiguous-conflict",
+      "text": "不要用搜索工具，不过使用子代理",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-252",
+      "category": "ambiguous-conflict",
+      "text": "不用子代理，但是执行工作流",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-253",
+      "category": "ambiguous-conflict",
+      "text": "不使用后台工具，并使用任务管理工具",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-254",
+      "category": "ambiguous-conflict",
+      "text": "如果需要搜索，使用文件搜索",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-255",
+      "category": "ambiguous-conflict",
+      "text": "并不是不要使用搜索工具",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-256",
+      "category": "ambiguous-conflict",
+      "text": "别不使用子代理",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-257",
+      "category": "ambiguous-conflict",
+      "text": "我没有说要使用搜索工具",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-258",
+      "category": "ambiguous-conflict",
+      "text": "使用搜索工具还是不用搜索工具",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-259",
+      "category": "ambiguous-conflict",
+      "text": "不再使用目标管理工具",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-260",
+      "category": "ambiguous-conflict",
+      "text": "停止在后台运行测试",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-261",
+      "category": "ambiguous-conflict",
+      "text": "暂停使用工作流",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-262",
+      "category": "ambiguous-conflict",
+      "text": "无需不调用搜索工具",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-263",
+      "category": "mixed-groups",
+      "text": "使用文件搜索定位接口，并调用子代理检查存储层",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search",
+        "delegate"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-264",
+      "category": "mixed-groups",
+      "text": "先用 rg 找到入口，再启用两个子代理核对测试",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search",
+        "delegate"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-265",
+      "category": "mixed-groups",
+      "text": "Use search tools and spawn two subagents",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search",
+        "delegate"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-266",
+      "category": "mixed-groups",
+      "text": "使用 git log 查看变更。使用子代理审查迁移",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search",
+        "delegate"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-267",
+      "category": "mixed-groups",
+      "text": "启动工作流完成检查；在后台执行集成测试",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "workflow",
+        "background"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-268",
+      "category": "mixed-groups",
+      "text": "执行工作流收集结果。使用后台工具启动构建",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "workflow",
+        "background"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-269",
+      "category": "mixed-groups",
+      "text": "run the workflow; run tests in the background",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "workflow",
+        "background"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-270",
+      "category": "mixed-groups",
+      "text": "用文件搜索查找缺失模块；创建待办清单",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search",
+        "session"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-271",
+      "category": "mixed-groups",
+      "text": "调用检索工具列出问题。记录会话目标",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search",
+        "session"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-272",
+      "category": "mixed-groups",
+      "text": "use search tools; use task management tools",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search",
+        "session"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-273",
+      "category": "strong-clause-boundary",
+      "text": "不要使用搜索工具。调用子代理审查配置",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "delegate"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-274",
+      "category": "strong-clause-boundary",
+      "text": "以后使用工作流；使用子代理检查现状",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "delegate"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-275",
+      "category": "strong-clause-boundary",
+      "text": "解释搜索工具。使用两个子代理检查模块",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "delegate"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-276",
+      "category": "strong-clause-boundary",
+      "text": "如果需要，使用子代理；在后台运行测试",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "background"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-277",
+      "category": "strong-clause-boundary",
+      "text": "不要使用工作流！使用后台工具启动检查",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "background"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-278",
+      "category": "unicode-normalization",
+      "text": "Ｕｓｅ ｓｅａｒｃｈ ｔｏｏｌｓ to locate the entrypoint",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-279",
+      "category": "unicode-normalization",
+      "text": "请使​用搜索工具检查 API",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-280",
+      "category": "unicode-normalization",
+      "text": "使用﻿搜索工具查找入口",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-281",
+      "category": "unicode-normalization",
+      "text": "使用‍搜索工具查询文件",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-282",
+      "category": "unicode-normalization",
+      "text": "使用搜索工具查找ＣＳＲＦ相关模块",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "search"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-283",
+      "category": "unicode-normalization",
+      "text": "Ｓｐａｗｎ ｔｗｏ ｓｕｂａｇｅｎｔｓ to review",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "delegate"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-284",
+      "category": "unicode-normalization",
+      "text": "🚀使用两个子代理检查接口",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "delegate"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-285",
+      "category": "unicode-normalization",
+      "text": "使‌用子代理核对文档",
+      "mode": "explicit",
+      "source": "human",
+      "expectedGroups": [
+        "delegate"
+      ],
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-286",
+      "category": "code-fence",
+      "text": "```typescript\nconst message = \"使用搜索工具\";\n```",
+      "expectedGroups": [],
+      "mode": "explicit",
+      "source": "human",
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-287",
+      "category": "code-fence",
+      "text": "~~~text\n在后台运行测试\n~~~",
+      "expectedGroups": [],
+      "mode": "explicit",
+      "source": "human",
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-288",
+      "category": "inline-code",
+      "text": "请保留字面值 `使用子代理`",
+      "expectedGroups": [],
+      "mode": "explicit",
+      "source": "human",
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-289",
+      "category": "blockquote",
+      "text": "> 使用搜索工具\n> 调用子代理\n说明这段文本",
+      "expectedGroups": [],
+      "mode": "explicit",
+      "source": "human",
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-290",
+      "category": "blockquote",
+      "text": "   > 使用工作流\n普通消息",
+      "expectedGroups": [],
+      "mode": "explicit",
+      "source": "human",
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-291",
+      "category": "quote-unterminated",
+      "text": "文字在这里：“使用搜索工具",
+      "expectedGroups": [],
+      "mode": "explicit",
+      "source": "human",
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-292",
+      "category": "quote-unterminated",
+      "text": "```bash\n使用后台工具",
+      "expectedGroups": [],
+      "mode": "explicit",
+      "source": "human",
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-293",
+      "category": "quote-unterminated",
+      "text": "「使用任务管理工具",
+      "expectedGroups": [],
+      "mode": "explicit",
+      "source": "human",
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-294",
+      "category": "strong-clause-boundary",
+      "text": "不要使用搜索工具\n使用子代理检查实现",
+      "expectedGroups": [
+        "delegate"
+      ],
+      "mode": "explicit",
+      "source": "human",
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-295",
+      "category": "masked-clause",
+      "text": "“不使用搜索工具”\n使用搜索工具查找接口",
+      "expectedGroups": [
+        "search"
+      ],
+      "mode": "explicit",
+      "source": "human",
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-296",
+      "category": "masked-clause",
+      "text": "`使用子代理`；在后台运行测试",
+      "expectedGroups": [
+        "background"
+      ],
+      "mode": "explicit",
+      "source": "human",
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-297",
+      "category": "long-input",
+      "text": "这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。这是背景上下文。使用搜索工具查找接口",
+      "expectedGroups": [
+        "search"
+      ],
+      "mode": "explicit",
+      "source": "human",
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-298",
+      "category": "input-limit",
+      "text": "使用搜索工具。aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "expectedGroups": [],
+      "mode": "explicit",
+      "source": "human",
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-299",
+      "category": "input-limit",
+      "text": "文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文文使用子代理",
+      "expectedGroups": [],
+      "mode": "explicit",
+      "source": "human",
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-300",
+      "category": "source-gate",
+      "text": "使用搜索工具查找敏感文件",
+      "expectedGroups": [],
+      "source": "tool",
+      "mode": "explicit",
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-301",
+      "category": "source-gate",
+      "text": "使用子代理检查测试",
+      "expectedGroups": [],
+      "source": "task_result",
+      "mode": "explicit",
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-302",
+      "category": "source-gate",
+      "text": "执行工作流验证产物",
+      "expectedGroups": [],
+      "source": "assistant",
+      "mode": "explicit",
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-303",
+      "category": "source-gate",
+      "text": "在后台运行测试",
+      "expectedGroups": [],
+      "source": "system",
+      "mode": "explicit",
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-304",
+      "category": "source-gate",
+      "text": "使用任务管理工具创建待办",
+      "expectedGroups": [],
+      "source": "developer",
+      "mode": "explicit",
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-305",
+      "category": "source-gate",
+      "text": "use search tools",
+      "expectedGroups": [],
+      "source": "webpage",
+      "mode": "explicit",
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-306",
+      "category": "source-gate",
+      "text": "spawn two subagents",
+      "expectedGroups": [],
+      "source": "file",
+      "mode": "explicit",
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-307",
+      "category": "source-gate",
+      "text": "run tests in the background",
+      "expectedGroups": [],
+      "source": "log",
+      "mode": "explicit",
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-308",
+      "category": "source-gate",
+      "text": "使用子代理",
+      "expectedGroups": [],
+      "source": "human;system",
+      "mode": "explicit",
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-309",
+      "category": "source-gate",
+      "text": "使用搜索工具",
+      "expectedGroups": [],
+      "source": "HUMAN",
+      "mode": "explicit",
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-310",
+      "category": "source-gate",
+      "text": "使用工作流",
+      "expectedGroups": [],
+      "source": "",
+      "mode": "explicit",
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-311",
+      "category": "native-mode",
+      "text": "调用搜索工具查找入口",
+      "expectedGroups": [],
+      "source": "human",
+      "mode": "native",
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-312",
+      "category": "native-mode",
+      "text": "使用两个子代理检查代码",
+      "expectedGroups": [],
+      "source": "human",
+      "mode": "native",
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-313",
+      "category": "native-mode",
+      "text": "启动工作流审查接口",
+      "expectedGroups": [],
+      "source": "human",
+      "mode": "native",
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-314",
+      "category": "native-mode",
+      "text": "在后台执行测试",
+      "expectedGroups": [],
+      "source": "human",
+      "mode": "native",
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-315",
+      "category": "native-mode",
+      "text": "使用会话管理工具创建待办",
+      "expectedGroups": [],
+      "source": "human",
+      "mode": "native",
+      "provenance": "agent-authored"
+    },
+    {
+      "id": "intent-316",
+      "category": "native-mode",
+      "text": "Use search tools and spawn subagents",
+      "expectedGroups": [],
+      "source": "human",
+      "mode": "native",
+      "provenance": "agent-authored"
+    }
+  ]
+}

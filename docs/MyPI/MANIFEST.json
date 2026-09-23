@@ -28,8 +28,8 @@
     },
     {
       "path": "STATE.md",
-      "bytes": 763,
-      "sha256": "3b9005b1f6689e79338ea582d0ca5d5ae372f0ef5a4a1e6367fd01d3f42f2da9"
+      "bytes": 1003,
+      "sha256": "14340991616d21f2fae56afe58fc4a9eb6ab8bfb4c15f4fccd446e281d5e3d15"
     },
     {
       "path": "contracts/event.example.json",
@@ -168,8 +168,8 @@
     },
     {
       "path": "evidence/contracts-check.json",
-      "bytes": 1067,
-      "sha256": "ce2701109cddfd7456d8ddb4f8b038be92b7b173be889e61ecd22e0e46683980"
+      "bytes": 1091,
+      "sha256": "74607789315fd3e658603b16f447dc0ffc1054541863e62ce09480f71d859499"
     },
     {
       "path": "evidence/pi-compatibility.md",
@@ -260,6 +260,11 @@
       "path": "tests/validate_contracts.py",
       "bytes": 5956,
       "sha256": "c0396c999809fa89d2781e82f1ba90470ffbf5f923fec10626a0d84ac38d3e4a"
+    },
+    {
+      "path": "package.json",
+      "bytes": 168,
+      "sha256": "8d6a1d819e2794ccbf270f0aba1e1fd921b4f41c8e73a95565b0843f0231d719"
     }
   ]
 }

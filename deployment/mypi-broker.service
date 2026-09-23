@@ -1,0 +1,20 @@
+# Install as the rootless Docker user's systemd --user service.
+[Unit]
+Description=MyPI restricted execution broker
+After=docker.service
+Requires=docker.service
+
+[Service]
+Type=simple
+WorkingDirectory=/srv/mypi
+EnvironmentFile=%h/.config/mypi/broker.env
+ExecStart=/usr/bin/node /srv/mypi/node_modules/tsx/dist/cli.mjs apps/execution-broker/src/main.ts
+Restart=on-failure
+RestartSec=5
+KillMode=control-group
+TimeoutStopSec=30
+UMask=0077
+NoNewPrivileges=true
+
+[Install]
+WantedBy=default.target

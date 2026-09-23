@@ -21,5 +21,5 @@
   "schemas": 43,
   "resolvedReferenceOccurrences": 310,
   "sqliteTables": 24,
-  "sqliteVersion": "3.46.1"
+  "sqliteVersion": "3.49.1"
 }

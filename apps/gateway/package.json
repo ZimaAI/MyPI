@@ -1,0 +1,18 @@
+{
+  "name": "@mypi/gateway",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": "./src/index.ts",
+  "scripts": {
+    "dev": "tsx src/main.ts",
+    "start": "tsx src/main.ts",
+    "test": "tsx --test test/*.test.ts",
+    "admin": "tsx src/admin.ts"
+  },
+  "dependencies": {
+    "@mypi/storage-sqlite": "workspace:*",
+    "fastify": "5.8.2",
+    "@fastify/cookie": "11.0.2"
+  }
+}

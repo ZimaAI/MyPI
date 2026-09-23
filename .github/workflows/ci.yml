@@ -1,0 +1,69 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Verify (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    env:
+      CI: 'true'
+      PUBLIC_EXECUTION_ENABLED: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - uses: pnpm/action-setup@v4
+        with:
+          version: '11.5.0'
+          run_install: false
+      - name: Install locked dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Lint and enforce dependency boundaries
+        run: pnpm lint
+      - name: Typecheck
+        run: pnpm typecheck
+      # pnpm test includes schemas, golden intent cases, policy/security checks,
+      # SQLite fault injection, and real SDK integration with loopback providers.
+      # It never starts the production execution profile or a paid provider.
+      - name: Unit, contract, policy and integration tests
+        run: pnpm test
+      - name: Compile isolated execution entry point
+        run: pnpm exec tsc -p deployment/tsconfig.sandbox.json
+      - name: Build web application
+        if: runner.os == 'Linux'
+        run: pnpm build
+      - name: Install browser test runtime
+        if: runner.os == 'Linux'
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Playwright end-to-end tests
+        id: e2e
+        if: runner.os == 'Linux'
+        run: pnpm test:e2e
+      - name: Preserve browser verification evidence
+        if: ${{ always() && runner.os == 'Linux' && steps.e2e.outcome != 'skipped' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-evidence-${{ github.run_id }}
+          retention-days: 14
+          if-no-files-found: ignore
+          path: |
+            docs/evidence/playwright-results.json
+            docs/evidence/screenshots/
+            test-results/

@@ -1,0 +1,11 @@
+# Build from repository root after `pnpm exec tsc -p deployment/tsconfig.sandbox.json`.
+# Build-time base tag is versioned. Pin the resulting image digest in MYPI_SANDBOX_IMAGE.
+FROM node:24.14.0-bookworm-slim
+RUN apt-get update && apt-get install -y --no-install-recommends bash git ripgrep ca-certificates \
+    && rm -rf /var/lib/apt/lists/* \
+    && groupadd -g 10001 sandbox && useradd -u 10001 -g 10001 -d /tmp -s /bin/bash sandbox
+COPY dist-sandbox /opt/mypi
+RUN printf '{"type":"module"}\n' > /opt/mypi/package.json
+USER 10001:10001
+WORKDIR /workspace
+CMD ["node", "/opt/mypi/apps/execution-broker/src/runner.js"]
