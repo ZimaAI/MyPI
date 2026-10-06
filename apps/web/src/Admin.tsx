@@ -29,6 +29,7 @@ import './admin.css';
 import RuleVersions from './AdminRules';
 import {
   MODEL_CONFIG_LIMITS,
+  modelEndpointProtocols,
   type ProviderPreset,
   type ModelPreset,
   type ModelProtocol,
@@ -1044,6 +1045,7 @@ function ModelForm({
   const [draft, setDraft] = useState({
     providerType: model?.providerType ?? initialProvider?.id ?? '',
     endpointId: model?.approvedEndpointId ?? initialProvider?.defaultEndpointId ?? '',
+    baseUrl: model?.baseUrl ?? '',
     modelId: model?.modelId ?? initialPreset?.id ?? '',
     displayName: model?.displayName ?? initialPreset?.name ?? '',
     contextWindow: String(model?.contextWindow ?? initialPreset?.defaultContextWindow ?? 32768),
@@ -1063,26 +1065,34 @@ function ModelForm({
   const provider = catalog?.providers.find((item) => item.id === draft.providerType);
   const preset = provider?.models.find((item) => item.id === draft.modelId);
   const endpoint = provider?.endpoints.find((item) => item.id === draft.endpointId);
+  const customEndpoint = draft.endpointId === 'custom';
+  const supportedProtocols = modelEndpointProtocols(draft.providerType, draft.endpointId);
   const sameModel = model?.providerType === draft.providerType && model?.modelId === draft.modelId;
   const sameEndpoint =
-    model?.providerType === draft.providerType && model?.approvedEndpointId === draft.endpointId;
+    model?.providerType === draft.providerType &&
+    model?.approvedEndpointId === draft.endpointId &&
+    (!customEndpoint || (model?.baseUrl ?? '') === draft.baseUrl.trim().replace(/\/+$/, ''));
   const change = (key: keyof typeof draft, value: string | boolean) =>
     setDraft((previous) => ({ ...previous, [key]: value }));
-  function applyPreset(nextProvider: ProviderPreset, next: ModelPreset) {
-    setDraft((previous) => ({
-      providerType: nextProvider.id,
-      endpointId:
-        previous.providerType === nextProvider.id
-          ? previous.endpointId
-          : nextProvider.defaultEndpointId,
-      modelId: next.id,
-      displayName: next.name,
-      contextWindow: String(next.defaultContextWindow),
-      maxOutputTokens: String(next.defaultOutputTokens),
-      protocol: next.protocol ?? nextProvider.protocol,
-      reasoning: next.reasoning,
-      thinkingLevel: next.thinkingLevel,
-    }));
+  function applyPreset(nextProvider: ProviderPreset, next?: ModelPreset) {
+    setDraft((previous) => {
+      const sameProvider = previous.providerType === nextProvider.id;
+      const endpointId = sameProvider ? previous.endpointId : nextProvider.defaultEndpointId;
+      const protocols = modelEndpointProtocols(nextProvider.id, endpointId);
+      return {
+        providerType: nextProvider.id,
+        endpointId,
+        baseUrl: sameProvider ? previous.baseUrl : '',
+        modelId: next?.id ?? '',
+        displayName: next?.name ?? '',
+        contextWindow: String(next?.defaultContextWindow ?? 32768),
+        maxOutputTokens: String(next?.defaultOutputTokens ?? 4096),
+        protocol:
+          sameProvider && protocols.includes(previous.protocol) ? previous.protocol : protocols[0],
+        reasoning: next?.reasoning ?? false,
+        thinkingLevel: next?.thinkingLevel ?? 'off',
+      };
+    });
     setError('');
   }
   async function submit(event: FormEvent<HTMLFormElement>) {
@@ -1093,6 +1103,7 @@ function ModelForm({
       displayName: draft.displayName,
       providerType: draft.providerType,
       approvedEndpointId: draft.endpointId,
+      ...(customEndpoint ? { baseUrl: draft.baseUrl } : {}),
       modelId: draft.modelId,
       protocol: draft.protocol,
       reasoning: draft.reasoning,
@@ -1160,8 +1171,17 @@ function ModelForm({
                 }
               }}
             >
-              {(['domestic', 'international'] as const).map((region) => (
-                <optgroup key={region} label={region === 'domestic' ? '国内服务商' : '国际服务商'}>
+              {(['domestic', 'international', 'custom'] as const).map((region) => (
+                <optgroup
+                  key={region}
+                  label={
+                    region === 'domestic'
+                      ? '国内服务商'
+                      : region === 'international'
+                        ? '国际服务商'
+                        : '自定义服务'
+                  }
+                >
                   {catalog?.providers
                     .filter((item) => item.region === region)
                     .map((item) => (
@@ -1173,11 +1193,19 @@ function ModelForm({
               ))}
             </select>
           </Field>
-          <Field label="服务地域">
+          <Field label="服务端点">
             <select
               value={draft.endpointId}
               onChange={(event) => {
-                change('endpointId', event.target.value);
+                const endpointId = event.target.value;
+                const protocols = modelEndpointProtocols(draft.providerType, endpointId);
+                setDraft((previous) => ({
+                  ...previous,
+                  endpointId,
+                  protocol: protocols.includes(previous.protocol)
+                    ? previous.protocol
+                    : protocols[0],
+                }));
                 setApiKey('');
               }}
             >
@@ -1186,6 +1214,7 @@ function ModelForm({
                   {item.name}
                 </option>
               ))}
+              {draft.providerType !== 'google' && <option value="custom">自定义端点</option>}
             </select>
           </Field>
         </div>
@@ -1235,10 +1264,20 @@ function ModelForm({
           </p>
           {preset?.notes && provider?.notes && <p>{provider.notes}</p>}
           <div className="adm-model-source">
-            <span>官方文档核对：{catalog?.verifiedAt ?? '未知'}</span>
-            <a href={preset?.sources[0] ?? provider?.sources[0]} target="_blank" rel="noreferrer">
-              查看官方说明
-            </a>
+            {provider?.sources.length ? (
+              <>
+                <span>官方文档核对：{catalog?.verifiedAt ?? '未知'}</span>
+                <a
+                  href={preset?.sources[0] ?? provider.sources[0]}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  查看官方说明
+                </a>
+              </>
+            ) : (
+              <span>自定义模型规格由所接入的服务商提供。</span>
+            )}
             {preset && provider && (
               <button
                 type="button"
@@ -1250,8 +1289,27 @@ function ModelForm({
             )}
           </div>
         </div>
-        <Field label="模型端点" hint="地域需与密钥匹配；端点由服务端预设目录提供。">
-          <input readOnly value={endpoint?.baseUrl ?? ''} className="adm-mono" />
+        <Field
+          label="模型端点"
+          hint={
+            customEndpoint
+              ? '填写公网 HTTPS Base URL，不含 /chat/completions、/responses 或 /messages。'
+              : '端点及密钥需与地域、套餐和调用协议匹配。'
+          }
+        >
+          <input
+            type="url"
+            required
+            maxLength={2048}
+            readOnly={!customEndpoint}
+            value={customEndpoint ? draft.baseUrl : (endpoint?.baseUrl ?? '')}
+            onChange={(event) => {
+              change('baseUrl', event.target.value);
+              setApiKey('');
+            }}
+            placeholder="https://gateway.example.com/v1"
+            className="adm-mono"
+          />
         </Field>
         <Field label="展示名称">
           <input
@@ -1277,7 +1335,7 @@ function ModelForm({
           hint={
             model?.keyConfigured && sameEndpoint
               ? '已配置凭据。留空保留现有密钥，输入新值将替换。'
-              : '输入此服务商及地域的密钥，仅写入服务器，保存后不会回显。'
+              : '输入此端点对应的密钥，仅写入服务器，保存后不会回显。'
           }
         >
           <input
@@ -1332,10 +1390,7 @@ function ModelForm({
               value={draft.protocol}
               onChange={(event) => change('protocol', event.target.value)}
             >
-              {(draft.providerType === 'openai'
-                ? ['openai-responses', 'openai-completions']
-                : [provider?.protocol ?? draft.protocol]
-              ).map((item) => (
+              {supportedProtocols.map((item) => (
                 <option key={item} value={item}>
                   {item}
                 </option>

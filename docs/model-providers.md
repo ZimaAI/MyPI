@@ -1,10 +1,10 @@
 # 模型服务与默认配置
 
-核对日期：**2026-10-06**。本目录覆盖 16 家服务商、18 个官方端点、33 个适合文字与工具调用的主要模型。它是可审阅的官方文档快照，账号实际开通范围仍以服务商和连接测试为准。未穷举所有历史模型、微调部署、嵌入、音视频或图像生成模型；Azure OpenAI、AWS Bedrock、Vertex AI 的云身份认证不在本轮 API Key 适配范围内。
+核对日期：**2026-10-06**。本目录覆盖 16 家服务商的 18 类服务（包含两个火山订阅套餐）、22 个官方端点、61 条文字/工具调用模型预设，另提供自定义服务入口。同一个模型在不同服务中的条目分别计数。它是可审阅的官方文档快照，账号实际开通范围仍以服务商和连接测试为准。未穷举所有历史模型、微调部署、嵌入、音视频或图像生成模型；Azure OpenAI、AWS Bedrock、Vertex AI 的云身份认证不在本轮 API Key 适配范围内。
 
 ## 使用方式
 
-后台进入“模型管理 → 添加模型”，依次选择服务商、地域、官方模型预设，填写密钥并保存。先连接测试，再启用、允许游客选择及设置游客默认。草稿默认停用且不公开；不自动创建账户、填入密钥或修改旧模型。编辑已有模型保留自定义预算，“恢复预设参数”才重置参数。切换服务商或地域会清空未保存的密钥；已有密钥的配置切换端点时必须重新提供匹配凭据。
+后台进入“模型管理 → 添加模型”，依次选择服务商、服务端点、官方模型预设，填写密钥并保存。先连接测试，再启用、允许游客选择及设置游客默认。草稿默认停用且不公开；不自动创建账户、填入密钥或修改旧模型。编辑已有模型保留自定义预算，“恢复预设参数”才重置参数。切换服务商、地域或自定义地址会清空未保存的密钥；已有密钥的配置切换端点时必须重新提供匹配凭据。
 
 CLI 可直接使用服务商密钥环境变量与默认模型：
 
@@ -17,14 +17,79 @@ pnpm cli models --provider dashscope --json
 pnpm cli doctor --provider dashscope --endpoint dashscope-intl
 ```
 
-私有 `~/.mypi/config.json` 的最小配置为 `{"provider":"deepseek"}`。可增加 `model`、`endpoint`、`maxOutputTokens`、`contextWindow`、`protocol`、`reasoning`、`thinkingLevel`。参数优先级仍为 CLI 参数、环境、已显式信任的项目配置、私有配置、目录默认值；密钥优先级为 `MYPI_API_KEY`、服务商密钥环境变量、私有配置，项目配置禁止密钥。显式切换服务商时，不继承其他服务商的私有密钥和模型设置。`mypi models` 只输出公开目录，无需连接服务商或读取密钥。Web 仅接受白名单端点；可信 CLI 保留显式 `--base-url`。
+私有 `~/.mypi/config.json` 的最小配置为 `{"provider":"deepseek"}`。可增加 `model`、`endpoint`、`maxOutputTokens`、`contextWindow`、`protocol`、`reasoning`、`thinkingLevel`。参数优先级仍为 CLI 参数、环境、已显式信任的项目配置、私有配置、目录默认值；密钥优先级为 `MYPI_API_KEY`、服务商密钥环境变量、私有配置，项目配置禁止密钥。显式切换服务商时，不继承其他服务商的私有密钥和模型设置。`mypi models` 只输出公开目录，无需连接服务商或读取密钥。Web 接受官方端点或管理员配置的公网 HTTPS 自定义端点；可信 CLI 的显式 `--base-url` 仍可连接本机/内网服务。协议可用 `--protocol` 或 `MYPI_PROTOCOL` 指定。
 
 管理员 API `GET /api/v1/admin/models` 返回已有配置及 `catalog.verifiedAt/providers`。经过登录和 CSRF 校验后，`POST /api/v1/admin/models` 可仅提交 `{"providerType":"deepseek","reason":"添加官方默认配置"}` 创建草稿；其余字段由同一目录补齐。模型/端点/协议/思考模式/Token 预算变化会使旧连接测试失效。
+
+## 火山引擎 Agent Plan 与 Coding Plan
+
+在提供商中分别选择“火山引擎 · Agent Plan”或“火山引擎 · Coding Plan”。默认 `ark-code-latest` 跟随控制台选定的模型/Auto 路由，窗口默认 32768、输出预算 8192；这两个数值是 MyPI 保守预算，不是路由模型的官方上限。也可直接选套餐 Model Name。选择 Anthropic 端点时自动匹配 Messages 协议；OpenAI 端点可选择 Chat Completions 或 Responses。
+
+| 服务 ID | 默认 Base URL（Chat / Responses） | Anthropic Base URL（端点 ID 加 `-anthropic`） | MyPI 密钥变量 |
+|---|---|---|---|
+| `volcengine-agent-plan` | `https://ark.cn-beijing.volces.com/api/plan/v3` | `https://ark.cn-beijing.volces.com/api/plan` | `ARK_AGENT_PLAN_API_KEY` |
+| `volcengine-coding-plan` | `https://ark.cn-beijing.volces.com/api/coding/v3` | `https://ark.cn-beijing.volces.com/api/coding` | `ARK_CODING_PLAN_API_KEY` |
+
+两个变量是 MyPI 用于隔离凭据的命名；也支持用户显式设置 `MYPI_API_KEY`。不会自动复用普通 `ARK_API_KEY`。Agent Plan 专属密钥不能与 Coding Plan 混用，普通 `/api/v3` 是按量计费接口。[Agent Plan 快速开始](https://docs.volcengine.com/docs/ark/agent-plan-personal-get-started)、[Agent Plan 协议与端点](https://docs.volcengine.com/docs/ark/agent-plan-personal-deepseek-harness?lang=zh)、[Coding Plan 接入](https://docs.volcengine.com/docs/ark/coding-plan-personal-ai-other-tools?lang=zh)。
+
+两套餐分别提供下列 14 个预设，含控制台别名。Coding Plan 数值来自[套餐规格](https://docs.volcengine.com/docs/ark/coding-plan-personal-plan-overview?lang=zh)，k 按 1024 换算。Agent Plan 的[接入示例](https://docs.volcengine.com/docs/ark/agent-plan-enterprise-opencode?lang=zh)给出的是配置预算，未将其或 Coding Plan 的限制当作 Agent Plan 硬上限：界面保持“未知”，默认窗口参考该示例。个人版/企业版和档位的可用模型由账号决定。
+
+| 套餐 Model Name | Coding Plan 上下文 / 输出上限 | Agent Plan 默认窗口 |
+|---|---|---|
+| `ark-code-latest` | 随控制台目标变化 / 未知 | 32768 |
+| `doubao-seed-evolving` | 1048576 / 262144 | 1024000 |
+| `doubao-seed-2.1-pro` | 1048576 / 262144 | 1024000 |
+| `doubao-seed-2.1-lite` | 1048576 / 262144 | 1024000 |
+| `doubao-seed-2.0-mini` | 262144 / 131072 | 256000 |
+| `minimax-m3` | 1048576 / 131072 | 1024000 |
+| `glm-5.3` | 1048576 / 131072 | 1024000 |
+| `glm-5.3-flash` | 1048576 / 131072 | 1024000 |
+| `deepseek-v4.1-flash` | 1048576 / 393216 | 1024000 |
+| `deepseek-v4-flash` | 1048576 / 393216 | 1024000 |
+| `deepseek-v4-pro` | 1048576 / 393216 | 1024000 |
+| `kimi-k2.7-code` | 262144 / 32768（含思考） | 256000 |
+| `kimi-k2.8-preview` | 1048576 / 1048576（仍受 MyPI 输出上限约束） | 1024000 |
+| `kimi-k3` | 1048576 / 131072 | 1024000 |
+
+每个预设默认输出预算 8192。保守启用思考默认档位并保留工具轮次 `reasoning_content`；不声称支持未验证的强度档位、图像/视频生成或套餐 Harness。Coding Plan 仅用于套餐允许的 AI 编程工具场景。CLI 示例（密钥已在本地安全配置）：
+
+```powershell
+pnpm cli models --provider volcengine-agent-plan
+pnpm cli doctor --provider volcengine-agent-plan
+pnpm cli run "解释项目结构" --provider volcengine-coding-plan --model doubao-seed-evolving
+pnpm cli doctor --provider volcengine-agent-plan --endpoint volcengine-agent-plan-anthropic
+pnpm cli doctor --provider volcengine-coding-plan --protocol openai-responses
+```
+
+## 自定义模型端点
+
+在“模型管理 → 添加模型”选择“自定义模型服务”，填写 Base URL、模型 ID、密钥和预算，在“协议与思考设置”中选择协议。已有提供商也可把“服务端点”改为“自定义端点”，保留其模型预设和服务商兼容参数。Gemini 的当前 SDK 无法注入安全传输，因此 Web 中仍只使用官方端点；自定义服务支持 Chat Completions、Responses、Anthropic Messages。
+
+填写基础路径，例如 `https://gateway.example.com/v1`；不要把 `/chat/completions`、`/responses` 或 `/messages` 拼进去。Messages 通常使用服务商给出的基础地址，SDK 再追加 `/v1/messages`。配置仅对管理员可见，凭据仍加密保存且不回显。改变提供商、端点 ID 或规范化后的 Base URL 必须重新输入匹配密钥，并重新连接测试；改名和末尾斜杠规范化不会丢失已有测试状态。
+
+Web 仅允许公网 HTTPS 地址（可含端口）；不允许 URL 凭据、查询参数、片段、内网/回环/云元数据地址。Worker 每次请求检查全部 DNS 地址并将验证结果固定到 TLS 连接，拒绝重定向，限制请求到配置的 origin/基础路径；流式响应最多 32 MiB，空闲超时 30 秒、总时限 5 分钟，连接测试仍受自身 30 秒限制。失败按真实错误处理，不切换到其他服务或按量计费端点。内网/本机模型服务仍需使用显式可信 CLI 的 `--base-url`。
+
+管理员 API 示例：
+
+```json
+{
+  "providerType": "custom",
+  "approvedEndpointId": "custom",
+  "baseUrl": "https://gateway.example.com/v1",
+  "modelId": "your-deployment-id",
+  "protocol": "openai-completions",
+  "contextWindow": 32768,
+  "maxOutputTokens": 4096,
+  "reason": "添加自定义模型网关"
+}
+```
+
+CLI 可运行 `pnpm cli doctor --provider custom --model your-deployment-id --base-url https://gateway.example.com/v1 --protocol openai-completions`；密钥单独通过环境或私有配置提供。
 
 ## 数值含义
 
 - `contextWindow` / `maxInputTokens` / `maxOutputTokens` 是文档规格；未找到明确独立上限时用 `null`（界面“未知”），不是零或无限。聚合服务不会套用原厂的窗口。
-- MyPI 的 `defaultOutputTokens` 统一为 **8192**，是本应用单次调用预算，不宣称是官方默认值或输出上限。上下文默认采用已核对窗口；未知时为 **32768**。百度和腾讯默认采用更小的输入上限。预算可调低。
+- MyPI 官方模型预设的 `defaultOutputTokens` 为 **8192**，是本应用单次调用预算，不宣称是官方默认值或输出上限。上下文通常采用已核对窗口，未知时为 **32768**；Agent Plan 具体模型参考接入示例的窗口预算，但不宣称其硬上限已知。百度和腾讯采用更小的输入上限。通用自定义服务默认窗口 32768、输出 4096，预算可调。
 - 本应用上下文预算范围为 1024–2000000；输出预算为 16–524288，并受已知官方上限和上下文预算共同约束。Kimi K3 官方输出参数上限大于 MyPI 上限，不能直接用作本应用默认预算。还需为输入、工具描述、历史和思考预留空间。
 - Google 官方给出输入/输出两个上限；本目录用输入上限作保守总窗口预算，不将两者相加。百度国内 v2 的总窗口与国际版资料口径不同，使用国内模型目录，同时单列输入上限。
 - `low/medium/high` 只在适配支持相应强度时显示；仅支持开关的服务显示“开启思考（模型默认）”。当前 Mistral Medium 3.5 仅使用 `reasoning_effort=none`，不启用其特殊分块思考输出。

@@ -1,0 +1,199 @@
+{
+  "config": {
+    "configFile": "D:\\Develop\\Projects\\MyPI\\playwright.config.ts",
+    "rootDir": "D:/Develop/Projects/MyPI/tests",
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "D:/Develop/Projects/MyPI/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "D:/Develop/Projects/MyPI/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.e2e.spec.ts"
+        ],
+        "timeout": 30000
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "docs/evidence/playwright-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "runAgents": "none",
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.58.2",
+    "workers": 1,
+    "webServer": {
+      "command": "node --import tsx tests/e2e/server.ts",
+      "url": "http://127.0.0.1:4197/health/live",
+      "reuseExistingServer": false,
+      "timeout": 60000
+    }
+  },
+  "suites": [
+    {
+      "title": "custom-models.e2e.spec.ts",
+      "file": "custom-models.e2e.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Ark plans and custom endpoints save, test, preserve edits and reset credential trust",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 7782,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('调用协议', { exact: true })\nExpected: \u001b[32m\"anthropic-messages\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('调用协议', { exact: true })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('调用协议', { exact: true })\nExpected: \u001b[32m\"anthropic-messages\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('调用协议', { exact: true })\u001b[22m\n\n    at D:\\Develop\\Projects\\MyPI\\tests\\custom-models.e2e.spec.ts:28:58",
+                    "location": {
+                      "file": "D:\\Develop\\Projects\\MyPI\\tests\\custom-models.e2e.spec.ts",
+                      "column": 58,
+                      "line": 28
+                    },
+                    "snippet": "  26 |   await expect(url).toHaveValue('https://ark.cn-beijing.volces.com/api/plan');\n  27 |   await page.getByText('协议与思考设置', { exact: true }).click();\n> 28 |   await expect(page.getByLabel('调用协议', { exact: true })).toHaveValue('anthropic-messages');\n     |                                                          ^\n  29 |   await page.getByRole('combobox', { name: '官方模型预设' }).selectOption('glm-5.3');\n  30 |   await page.getByRole('button', { name: '恢复预设参数' }).click();\n  31 |   await expect(page.getByLabel('调用协议', { exact: true })).toHaveValue('anthropic-messages');"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\Develop\\Projects\\MyPI\\tests\\custom-models.e2e.spec.ts",
+                        "column": 58,
+                        "line": 28
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveValue\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('调用协议', { exact: true })\nExpected: \u001b[32m\"anthropic-messages\"\u001b[39m\nTimeout: 5000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toHaveValue\" with timeout 5000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('调用协议', { exact: true })\u001b[22m\n\n\n  26 |   await expect(url).toHaveValue('https://ark.cn-beijing.volces.com/api/plan');\n  27 |   await page.getByText('协议与思考设置', { exact: true }).click();\n> 28 |   await expect(page.getByLabel('调用协议', { exact: true })).toHaveValue('anthropic-messages');\n     |                                                          ^\n  29 |   await page.getByRole('combobox', { name: '官方模型预设' }).selectOption('glm-5.3');\n  30 |   await page.getByRole('button', { name: '恢复预设参数' }).click();\n  31 |   await expect(page.getByLabel('调用协议', { exact: true })).toHaveValue('anthropic-messages');\n    at D:\\Develop\\Projects\\MyPI\\tests\\custom-models.e2e.spec.ts:28:58"
+                    },
+                    {
+                      "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-06T14:04:21.926Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\Develop\\Projects\\MyPI\\test-results\\custom-models.e2e-Ark-plan-2af3d--and-reset-credential-trust\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\Develop\\Projects\\MyPI\\test-results\\custom-models.e2e-Ark-plan-2af3d--and-reset-credential-trust\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\Develop\\Projects\\MyPI\\tests\\custom-models.e2e.spec.ts",
+                    "column": 58,
+                    "line": 28
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "160f4006502b7ca1da92-78daaa0e984c8209057d",
+          "file": "custom-models.e2e.spec.ts",
+          "line": 4,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "model-presets.e2e.spec.ts",
+      "file": "model-presets.e2e.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "model catalog fills provider defaults, keeps edits, retries failures and fits mobile",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3290,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-06T14:05:06.084Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "c7280d7dd13fd4ff0f45-03feb180f5606748adb4",
+          "file": "model-presets.e2e.spec.ts",
+          "line": 4,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-06T14:04:10.236Z",
+    "duration": 60170.141,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

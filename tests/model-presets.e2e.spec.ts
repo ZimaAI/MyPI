@@ -16,7 +16,7 @@ test('model catalog fills provider defaults, keeps edits, retries failures and f
   const dialog = page.getByRole('dialog');
   await expect(
     page.getByRole('combobox', { name: '提供商', exact: true }).locator('option'),
-  ).toHaveCount(16);
+  ).toHaveCount(19);
   await expect(page.getByLabel('模型标识', { exact: true })).toHaveValue('deepseek-flash');
   await expect(page.getByLabel('上下文窗口', { exact: false })).toHaveValue('1048576');
   await expect(page.getByLabel('最大输出 Token', { exact: false })).toHaveValue('8192');
@@ -30,7 +30,7 @@ test('model catalog fills provider defaults, keeps edits, retries failures and f
     'https://generativelanguage.googleapis.com/v1beta',
   );
   await page.getByRole('combobox', { name: '提供商', exact: true }).selectOption('minimax');
-  await page.getByRole('combobox', { name: '服务地域', exact: true }).selectOption('minimax-intl');
+  await page.getByRole('combobox', { name: '服务端点', exact: true }).selectOption('minimax-intl');
   await expect(page.getByLabel('模型端点', { exact: false })).toHaveValue(
     'https://api.minimax.io/anthropic',
   );
@@ -38,7 +38,7 @@ test('model catalog fills provider defaults, keeps edits, retries failures and f
   await page.getByRole('combobox', { name: '提供商', exact: true }).selectOption('dashscope');
   await page.getByLabel('API Key', { exact: false }).fill('fixture-must-clear-on-region-change');
   await page
-    .getByRole('combobox', { name: '服务地域', exact: true })
+    .getByRole('combobox', { name: '服务端点', exact: true })
     .selectOption('dashscope-intl');
   await expect(page.getByLabel('API Key', { exact: false })).toHaveValue('');
   await expect(page.getByLabel('模型端点', { exact: false })).toHaveValue(
@@ -79,7 +79,7 @@ test('model catalog fills provider defaults, keeps edits, retries failures and f
   await expect(row).toBeVisible();
   await expect(row.getByText('已停用', { exact: true })).toBeVisible();
   await row.getByRole('button', { name: '编辑', exact: true }).click();
-  await expect(page.getByRole('combobox', { name: '服务地域', exact: true })).toHaveValue(
+  await expect(page.getByRole('combobox', { name: '服务端点', exact: true })).toHaveValue(
     'dashscope-intl',
   );
   await expect(page.getByLabel('上下文窗口', { exact: false })).toHaveValue('65432');

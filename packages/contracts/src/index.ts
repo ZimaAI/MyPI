@@ -62,6 +62,8 @@ export interface ModelConfig {
   modelId: string;
   apiKey?: string;
   baseUrl?: string;
+  /** Set only by server-side resolution of administrator supplied public endpoints. */
+  endpointPolicy?: 'public';
   protocol?: ModelProtocol;
   reasoning?: boolean;
   thinkingLevel?: ModelThinkingLevel;

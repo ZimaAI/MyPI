@@ -1,5 +1,17 @@
 # 实施与最终本地验证
 
+## 2026-10-06：火山套餐与自定义模型端点
+
+新增 `volcengine-agent-plan` 与 `volcengine-coding-plan`，分别使用 `/api/plan`、`/api/coding` 专用地址，支持 Chat Completions、Responses、Anthropic Messages 三种协议；不混用普通按量端点与套餐凭据。各提供 14 个模型预设（含 `ark-code-latest` 控制台别名），全目录现有 18 类服务、22 个官方端点、61 条模型预设，另有自定义入口。套餐规格、默认预算与官方来源见[模型服务配置](../model-providers.md)。Agent Plan 接入示例的参数仅作为默认预算，不冒充官方硬上限。
+
+管理员可新增自定义服务，也可为既有服务选择自定义公网 HTTPS Base URL。Gateway 校验地址、协议、预算和凭据边界；SQLite 加密存储后由 Worker 解析。更换目的地址必须重新填写密钥，并使旧连接测试失效；仅改名或规范化末尾斜杠保留既有测试状态。每次自定义请求重新检查所有 DNS 地址并固定到 TLS 连接，限制 origin/基础路径，禁止重定向及内网/回环/元数据访问，设置时限和流式响应大小限制。当前 Gemini SDK 不支持注入自定义传输，因此 Web 中保留其官方端点。可信 CLI 仍允许显式内网地址，并新增 `--protocol` / `MYPI_PROTOCOL`。
+
+`pnpm format` 与 `pnpm verify` 退出 0，依赖边界、格式、TypeScript、**86/86 自动测试**及生产构建通过，见[原始记录](plan-custom-verification.txt)。测试涵盖套餐协议/端点及凭据隔离，真实 SDK 的三个协议与自定义传输，思考/工具结果续传，API 的管理员权限/地址变更/测试失效，以及 DNS 固定、混合公网私网答案、重定向、超量流、取消和超时。浏览器测试定位修正后补跑最终类型和格式检查，追加到同一记录。
+
+最终完整 Playwright 套件 **7/7 通过，0 failed/skipped/flaky**（48.6 秒），见[原始报告](playwright-results.json)。新增流程覆盖两个套餐、协议切换、恢复预设、自定义地址持久化、错误后保留输入、连接测试失效、密钥不回显和手机无横向溢出。首次新增测试使用精确 label 定位包含选项文本的下拉框，导致找不到控件；更正为该控件的可访问 combobox 角色后通过，保留[首次报告](plan-custom-browser-initial.json)，未放宽断言或超时。已实际查看 [1440×900 桌面](screenshots/custom-model-desktop.png) 与 [390×844 手机](screenshots/custom-model-mobile.png) 截图。
+
+更新前已在现有数据卷创建 SQLite 一致性备份 `/data/backups/before-ark-plans-custom-endpoints-20261006`：30 页，SHA-256 `e322624978e352f0b23c35fedb8b1b77dcc7160f9209f54217b79bfb51a4b1d6`。保留 `.env.docker`、现有数据卷及公开执行关闭状态。SDK/浏览器请求使用明确的本地 fixture，没有消耗真实套餐或付费 API 额度；账号实际连通性需由管理员配置密钥后测试。
+
 ## 2026-10-06：国内外模型服务预设
 
 通过服务商官方文档核对并新增 16 家服务商、18 个端点和 33 个文字/工具调用模型。目录、完整规格和来源见 [模型服务配置](../model-providers.md)。Gateway、CLI 和管理页共享预设；新配置自动填充协议、模型、上下文/输出预算与思考模式。未知独立输出上限保持未知，既有配置的协议、预算、凭据和关闭思考状态不会因升级自动改写。

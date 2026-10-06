@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createServer, type ServerResponse } from 'node:http';
+import { createServer, request as httpRequest, type ServerResponse } from 'node:http';
 import {
   providerPresets,
   getProviderPreset,
@@ -239,6 +239,117 @@ test(
   },
 );
 
+test('Ark plan endpoint variants and custom public endpoints use all three real SDK transports', async () => {
+  let protocol = 'openai-completions';
+  const requests: any[] = [];
+  const server = createServer(async (request, response) => {
+    let raw = '';
+    for await (const chunk of request) raw += chunk;
+    requests.push({ path: request.url!, headers: request.headers, payload: JSON.parse(raw) });
+    reply(response, protocol, 'ark-code-latest');
+  });
+  await new Promise<void>((resolve) => server.listen(0, '127.0.0.1', resolve));
+  const port = (server.address() as { port: number }).port;
+  try {
+    for (const providerType of ['volcengine-agent-plan', 'volcengine-coding-plan', 'custom']) {
+      for (const api of ['openai-completions', 'openai-responses', 'anthropic-messages'] as const) {
+        protocol = api;
+        const custom = providerType === 'custom';
+        const prefix = custom
+          ? '/custom/gateway'
+          : providerType.includes('agent')
+            ? '/api/plan'
+            : '/api/coding';
+        const path = `${prefix}${api === 'anthropic-messages' ? '' : '/v3'}`;
+        let networkCalls = 0;
+        const runtime = new PiRuntimeFactory({
+          modelFetchOptions: {
+            resolveDns: async () => [{ address: '8.8.8.8', family: 4 }],
+            request: ((url: URL, options: any, callback: any) => {
+              networkCalls++;
+              assert.equal(url.origin, 'https://model.example.com');
+              assert.equal(options.rejectUnauthorized, true);
+              return httpRequest(
+                `http://127.0.0.1:${port}${url.pathname}${url.search}`,
+                {
+                  method: options.method,
+                  headers: options.headers,
+                  signal: options.signal,
+                  agent: false,
+                },
+                callback,
+              );
+            }) as any,
+          },
+        });
+        const session = await runtime.create({
+          sessionId: crypto.randomUUID(),
+          tools: [tool],
+          model: {
+            id: `${providerType}-${api}`,
+            displayName: providerType,
+            providerType,
+            protocol: api,
+            modelId: custom ? 'customer-deployment' : 'ark-code-latest',
+            apiKey: 'fixture-plan-custom-key',
+            baseUrl: `${custom ? 'https://model.example.com' : `http://127.0.0.1:${port}`}${path}`,
+            ...(custom ? { endpointPolicy: 'public' as const } : {}),
+            maxOutputTokens: 4096,
+            contextWindow: 32768,
+            reasoning: !custom,
+            thinkingLevel: custom ? 'off' : 'low',
+            configVersion: 1,
+          },
+          onEvent: () => {},
+          beforeModelCall: async () => crypto.randomUUID(),
+          afterModelCall: async (_, usage) => {
+            assert.equal(usage.outputTokens, 2);
+          },
+        });
+        try {
+          const result = await session.prompt('Reply OK.', new AbortController().signal);
+          assert.equal(result.text, 'OK', `${providerType}/${api}`);
+          assert.equal(networkCalls, custom ? 1 : 0);
+          const req = requests.at(-1)!;
+          assert.equal(req.payload.model, custom ? 'customer-deployment' : 'ark-code-latest');
+          const operation =
+            api === 'anthropic-messages'
+              ? '/v1/messages'
+              : api === 'openai-responses'
+                ? '/responses'
+                : '/chat/completions';
+          assert.equal(new URL(req.path, 'https://model.example.com').pathname, path + operation);
+          assert.equal(
+            req.headers[api === 'anthropic-messages' ? 'x-api-key' : 'authorization'],
+            api === 'anthropic-messages'
+              ? 'fixture-plan-custom-key'
+              : 'Bearer fixture-plan-custom-key',
+          );
+          assert.equal(
+            req.payload.max_tokens ??
+              req.payload.max_output_tokens ??
+              req.payload.max_completion_tokens,
+            4096,
+          );
+          if (!custom && api === 'openai-completions') {
+            assert.equal(req.payload.thinking.type, 'enabled');
+            assert.equal(req.payload.max_completion_tokens, 4096);
+          }
+          if (!custom && api === 'anthropic-messages') {
+            assert.equal(req.payload.thinking.type, 'enabled');
+            assert.ok(req.payload.thinking.budget_tokens < req.payload.max_tokens);
+          }
+        } finally {
+          await session.close();
+        }
+      }
+    }
+  } finally {
+    server.closeAllConnections();
+    await new Promise<void>((resolve) => server.close(() => resolve()));
+  }
+});
+
 test('thinking tool calls replay reasoning and results without leaking tools or losing usage', async () => {
   const requests: any[] = [];
   let first = true;
@@ -279,7 +390,14 @@ test('thinking tool calls replay reasoning and results without leaking tools or 
   });
   await new Promise<void>((resolve) => server.listen(0, '127.0.0.1', resolve));
   try {
-    for (const id of ['deepseek', 'moonshot', 'zhipu', 'tencent']) {
+    for (const id of [
+      'deepseek',
+      'moonshot',
+      'zhipu',
+      'tencent',
+      'volcengine-agent-plan',
+      'volcengine-coding-plan',
+    ]) {
       first = true;
       requests.length = 0;
       const provider = getProviderPreset(id)!,

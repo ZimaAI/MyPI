@@ -86,12 +86,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 6830,
+                  "duration": 11087,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-06T13:32:38.357Z",
+                  "startTime": "2026-10-06T14:06:06.037Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -128,12 +128,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 4492,
+                  "duration": 5460,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-06T13:32:45.657Z",
+                  "startTime": "2026-10-06T14:06:17.446Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -162,12 +162,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 3406,
+                  "duration": 3777,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-06T13:32:50.182Z",
+                  "startTime": "2026-10-06T14:06:22.980Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -196,12 +196,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1680,
+                  "duration": 1365,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-06T13:32:53.630Z",
+                  "startTime": "2026-10-06T14:06:26.798Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -212,6 +212,48 @@
           "id": "6a4f6af76e0a7571f584-b321571acec8353ffd85",
           "file": "chat.e2e.spec.ts",
           "line": 58,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "custom-models.e2e.spec.ts",
+      "file": "custom-models.e2e.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "Ark plans and custom endpoints save, test, preserve edits and reset credential trust",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 90000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6324,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-06T14:06:28.229Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "160f4006502b7ca1da92-78daaa0e984c8209057d",
+          "file": "custom-models.e2e.spec.ts",
+          "line": 4,
           "column": 1
         }
       ]
@@ -238,12 +280,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 3933,
+                  "duration": 4252,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-06T13:32:55.386Z",
+                  "startTime": "2026-10-06T14:06:34.626Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -280,12 +322,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 3357,
+                  "duration": 4088,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-06T13:32:59.400Z",
+                  "startTime": "2026-10-06T14:06:38.942Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -303,9 +345,9 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-10-06T13:32:30.494Z",
-    "duration": 33459.547999999995,
-    "expected": 6,
+    "startTime": "2026-10-06T14:05:56.343Z",
+    "duration": 48619.894,
+    "expected": 7,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

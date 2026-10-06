@@ -8,6 +8,8 @@ import {
   type Conversation,
   type Policy,
   providerPresets,
+  customProviderPreset,
+  modelEndpointProtocols,
   getProviderPreset,
   getModelPreset,
   MODEL_CATALOG_VERIFIED_AT,
@@ -31,6 +33,7 @@ import type { GatewayServices } from './services.js';
 import { readActiveRules } from '@mypi/policy';
 import { AgentEntityStore } from '../../../packages/storage-sqlite/src/entity-store.ts';
 import { registerRuleRoutes } from './rules.js';
+import { normalizeModelBaseUrl } from '../../../packages/model-network/src/index.ts';
 export { ModelRepository, SecretBox, effectivePolicy, hashPassword } from './security.js';
 export type { GatewayServices } from './services.js';
 
@@ -862,7 +865,10 @@ export async function createGateway(options: GatewayOptions): Promise<FastifyIns
   });
   app.get('/api/v1/admin/models', async () => ({
     items: models.list(),
-    catalog: { verifiedAt: MODEL_CATALOG_VERIFIED_AT, providers: providerPresets },
+    catalog: {
+      verifiedAt: MODEL_CATALOG_VERIFIED_AT,
+      providers: [...providerPresets, customProviderPreset],
+    },
     approvedEndpoints: Object.entries(approvedEndpoints).map(([id, ep]) => ({
       id,
       providerType: ep.providerType,
@@ -872,9 +878,13 @@ export async function createGateway(options: GatewayOptions): Promise<FastifyIns
   }));
   const modelProperties = {
     displayName: string(1, 100),
-    providerType: { type: 'string', enum: providerPresets.map((provider) => provider.id) },
+    providerType: {
+      type: 'string',
+      enum: [...providerPresets.map((provider) => provider.id), 'custom'],
+    },
     modelId: string(1, 200),
-    approvedEndpointId: { type: 'string', enum: Object.keys(approvedEndpoints) },
+    approvedEndpointId: { type: 'string', enum: [...Object.keys(approvedEndpoints), 'custom'] },
+    baseUrl: string(0, 2048),
     protocol: { type: 'string', enum: MODEL_PROTOCOLS },
     reasoning: boolean,
     thinkingLevel: { type: 'string', enum: ['off', 'low', 'medium', 'high'] },
@@ -902,28 +912,39 @@ export async function createGateway(options: GatewayOptions): Promise<FastifyIns
     const preset = getModelPreset(providerType, modelId);
     const endpointId =
       input.approvedEndpointId ?? previous?.approvedEndpointId ?? provider.defaultEndpointId;
+    let baseUrl: string | undefined;
+    if (endpointId === 'custom') {
+      try {
+        baseUrl = normalizeModelBaseUrl(input.baseUrl ?? previous?.baseUrl ?? '');
+      } catch (error) {
+        throw invalid((error as Error).message);
+      }
+    } else if (input.baseUrl) throw invalid('自定义 Base URL 需要选择自定义端点');
+    if (!modelId.trim()) throw invalid('请填写模型 ID');
+    const supportedProtocols = modelEndpointProtocols(providerType, endpointId);
+    if (!supportedProtocols.length) throw invalid('此服务或端点不支持所选调用方式');
     const identityChanged =
       !!previous &&
       (providerType !== previous.providerType ||
         modelId !== previous.modelId ||
-        endpointId !== previous.approvedEndpointId);
+        endpointId !== previous.approvedEndpointId ||
+        baseUrl !== previous.baseUrl);
     const endpointChanged =
       !!previous &&
-      (providerType !== previous.providerType || endpointId !== previous.approvedEndpointId);
+      (providerType !== previous.providerType ||
+        endpointId !== previous.approvedEndpointId ||
+        baseUrl !== previous.baseUrl);
     if (endpointChanged && previous.encryptedKey && !input.apiKey)
-      throw invalid('切换服务商或地域时请重新输入匹配的 API Key');
+      throw invalid('切换服务商、地域或端点地址时请重新输入匹配的 API Key');
     const protocol =
       input.protocol ??
       (!identityChanged ? previous?.protocol : undefined) ??
       (previous && !identityChanged && providerType === 'openai'
         ? 'openai-completions'
-        : (preset?.protocol ?? provider.protocol));
-    if (
-      protocol !== provider.protocol &&
-      !(providerType === 'openai' && protocol === 'openai-completions')
-    )
+        : (preset?.protocol ?? supportedProtocols[0]));
+    if (!supportedProtocols.includes(protocol))
       throw invalid('The protocol does not match the provider');
-    if (approvedEndpoints[endpointId]?.providerType !== providerType)
+    if (endpointId !== 'custom' && approvedEndpoints[endpointId]?.providerType !== providerType)
       throw invalid('The endpoint does not match the provider');
     if (input.defaultForGuests && existing?.data.testedVersion !== existing?.version)
       throw invalid('Test this model successfully before making it the guest default');
@@ -933,6 +954,7 @@ export async function createGateway(options: GatewayOptions): Promise<FastifyIns
       providerType,
       modelId,
       approvedEndpointId: endpointId,
+      baseUrl,
       protocol,
       reasoning:
         input.reasoning ??
@@ -997,6 +1019,7 @@ export async function createGateway(options: GatewayOptions): Promise<FastifyIns
       (data.providerType !== previous.providerType ||
         data.modelId !== previous.modelId ||
         data.approvedEndpointId !== previous.approvedEndpointId ||
+        data.baseUrl !== previous.baseUrl ||
         data.protocol !==
           (previous.protocol ??
             (previous.providerType === 'openai'

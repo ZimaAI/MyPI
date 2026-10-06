@@ -1,7 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
-import { createGateway, createAdmin, type GatewayServices } from '../src/index.js';
+import {
+  createGateway,
+  createAdmin,
+  ModelRepository,
+  SecretBox,
+  type GatewayServices,
+} from '../src/index.js';
 import { SqliteStore } from '@mypi/storage-sqlite';
 import { defaultPolicy, providerPresets } from '@mypi/contracts';
 const origin = 'http://localhost:3000';
@@ -133,7 +139,7 @@ test('provider presets resolve server defaults and enforce endpoint, limits and 
     const catalog = (
       await f.app.inject({ url: '/api/v1/admin/models', headers: { cookie: admin.cookie } })
     ).json();
-    assert.equal(catalog.catalog.providers.length, 16);
+    assert.equal(catalog.catalog.providers.length, 19);
     assert.equal(catalog.catalog.verifiedAt, '2026-10-06');
     assert.equal(catalog.items.length, 0);
     for (const provider of providerPresets) {
@@ -243,6 +249,134 @@ test('provider presets resolve server defaults and enforce endpoint, limits and 
     });
     assert.equal(changed.statusCode, 200, changed.body);
     assert.equal(changed.json().testedVersion, undefined);
+  } finally {
+    await f.close();
+  }
+});
+
+test('plan protocols and administrator custom endpoints persist, protect keys and invalidate tests', async () => {
+  const f = await fixture();
+  try {
+    const admin = await f.admin(),
+      guest = await f.guest();
+    const repository = new ModelRepository(
+      f.store,
+      new SecretBox(Buffer.alloc(32, 3).toString('base64')),
+    );
+    for (const kind of ['agent', 'coding']) {
+      const providerType = `volcengine-${kind}-plan`;
+      for (const protocol of ['openai-completions', 'openai-responses', 'anthropic-messages']) {
+        const created = await f.app.inject({
+          method: 'POST',
+          url: '/api/v1/admin/models',
+          headers: f.write(admin),
+          payload: {
+            providerType,
+            protocol,
+            apiKey: 'fixture-plan-key',
+            reason: 'plan protocol fixture',
+            approvedEndpointId:
+              providerType + (protocol === 'anthropic-messages' ? '-anthropic' : ''),
+          },
+        });
+        assert.equal(created.statusCode, 201, created.body);
+        const resolved = repository.resolveModel(created.json().id, false);
+        assert.equal(resolved.protocol, protocol);
+        assert.equal(resolved.modelId, 'ark-code-latest');
+        assert.ok(resolved.baseUrl?.includes(`/api/${kind === 'agent' ? 'plan' : 'coding'}`));
+        assert.ok(!created.body.includes('fixture-plan-key'));
+      }
+    }
+    const create = (payload: Record<string, unknown>, identity = admin) =>
+      f.app.inject({
+        method: 'POST',
+        url: '/api/v1/admin/models',
+        headers: f.write(identity),
+        payload: {
+          providerType: 'custom',
+          approvedEndpointId: 'custom',
+          baseUrl: 'https://models.example.com/v1/',
+          modelId: 'my-deployment',
+          apiKey: 'fixture-custom-secret',
+          reason: 'custom endpoint test',
+          ...payload,
+        },
+      });
+    assert.equal((await create({}, guest)).statusCode, 401);
+    for (const payload of [
+      { baseUrl: 'http://127.0.0.1:4101' },
+      { baseUrl: 'https://169.254.169.254' },
+      { baseUrl: 'https://secret@models.example.com/v1' },
+      { baseUrl: 'https://models.example.com/v1?key=secret' },
+      { baseUrl: '' },
+      { modelId: '' },
+      { protocol: 'google-generative-ai' },
+      { approvedEndpointId: 'openai' },
+    ])
+      assert.equal((await create(payload)).statusCode, 400);
+    const created = await create({});
+    assert.equal(created.statusCode, 201, created.body);
+    const id = created.json().id;
+    assert.equal(created.json().baseUrl, 'https://models.example.com/v1');
+    assert.ok(!created.body.includes('fixture-custom-secret'));
+    const resolved = repository.resolveModel(id, false);
+    assert.equal(resolved.endpointPolicy, 'public');
+    assert.equal(resolved.apiKey, 'fixture-custom-secret');
+    assert.equal(resolved.baseUrl, 'https://models.example.com/v1');
+    const patch = (payload: Record<string, unknown>) =>
+      f.app.inject({
+        method: 'PATCH',
+        url: `/api/v1/admin/models/${id}`,
+        headers: f.write(admin),
+        payload: {
+          expectedVersion: f.store.get('model', id)!.version,
+          reason: 'custom endpoint edit test',
+          ...payload,
+        },
+      });
+    await f.app.inject({
+      method: 'POST',
+      url: `/api/v1/admin/models/${id}/test`,
+      headers: f.write(admin),
+    });
+    const tested = f.store.get<any>('model', id)!;
+    assert.equal(tested.data.testedVersion, tested.version);
+    assert.equal((await patch({ baseUrl: 'https://new.example.com/v1' })).statusCode, 400);
+    const rename = await patch({
+      displayName: 'Preserve existing custom key',
+      baseUrl: 'https://models.example.com/v1/',
+    });
+    assert.equal(rename.statusCode, 200, rename.body);
+    assert.equal(rename.json().testedVersion, rename.json().version);
+    const moved = await patch({
+      baseUrl: 'https://new.example.com/v2',
+      apiKey: 'new-fixture-secret',
+    });
+    assert.equal(moved.statusCode, 200, moved.body);
+    assert.equal(moved.json().testedVersion, undefined);
+    assert.equal(repository.resolveModel(id, false).baseUrl, 'https://new.example.com/v2');
+    assert.equal(repository.resolveModel(id, false).apiKey, 'new-fixture-secret');
+    const restored = await patch({
+      providerType: 'volcengine-agent-plan',
+      modelId: 'ark-code-latest',
+      approvedEndpointId: 'volcengine-agent-plan',
+      apiKey: 'plan-fixture-key',
+      reasoning: true,
+      thinkingLevel: 'low',
+    });
+    assert.equal(restored.statusCode, 200, restored.body);
+    assert.equal(restored.json().baseUrl, undefined);
+    assert.equal(repository.resolveModel(id, false).endpointPolicy, undefined);
+    const thirdParty = await create({
+      providerType: 'openai',
+      modelId: 'gpt-6.1-sol',
+      protocol: 'openai-responses',
+    });
+    assert.equal(thirdParty.statusCode, 201, thirdParty.body);
+    assert.equal(
+      repository.resolveModel(thirdParty.json().id, false).baseUrl,
+      'https://models.example.com/v1',
+    );
   } finally {
     await f.close();
   }

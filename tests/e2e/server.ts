@@ -140,6 +140,7 @@ const services = {
       reasoning: false,
       thinkingLevel: 'off',
       baseUrl: model.baseUrl,
+      endpointPolicy: undefined, // Explicit loopback fixture, not a web-configurable bypass.
       apiKey: 'fixture-only',
     }),
   ready: async () => ({ ready: true, sandboxEnforced: false }),

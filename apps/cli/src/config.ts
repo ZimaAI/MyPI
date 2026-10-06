@@ -10,6 +10,7 @@ import {
   approvedModelEndpoints,
   modelLimitError,
   MODEL_PROTOCOLS,
+  modelEndpointProtocols,
 } from '../../../packages/contracts/src/index.ts';
 
 export interface CliOptions {
@@ -33,6 +34,7 @@ export interface CliOptions {
   model?: string;
   baseUrl?: string;
   endpoint?: string;
+  protocol?: ModelConfig['protocol'];
 }
 
 export const usage = `MyPI — 独立 Coding Agent（默认 explicit）
@@ -53,12 +55,13 @@ export const usage = `MyPI — 独立 Coding Agent（默认 explicit）
   --model ID            提供商模型 ID
   --base-url URL        本地配置的提供商地址
   --endpoint ID         服务商预设地域端点（mypi models 查看）
+  --protocol TYPE       openai-completions / openai-responses / anthropic-messages
   --state-dir DIR       私有状态目录（默认 ~/.mypi）
   --trust-project       信任 .mypi/config.json 中的非敏感设置
   --json                JSONL 事件输出，诊断写 stderr
   --help                显示帮助
 
-环境: MYPI_API_KEY, MYPI_MODEL, MYPI_PROVIDER, MYPI_BASE_URL, MYPI_ENDPOINT, MYPI_HOME
+环境: MYPI_API_KEY, MYPI_MODEL, MYPI_PROVIDER, MYPI_BASE_URL, MYPI_ENDPOINT, MYPI_PROTOCOL, MYPI_HOME
 也支持服务商 API Key 环境变量；默认模型参数来自官方文档快照。
 交互: /mode native|explicit /tasks /processes /cancel /new /quit
 `;
@@ -114,6 +117,11 @@ export function parseArgs(args: string[], cwd = process.cwd()): CliOptions {
           break;
         case 'endpoint':
           options.endpoint = value;
+          break;
+        case 'protocol':
+          if (!MODEL_PROTOCOLS.includes(value as ModelConfig['protocol'] & string))
+            throw new AppError('CLI_ARGUMENT', 'Unknown model protocol');
+          options.protocol = value as ModelConfig['protocol'];
           break;
         default:
           throw new AppError('CLI_ARGUMENT', `Unknown option --${key}`);
@@ -228,8 +236,28 @@ export async function loadConfig(
   const endpointId =
     options.endpoint ?? env.MYPI_ENDPOINT ?? config.endpoint ?? provider?.defaultEndpointId;
   const endpoint = endpointId ? approvedModelEndpoints[endpointId] : undefined;
-  if (endpointId && (!endpoint || endpoint.providerType !== providerType))
+  if (
+    endpointId &&
+    endpointId !== 'custom' &&
+    (!endpoint || endpoint.providerType !== providerType)
+  )
     throw new AppError('CLI_CONFIG', 'Endpoint does not match the provider');
+  const baseUrl = options.baseUrl ?? env.MYPI_BASE_URL ?? config.baseUrl ?? endpoint?.baseUrl;
+  if ((endpointId === 'custom' && !baseUrl) || (providerType === 'custom' && !modelId))
+    throw new AppError('CLI_CONFIG', '自定义模型需要 --base-url 和 --model，或对应配置项');
+  const supportedProtocols =
+    provider && endpointId ? modelEndpointProtocols(providerType, endpointId) : undefined;
+  const protocol =
+    options.protocol ??
+    (env.MYPI_PROTOCOL as ModelConfig['protocol']) ??
+    config.protocol ??
+    endpoint?.protocols?.[0] ??
+    preset?.protocol ??
+    provider?.protocol;
+  if (protocol && !MODEL_PROTOCOLS.includes(protocol))
+    throw new AppError('CLI_CONFIG', 'Unknown model protocol');
+  if (protocol && supportedProtocols && !supportedProtocols.includes(protocol))
+    throw new AppError('CLI_CONFIG', 'Protocol does not match the endpoint');
   const contextWindow = config.contextWindow ?? preset?.defaultContextWindow ?? 32768;
   const maxOutputTokens = config.maxOutputTokens ?? preset?.defaultOutputTokens ?? 4096;
   const error = modelLimitError(providerType, modelId, contextWindow, maxOutputTokens);
@@ -252,8 +280,8 @@ export async function loadConfig(
         env.MYPI_API_KEY ??
         (provider ? env[provider.apiKeyEnv] : undefined) ??
         (!user.provider || user.provider === providerType ? user.apiKey : undefined),
-      baseUrl: options.baseUrl ?? env.MYPI_BASE_URL ?? config.baseUrl ?? endpoint?.baseUrl,
-      protocol: config.protocol ?? preset?.protocol ?? provider?.protocol,
+      baseUrl,
+      protocol,
       reasoning,
       thinkingLevel,
       maxOutputTokens,

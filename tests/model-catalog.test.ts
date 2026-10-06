@@ -13,7 +13,7 @@ import { SqliteStore } from '../packages/storage-sqlite/src/index.ts';
 import { ModelRepository, SecretBox } from '../packages/storage-sqlite/src/security.ts';
 
 test('catalog defaults have official sources, unique approved HTTPS endpoints and valid token budgets', () => {
-  assert.equal(providerPresets.length, 16);
+  assert.equal(providerPresets.length, 18);
   assert.equal(new Set(providerPresets.map((p) => p.id)).size, providerPresets.length);
   const endpoints = providerPresets.flatMap((p) => p.endpoints);
   assert.equal(new Set(endpoints.map((e) => e.id)).size, endpoints.length);
@@ -99,6 +99,52 @@ test('CLI uses provider defaults and key env names, supports regions and explici
     assert.equal(switched.apiKey, undefined);
     assert.equal(switched.baseUrl, approvedModelEndpoints.google.baseUrl);
     assert.equal(switched.maxOutputTokens, 8192);
+    for (const kind of ['agent', 'coding']) {
+      const provider = `volcengine-${kind}-plan`;
+      const plan = (
+        await loadConfig({ ...options, provider, endpoint: `${provider}-anthropic` }, {})
+      ).model;
+      assert.equal(plan.protocol, 'anthropic-messages');
+      assert.equal(plan.modelId, 'ark-code-latest');
+      assert.equal(plan.apiKey, undefined);
+      assert.equal(
+        plan.baseUrl,
+        `https://ark.cn-beijing.volces.com/api/${kind === 'agent' ? 'plan' : 'coding'}`,
+      );
+    }
+    const custom = (
+      await loadConfig(
+        {
+          ...options,
+          provider: 'custom',
+          endpoint: undefined,
+          model: 'private-model',
+          baseUrl: 'http://127.0.0.1:1234/v1',
+        },
+        {},
+      )
+    ).model;
+    assert.equal(custom.modelId, 'private-model');
+    assert.equal(custom.protocol, 'openai-completions');
+    const withProtocol = parseArgs([
+      '--state-dir',
+      dir,
+      '--provider',
+      'custom',
+      '--model',
+      'deployment',
+      '--base-url',
+      'https://gateway.example.com',
+      '--protocol',
+      'anthropic-messages',
+    ]);
+    assert.equal((await loadConfig(withProtocol, {})).model.protocol, 'anthropic-messages');
+    await assert.rejects(loadConfig({ ...options, endpoint: 'custom' }, {}), /自定义模型需要/);
+    assert.equal(custom.endpointPolicy, undefined); // Trusted CLI supports explicitly configured local services.
+    await assert.rejects(
+      loadConfig({ ...options, provider: 'custom', endpoint: undefined }, {}),
+      /自定义模型需要/,
+    );
     assert.equal(parseArgs(['models', '--provider', 'deepseek', '--json']).command, 'models');
   } finally {
     await rm(dir, { recursive: true, force: true });

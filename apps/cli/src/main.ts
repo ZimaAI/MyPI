@@ -20,6 +20,7 @@ import {
   AppError,
   defaultPolicy,
   providerPresets,
+  customProviderPreset,
   MODEL_CATALOG_VERIFIED_AT,
   type AgentEvent,
   type Conversation,
@@ -100,7 +101,7 @@ export async function main(args = process.argv.slice(2)): Promise<number> {
     return 0;
   }
   if (options.command === 'models') {
-    const providers = providerPresets.filter(
+    const providers = [...providerPresets, customProviderPreset].filter(
       (provider) => !options.provider || provider.id === options.provider,
     );
     if (!providers.length) throw new AppError('CLI_ARGUMENT', 'Unknown catalog provider');

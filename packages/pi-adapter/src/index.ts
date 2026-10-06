@@ -3,6 +3,7 @@ import { mkdirSync } from 'node:fs';
 import { lstat, readdir, realpath, unlink } from 'node:fs/promises';
 import { homedir } from 'node:os';
 import { isAbsolute, join, relative, resolve } from 'node:path';
+import { createPublicModelFetch, type ModelFetchOptions } from '../../model-network/src/index.ts';
 import {
   createAgentSession,
   createExtensionRuntime,
@@ -93,13 +94,14 @@ function compatibility(
   api: Api,
 ): OpenAICompletionsCompat | AnthropicMessagesCompat | undefined {
   const provider = model.providerType;
+  const arkPlan = provider === 'volcengine-agent-plan' || provider === 'volcengine-coding-plan';
   if (api === 'anthropic-messages') {
     const adaptive =
       provider === 'anthropic' && /^claude-(sonnet-5|opus-5|fable-5)/.test(model.modelId);
     return {
       forceAdaptiveThinking: adaptive || provider === 'minimax',
       supportsTemperature: !adaptive,
-      ...(provider === 'minimax'
+      ...(provider === 'minimax' || arkPlan
         ? {
             supportsEagerToolInputStreaming: false,
             supportsCacheControlOnTools: false,
@@ -154,6 +156,16 @@ function compatibility(
       return { ...common, supportsReasoningEffort: true };
     case 'volcengine':
       return { ...common, thinkingFormat: 'deepseek', maxTokensField: 'max_completion_tokens' };
+    case 'volcengine-agent-plan':
+    case 'volcengine-coding-plan':
+      return {
+        ...common,
+        thinkingFormat: 'deepseek',
+        maxTokensField: 'max_completion_tokens',
+        requiresReasoningContentOnAssistantMessages: true,
+      };
+    case 'custom':
+      return { ...common, supportsReasoningEffort: true };
     case 'groq':
       return { ...common, supportsReasoningEffort: true, maxTokensField: 'max_completion_tokens' };
     case 'openrouter':
@@ -232,6 +244,8 @@ function toolResult(value: unknown, isError: boolean): ToolResult {
 }
 
 export interface PiRuntimeOptions {
+  /** Trusted composition/test seam; never accepted from model or request configuration. */
+  modelFetchOptions?: ModelFetchOptions;
   /** Trusted private storage, never a public executable workspace. Omit for memory-only. */
   stateDir?: string;
   /** Logical cwd for session grouping only; tools are always supplied by execution ports. */
@@ -252,6 +266,18 @@ export class PiRuntimeFactory implements RuntimeFactory {
     const preset = getModelPreset(input.model.providerType, input.model.modelId);
     const reasoning = input.model.reasoning ?? preset?.reasoning ?? false;
     const thinkingLevel = input.model.thinkingLevel ?? preset?.thinkingLevel ?? 'off';
+    if (input.model.providerType === 'custom' && !input.model.baseUrl)
+      throw new AppError('MODEL_NOT_CONFIGURED', '自定义模型必须配置 Base URL', 422);
+    if (input.model.endpointPolicy === 'public' && api === 'google-generative-ai')
+      throw new AppError(
+        'UNSUPPORTED_PROVIDER',
+        '当前 Gemini SDK 不支持自定义安全传输，请使用官方端点',
+        422,
+      );
+    const modelFetch =
+      input.model.endpointPolicy === 'public'
+        ? createPublicModelFetch(input.model.baseUrl ?? '', this.options.modelFetchOptions)
+        : undefined;
     const cwd = resolve(
       this.options.cwd ?? this.options.stateDir ?? join(homedir(), '.mypi', 'runtime'),
     );
@@ -266,7 +292,8 @@ export class PiRuntimeFactory implements RuntimeFactory {
       api,
       baseUrl:
         input.model.baseUrl ??
-        (provider ? approvedModelEndpoints[provider.defaultEndpointId].baseUrl : endpoint(api)),
+        (provider ? approvedModelEndpoints[provider.defaultEndpointId]?.baseUrl : undefined) ??
+        endpoint(api),
       models: [
         {
           id: input.model.modelId,
@@ -312,6 +339,7 @@ export class PiRuntimeFactory implements RuntimeFactory {
           activeSignal?.throwIfAborted();
           const requestOptions = {
             ...options,
+            ...(modelFetch ? { fetch: modelFetch, transport: 'sse' as const } : {}),
             maxTokens: Math.min(
               options?.maxTokens ?? input.model.maxOutputTokens,
               input.model.maxOutputTokens,

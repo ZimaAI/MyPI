@@ -33,11 +33,12 @@ export interface ProviderEndpoint {
   id: string;
   name: string;
   baseUrl: string;
+  protocols?: ModelProtocol[];
 }
 export interface ProviderPreset {
   id: string;
   name: string;
-  region: 'domestic' | 'international';
+  region: 'domestic' | 'international' | 'custom';
   protocol: ModelProtocol;
   apiKeyEnv: string;
   defaultEndpointId: string;
@@ -106,6 +107,105 @@ const siliconDocs = 'https://docs.siliconflow.cn/docs/api/chat-completions-post'
 const claudeDocs = 'https://platform.claude.com/docs/en/models/overview';
 const groqDocs = 'https://console.groq.com/docs/models';
 const routerDocs = 'https://openrouter.ai/api/v1/models';
+const codingPlanDocs =
+  'https://docs.volcengine.com/docs/ark/coding-plan-personal-plan-overview?lang=zh';
+const agentPlanDocs = 'https://docs.volcengine.com/docs/ark/agent-plan-enterprise-opencode?lang=zh';
+
+function arkPlan(kind: 'agent' | 'coding'): ProviderPreset {
+  const id = `volcengine-${kind}-plan`;
+  const path = kind === 'agent' ? 'plan' : 'coding';
+  const source = kind === 'agent' ? agentPlanDocs : codingPlanDocs;
+  const models = [
+    model('ark-code-latest', '控制台所选模型 · ark-code-latest', null, null, source, {
+      thinkingLevels: ['low'],
+      notes:
+        '此别名跟随方舟控制台选定的模型或 Auto 路由；上下文和输出上限随目标变化。默认窗口 32768、输出 8192 是保守预算，请按实际模型调整。',
+    }),
+    ...(
+      [
+        ['doubao-seed-evolving', 'Doubao Seed Evolving', 1048576, 262144],
+        ['doubao-seed-2.1-pro', 'Doubao Seed 2.1 Pro', 1048576, 262144],
+        ['doubao-seed-2.1-lite', 'Doubao Seed 2.1 Lite', 1048576, 262144],
+        ['doubao-seed-2.0-mini', 'Doubao Seed 2.0 Mini', 262144, 131072],
+        ['minimax-m3', 'MiniMax M3', 1048576, 131072],
+        ['glm-5.3', 'GLM 5.3', 1048576, 131072],
+        ['glm-5.3-flash', 'GLM 5.3 Flash', 1048576, 131072],
+        ['deepseek-v4.1-flash', 'DeepSeek V4.1 Flash', 1048576, 393216],
+        ['deepseek-v4-flash', 'DeepSeek V4 Flash', 1048576, 393216],
+        ['deepseek-v4-pro', 'DeepSeek V4 Pro', 1048576, 393216],
+        ['kimi-k2.7-code', 'Kimi K2.7 Code', 262144, 32768],
+        ['kimi-k2.8-preview', 'Kimi K2.8 Preview', 1048576, 1048576],
+        ['kimi-k3', 'Kimi K3', 1048576, 131072],
+      ] as const
+    ).map(([modelId, name, context, output]) =>
+      model(
+        modelId,
+        name,
+        kind === 'agent' ? null : context,
+        kind === 'agent' ? null : output,
+        source,
+        {
+          // Agent Plan's integration snippets are configuration examples, not hard-limit specifications.
+          ...(kind === 'agent'
+            ? { defaultContextWindow: context === 1048576 ? 1024000 : 256000 }
+            : {}),
+          thinkingLevels: ['low'],
+          preview: modelId.includes('preview'),
+          notes:
+            kind === 'agent'
+              ? '窗口预算参考 Agent Plan 官方接入示例，不将示例参数标为硬上限；实际规格以账号套餐为准。使用套餐 Model Name，思考采用默认档位。'
+              : '使用套餐 Model Name，不使用按量计费的日期版本 ID；可用性取决于套餐。思考由模型默认档位控制。',
+        },
+      ),
+    ),
+  ];
+  return provider(
+    id,
+    `火山引擎 · ${kind === 'agent' ? 'Agent' : 'Coding'} Plan`,
+    'domestic',
+    'openai-completions',
+    kind === 'agent' ? 'ARK_AGENT_PLAN_API_KEY' : 'ARK_CODING_PLAN_API_KEY',
+    `https://ark.cn-beijing.volces.com/api/${path}/v3`,
+    source,
+    models,
+    {
+      endpoints: [
+        {
+          id,
+          name: '北京 · OpenAI 兼容',
+          baseUrl: `https://ark.cn-beijing.volces.com/api/${path}/v3`,
+          protocols: ['openai-completions', 'openai-responses'],
+        },
+        {
+          id: `${id}-anthropic`,
+          name: '北京 · Anthropic 兼容',
+          baseUrl: `https://ark.cn-beijing.volces.com/api/${path}`,
+          protocols: ['anthropic-messages'],
+        },
+      ],
+      notes:
+        kind === 'agent'
+          ? '使用 Agent Plan 专属 API Key，不能与 Coding Plan 或按量计费密钥混用。模型范围以账号套餐为准。'
+          : '使用 Coding Plan 对应密钥及订阅额度，仅用于套餐允许的 AI 编程工具场景。普通 /api/v3 地址会按量计费。',
+    },
+  );
+}
+
+/** Generic services have no invented model IDs, official sources or endpoints. */
+export const customProviderPreset: ProviderPreset = {
+  id: 'custom',
+  name: '自定义模型服务',
+  region: 'custom',
+  protocol: 'openai-completions',
+  apiKeyEnv: 'MYPI_API_KEY',
+  defaultEndpointId: 'custom',
+  defaultModelId: '',
+  endpoints: [],
+  models: [],
+  sources: [],
+  notes:
+    '填写服务商提供的 HTTPS Base URL、模型 ID 和匹配协议；上下文和输出预算请按该服务的实际规格设置。',
+};
 
 export const providerPresets: ProviderPreset[] = [
   provider(
@@ -262,6 +362,8 @@ export const providerPresets: ProviderPreset[] = [
     ],
     { notes: '需在方舟开通模型。专属部署可手动填写 ep- 接入点 ID，并按该部署填写限制。' },
   ),
+  arkPlan('agent'),
+  arkPlan('coding'),
   provider(
     'baidu',
     '百度千帆 · 文心',
@@ -495,7 +597,8 @@ export const providerPresets: ProviderPreset[] = [
   ),
 ];
 
-export const getProviderPreset = (id: string) => providerPresets.find((item) => item.id === id);
+export const getProviderPreset = (id: string) =>
+  id === 'custom' ? customProviderPreset : providerPresets.find((item) => item.id === id);
 export const getModelPreset = (providerId: string, modelId: string) =>
   getProviderPreset(providerId)?.models.find((item) => item.id === modelId);
 export const approvedModelEndpoints: Record<string, ProviderEndpoint & { providerType: string }> =
@@ -504,6 +607,23 @@ export const approvedModelEndpoints: Record<string, ProviderEndpoint & { provide
       item.endpoints.map((endpoint) => [endpoint.id, { ...endpoint, providerType: item.id }]),
     ),
   );
+
+export const CUSTOM_MODEL_PROTOCOLS: ModelProtocol[] = [
+  'openai-completions',
+  'openai-responses',
+  'anthropic-messages',
+];
+export function modelEndpointProtocols(providerId: string, endpointId: string): ModelProtocol[] {
+  if (endpointId === 'custom') return providerId === 'google' ? [] : CUSTOM_MODEL_PROTOCOLS;
+  const endpoint = approvedModelEndpoints[endpointId];
+  if (!endpoint || endpoint.providerType !== providerId) return [];
+  return (
+    endpoint.protocols ??
+    (providerId === 'openai'
+      ? ['openai-responses', 'openai-completions']
+      : [getProviderPreset(providerId)!.protocol])
+  );
+}
 
 /** Returns an error for invalid application budgets, without claiming unknown official limits. */
 export function modelLimitError(

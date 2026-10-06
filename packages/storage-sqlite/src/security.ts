@@ -2,6 +2,7 @@ import { createCipheriv, createDecipheriv, createHash, createHmac, randomBytes }
 import type { ModelConfig, ModelProtocol, ModelThinkingLevel, Policy } from '@mypi/contracts';
 import { approvedModelEndpoints, defaultPolicy } from '@mypi/contracts';
 import { SqliteStore, StoreError } from './index.js';
+import { normalizeModelBaseUrl } from '../../model-network/src/index.ts';
 
 export { hashPassword, verifyPassword, createAdmin } from './admin.js';
 export const sha256 = (text: string) => createHash('sha256').update(text).digest('hex');
@@ -42,6 +43,7 @@ export interface StoredModel {
   providerType: string;
   modelId: string;
   approvedEndpointId: string;
+  baseUrl?: string;
   protocol?: ModelProtocol;
   reasoning?: boolean;
   thinkingLevel?: ModelThinkingLevel;
@@ -73,7 +75,8 @@ export class ModelRepository {
       throw new StoreError('MODEL_UNAVAILABLE', 'No available model is configured', 503);
     const model = record.data,
       endpoint = approvedEndpoints[model.approvedEndpointId];
-    if (!endpoint || endpoint.providerType !== model.providerType)
+    const custom = model.approvedEndpointId === 'custom';
+    if (!custom && (!endpoint || endpoint.providerType !== model.providerType))
       throw new StoreError('MODEL_UNAVAILABLE', 'The provider endpoint is not approved', 503);
     if (!model.encryptedKey)
       throw new StoreError('MODEL_UNAVAILABLE', 'The model credential is not configured', 503);
@@ -83,7 +86,8 @@ export class ModelRepository {
       providerType: model.providerType,
       modelId: model.modelId,
       apiKey: this.secrets.decrypt(model.encryptedKey),
-      baseUrl: endpoint.baseUrl,
+      baseUrl: custom ? normalizeModelBaseUrl(model.baseUrl ?? '') : endpoint.baseUrl,
+      ...(custom ? { endpointPolicy: 'public' as const } : {}),
       protocol: model.protocol,
       // Older records ran with thinking disabled; adopting a preset is an explicit edit.
       reasoning: model.reasoning ?? false,
