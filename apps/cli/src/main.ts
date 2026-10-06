@@ -19,6 +19,8 @@ import {
 import {
   AppError,
   defaultPolicy,
+  providerPresets,
+  MODEL_CATALOG_VERIFIED_AT,
   type AgentEvent,
   type Conversation,
   type Mode,
@@ -95,6 +97,20 @@ export async function main(args = process.argv.slice(2)): Promise<number> {
   const options = parseArgs(args);
   if (options.command === 'help') {
     process.stdout.write(usage);
+    return 0;
+  }
+  if (options.command === 'models') {
+    const providers = providerPresets.filter(
+      (provider) => !options.provider || provider.id === options.provider,
+    );
+    if (!providers.length) throw new AppError('CLI_ARGUMENT', 'Unknown catalog provider');
+    process.stdout.write(
+      JSON.stringify(
+        { verifiedAt: MODEL_CATALOG_VERIFIED_AT, providers },
+        null,
+        options.json ? 0 : 2,
+      ) + '\n',
+    );
     return 0;
   }
   const config = await loadConfig(options);

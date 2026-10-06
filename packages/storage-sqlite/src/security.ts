@@ -1,6 +1,6 @@
 import { createCipheriv, createDecipheriv, createHash, createHmac, randomBytes } from 'node:crypto';
-import type { ModelConfig, Policy } from '@mypi/contracts';
-import { defaultPolicy } from '@mypi/contracts';
+import type { ModelConfig, ModelProtocol, ModelThinkingLevel, Policy } from '@mypi/contracts';
+import { approvedModelEndpoints, defaultPolicy } from '@mypi/contracts';
 import { SqliteStore, StoreError } from './index.js';
 
 export { hashPassword, verifyPassword, createAdmin } from './admin.js';
@@ -35,17 +35,16 @@ export class SecretBox {
     );
   }
 }
-export const approvedEndpoints: Record<string, { providerType: string; baseUrl: string }> = {
-  openai: { providerType: 'openai', baseUrl: 'https://api.openai.com/v1' },
-  anthropic: { providerType: 'anthropic', baseUrl: 'https://api.anthropic.com' },
-  google: { providerType: 'google', baseUrl: 'https://generativelanguage.googleapis.com' },
-};
+export const approvedEndpoints = approvedModelEndpoints;
 export interface StoredModel {
   id: string;
   displayName: string;
   providerType: string;
   modelId: string;
   approvedEndpointId: string;
+  protocol?: ModelProtocol;
+  reasoning?: boolean;
+  thinkingLevel?: ModelThinkingLevel;
   encryptedKey?: string;
   keyFingerprint?: string;
   enabled: boolean;
@@ -85,6 +84,10 @@ export class ModelRepository {
       modelId: model.modelId,
       apiKey: this.secrets.decrypt(model.encryptedKey),
       baseUrl: endpoint.baseUrl,
+      protocol: model.protocol,
+      // Older records ran with thinking disabled; adopting a preset is an explicit edit.
+      reasoning: model.reasoning ?? false,
+      thinkingLevel: model.thinkingLevel ?? 'off',
       maxOutputTokens: model.maxOutputTokens,
       contextWindow: model.contextWindow,
       configVersion: record.version,

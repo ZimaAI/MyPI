@@ -219,15 +219,16 @@ export function createWorkerServices(options: WorkerOptions) {
       return { artifactId, name: item.name };
     },
     testModel: async (model: ModelConfig) => {
+      const testOutputTokens = Math.min(model.maxOutputTokens, model.reasoning ? 2048 : 32);
       const start = Date.now(),
         controller = new AbortController(),
-        timer = setTimeout(() => controller.abort(), 15000),
+        timer = setTimeout(() => controller.abort(), 30000),
         sessionId = `model-test:${randomUUID()}`;
       let session: Awaited<ReturnType<RuntimeFactory['create']>> | undefined;
       try {
         session = await runtime.create({
           sessionId,
-          model: { ...model, maxOutputTokens: 32 },
+          model: { ...model, maxOutputTokens: testOutputTokens },
           tools: [],
           onEvent: () => {},
           beforeModelCall: async (input = 1024) => {
@@ -237,7 +238,7 @@ export function createWorkerServices(options: WorkerOptions) {
               calls: 100,
             });
             const id = randomUUID();
-            store.reserveQuota(id, [bucket.id], input + 32);
+            store.reserveQuota(id, [bucket.id], input + testOutputTokens);
             return id;
           },
           afterModelCall: async (id, usage) =>
@@ -249,6 +250,12 @@ export function createWorkerServices(options: WorkerOptions) {
             ),
         });
         const result = await session.prompt('Reply with exactly OK.', controller.signal);
+        if (!result.text.trim())
+          throw new AppError(
+            'MODEL_TEST_EMPTY',
+            '模型未返回可见文本，请检查输出预算和思考设置',
+            502,
+          );
         return {
           ok: true,
           latencyMs: Date.now() - start,

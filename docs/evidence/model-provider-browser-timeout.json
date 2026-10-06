@@ -86,12 +86,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 6830,
+                  "duration": 18499,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-06T13:32:38.357Z",
+                  "startTime": "2026-10-06T13:26:23.399Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -128,12 +128,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 4492,
+                  "duration": 7978,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-06T13:32:45.657Z",
+                  "startTime": "2026-10-06T13:26:43.650Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -148,7 +148,7 @@
         },
         {
           "title": "explicit delegation returns independent task cards and an origin summary",
-          "ok": true,
+          "ok": false,
           "tags": [],
           "tests": [
             {
@@ -161,18 +161,56 @@
                 {
                   "workerIndex": 0,
                   "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 3406,
-                  "errors": [],
+                  "status": "failed",
+                  "duration": 7719,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/\\/c\\//\u001b[39m\nReceived string:  \u001b[31m\"http://127.0.0.1:4197/\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    8 × unexpected value \"http://127.0.0.1:4197/\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/\\/c\\//\u001b[39m\nReceived string:  \u001b[31m\"http://127.0.0.1:4197/\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    8 × unexpected value \"http://127.0.0.1:4197/\"\u001b[22m\n\n    at D:\\Develop\\Projects\\MyPI\\tests\\chat.e2e.spec.ts:49:22",
+                    "location": {
+                      "file": "D:\\Develop\\Projects\\MyPI\\tests\\chat.e2e.spec.ts",
+                      "column": 22,
+                      "line": 49
+                    },
+                    "snippet": "  47 |   await page.getByRole('button', { name: '新的对话' }).click();\n  48 |   await page.getByRole('button', { name: '创建工作区', exact: true }).click();\n> 49 |   await expect(page).toHaveURL(/\\/c\\//);\n     |                      ^\n  50 |   await page.getByRole('button', { name: '让两个子代理并行协作' }).click();\n  51 |   await page.getByRole('button', { name: '发送消息' }).click();\n  52 |   await page.getByRole('tab', { name: /并行任务/ }).click();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "D:\\Develop\\Projects\\MyPI\\tests\\chat.e2e.spec.ts",
+                        "column": 22,
+                        "line": 49
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mpage\u001b[39m\u001b[2m).\u001b[22mtoHaveURL\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nExpected pattern: \u001b[32m/\\/c\\//\u001b[39m\nReceived string:  \u001b[31m\"http://127.0.0.1:4197/\"\u001b[39m\nTimeout: 5000ms\n\nCall log:\n\u001b[2m  - Expect \"toHaveURL\" with timeout 5000ms\u001b[22m\n\u001b[2m    8 × unexpected value \"http://127.0.0.1:4197/\"\u001b[22m\n\n\n  47 |   await page.getByRole('button', { name: '新的对话' }).click();\n  48 |   await page.getByRole('button', { name: '创建工作区', exact: true }).click();\n> 49 |   await expect(page).toHaveURL(/\\/c\\//);\n     |                      ^\n  50 |   await page.getByRole('button', { name: '让两个子代理并行协作' }).click();\n  51 |   await page.getByRole('button', { name: '发送消息' }).click();\n  52 |   await page.getByRole('tab', { name: /并行任务/ }).click();\n    at D:\\Develop\\Projects\\MyPI\\tests\\chat.e2e.spec.ts:49:22"
+                    },
+                    {
+                      "message": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+                    }
+                  ],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-06T13:32:50.182Z",
+                  "startTime": "2026-10-06T13:26:51.704Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "D:\\Develop\\Projects\\MyPI\\test-results\\chat.e2e-explicit-delegati-643d1-cards-and-an-origin-summary\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "D:\\Develop\\Projects\\MyPI\\test-results\\chat.e2e-explicit-delegati-643d1-cards-and-an-origin-summary\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "D:\\Develop\\Projects\\MyPI\\tests\\chat.e2e.spec.ts",
+                    "column": 22,
+                    "line": 49
+                  }
                 }
               ],
-              "status": "expected"
+              "status": "unexpected"
             }
           ],
           "id": "6a4f6af76e0a7571f584-805de3918984e695c465",
@@ -193,15 +231,15 @@
               "projectName": "",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 1,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1680,
+                  "duration": 3039,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-06T13:32:53.630Z",
+                  "startTime": "2026-10-06T13:27:35.360Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -235,15 +273,15 @@
               "projectName": "",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 1,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 3933,
+                  "duration": 8208,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-06T13:32:55.386Z",
+                  "startTime": "2026-10-06T13:27:39.248Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -277,15 +315,15 @@
               "projectName": "",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 1,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 3357,
+                  "duration": 5449,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-06T13:32:59.400Z",
+                  "startTime": "2026-10-06T13:27:47.574Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -303,11 +341,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-10-06T13:32:30.494Z",
-    "duration": 33459.547999999995,
-    "expected": 6,
+    "startTime": "2026-10-06T13:26:01.950Z",
+    "duration": 112652.08200000001,
+    "expected": 5,
     "skipped": 0,
-    "unexpected": 0,
+    "unexpected": 1,
     "flaky": 0
   }
 }

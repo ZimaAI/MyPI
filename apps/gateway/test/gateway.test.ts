@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
 import { createGateway, createAdmin, type GatewayServices } from '../src/index.js';
 import { SqliteStore } from '@mypi/storage-sqlite';
-import { defaultPolicy } from '@mypi/contracts';
+import { defaultPolicy, providerPresets } from '@mypi/contracts';
 const origin = 'http://localhost:3000';
 async function fixture() {
   const store = new SqliteStore();
@@ -120,6 +120,134 @@ async function fixture() {
     },
   };
 }
+test('provider presets resolve server defaults and enforce endpoint, limits and credential boundaries', async () => {
+  const f = await fixture();
+  try {
+    const admin = await f.admin();
+    const guest = await f.guest();
+    const denied = await f.app.inject({
+      url: '/api/v1/admin/models',
+      headers: { cookie: guest.cookie },
+    });
+    assert.equal(denied.statusCode, 401);
+    const catalog = (
+      await f.app.inject({ url: '/api/v1/admin/models', headers: { cookie: admin.cookie } })
+    ).json();
+    assert.equal(catalog.catalog.providers.length, 16);
+    assert.equal(catalog.catalog.verifiedAt, '2026-10-06');
+    assert.equal(catalog.items.length, 0);
+    for (const provider of providerPresets) {
+      const response = await f.app.inject({
+        method: 'POST',
+        url: '/api/v1/admin/models',
+        headers: f.write(admin),
+        payload: { providerType: provider.id, reason: 'use documented provider default' },
+      });
+      assert.equal(response.statusCode, 201, response.body);
+      const saved = response.json(),
+        preset = provider.models.find((p) => p.id === provider.defaultModelId)!;
+      assert.equal(saved.modelId, preset.id);
+      assert.equal(saved.maxOutputTokens, preset.defaultOutputTokens);
+      assert.equal(saved.contextWindow, preset.defaultContextWindow);
+      assert.equal(saved.protocol, provider.protocol);
+      assert.equal(saved.enabled, false);
+      assert.equal(saved.defaultForGuests, false);
+      assert.equal(saved.keyConfigured, false);
+    }
+    const old = f.store.list<any>('model').find((row) => row.data.providerType === 'openai')!;
+    delete old.data.protocol;
+    delete old.data.reasoning;
+    delete old.data.thinkingLevel;
+    let legacy = f.store.put('model', old.id, old.data);
+    for (const displayName of ['Legacy name edit', 'Legacy second edit']) {
+      const renamed = await f.app.inject({
+        method: 'PATCH',
+        url: `/api/v1/admin/models/${old.id}`,
+        headers: f.write(admin),
+        payload: {
+          expectedVersion: legacy.version,
+          displayName,
+          reason: 'preserve legacy transport when renaming',
+        },
+      });
+      assert.equal(renamed.statusCode, 200, renamed.body);
+      assert.equal(renamed.json().protocol, 'openai-completions');
+      assert.equal(renamed.json().reasoning, false);
+      assert.equal(renamed.json().thinkingLevel, 'off');
+      legacy = f.store.get('model', old.id)!;
+    }
+    for (const patch of [
+      { approvedEndpointId: 'openai' },
+      { maxOutputTokens: 393217 },
+      { contextWindow: 2000000 },
+      { contextWindow: 1024, maxOutputTokens: 8192 },
+      { baseUrl: 'http://127.0.0.1:1234' },
+      { protocol: 'anthropic-messages' },
+    ]) {
+      const response = await f.app.inject({
+        method: 'POST',
+        url: '/api/v1/admin/models',
+        headers: f.write(admin),
+        payload: { providerType: 'deepseek', reason: 'reject invalid model config', ...patch },
+      });
+      assert.equal(response.statusCode, 400, response.body);
+    }
+    const created = await f.app.inject({
+      method: 'POST',
+      url: '/api/v1/admin/models',
+      headers: f.write(admin),
+      payload: {
+        providerType: 'dashscope',
+        apiKey: 'private-dashscope-key',
+        enabled: true,
+        publicSelectable: true,
+        maxOutputTokens: 65536,
+        reason: 'larger configured output budget',
+      },
+    });
+    assert.equal(created.statusCode, 201, created.body);
+    const item = created.json();
+    assert.equal(item.maxOutputTokens, 65536);
+    assert.ok(!created.body.includes('private-dashscope-key'));
+    assert.equal(
+      (
+        await f.app.inject({
+          method: 'PATCH',
+          url: `/api/v1/admin/models/${item.id}`,
+          headers: f.write(admin),
+          payload: {
+            expectedVersion: item.version,
+            approvedEndpointId: 'dashscope-intl',
+            reason: 'switch region without new key',
+          },
+        })
+      ).statusCode,
+      400,
+    );
+    await f.app.inject({
+      method: 'POST',
+      url: `/api/v1/admin/models/${item.id}/test`,
+      headers: f.write(admin),
+    });
+    const tested = f.store.get<any>('model', item.id)!;
+    assert.equal(tested.data.testedVersion, tested.version);
+    const changed = await f.app.inject({
+      method: 'PATCH',
+      url: `/api/v1/admin/models/${item.id}`,
+      headers: f.write(admin),
+      payload: {
+        expectedVersion: tested.version,
+        maxOutputTokens: 8192,
+        reason: 'token change invalidates connection test',
+      },
+    });
+    assert.equal(changed.statusCode, 200, changed.body);
+    assert.equal(changed.json().testedVersion, undefined);
+  } finally {
+    await f.close();
+  }
+});
+
 test('guest identity is reused, CSRF and additional role fields are rejected, objects remain private', async () => {
   const f = await fixture();
   try {

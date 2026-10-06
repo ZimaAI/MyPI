@@ -2,7 +2,19 @@ import Fastify, { type FastifyInstance, type FastifyRequest } from 'fastify';
 import cookie from '@fastify/cookie';
 import { randomBytes, randomUUID } from 'node:crypto';
 import { SqliteStore, StoreError, type Stored } from '@mypi/storage-sqlite';
-import { defaultPolicy, terminalRun, type Conversation, type Policy } from '@mypi/contracts';
+import {
+  defaultPolicy,
+  terminalRun,
+  type Conversation,
+  type Policy,
+  providerPresets,
+  getProviderPreset,
+  getModelPreset,
+  MODEL_CATALOG_VERIFIED_AT,
+  MODEL_CONFIG_LIMITS,
+  MODEL_PROTOCOLS,
+  modelLimitError,
+} from '@mypi/contracts';
 import {
   approvedEndpoints,
   csrfToken,
@@ -850,22 +862,28 @@ export async function createGateway(options: GatewayOptions): Promise<FastifyIns
   });
   app.get('/api/v1/admin/models', async () => ({
     items: models.list(),
+    catalog: { verifiedAt: MODEL_CATALOG_VERIFIED_AT, providers: providerPresets },
     approvedEndpoints: Object.entries(approvedEndpoints).map(([id, ep]) => ({
       id,
       providerType: ep.providerType,
+      name: ep.name,
+      baseUrl: ep.baseUrl,
     })),
   }));
   const modelProperties = {
     displayName: string(1, 100),
-    providerType: { type: 'string', enum: Object.keys(approvedEndpoints) },
+    providerType: { type: 'string', enum: providerPresets.map((provider) => provider.id) },
     modelId: string(1, 200),
     approvedEndpointId: { type: 'string', enum: Object.keys(approvedEndpoints) },
+    protocol: { type: 'string', enum: MODEL_PROTOCOLS },
+    reasoning: boolean,
+    thinkingLevel: { type: 'string', enum: ['off', 'low', 'medium', 'high'] },
     apiKey: string(0, 8192),
     enabled: boolean,
     publicSelectable: boolean,
     defaultForGuests: boolean,
-    maxOutputTokens: integer(1, 16384),
-    contextWindow: integer(1024, 2000000),
+    maxOutputTokens: integer(16, MODEL_CONFIG_LIMITS.maxOutputTokens),
+    contextWindow: integer(1024, MODEL_CONFIG_LIMITS.contextWindow),
     inputPriceMicros: integer(0, 1000000000),
     outputPriceMicros: integer(0, 1000000000),
     currency: { type: 'string', enum: ['USD', 'CNY', 'EUR'] },
@@ -877,32 +895,98 @@ export async function createGateway(options: GatewayOptions): Promise<FastifyIns
       previous = existing?.data;
     if (existing && input.expectedVersion === undefined)
       throw invalid('expectedVersion is required');
+    const providerType = input.providerType ?? previous?.providerType;
+    const provider = getProviderPreset(providerType);
+    if (!provider) throw invalid('Unsupported provider');
+    const modelId = input.modelId ?? previous?.modelId ?? provider.defaultModelId;
+    const preset = getModelPreset(providerType, modelId);
+    const endpointId =
+      input.approvedEndpointId ?? previous?.approvedEndpointId ?? provider.defaultEndpointId;
+    const identityChanged =
+      !!previous &&
+      (providerType !== previous.providerType ||
+        modelId !== previous.modelId ||
+        endpointId !== previous.approvedEndpointId);
+    const endpointChanged =
+      !!previous &&
+      (providerType !== previous.providerType || endpointId !== previous.approvedEndpointId);
+    if (endpointChanged && previous.encryptedKey && !input.apiKey)
+      throw invalid('切换服务商或地域时请重新输入匹配的 API Key');
+    const protocol =
+      input.protocol ??
+      (!identityChanged ? previous?.protocol : undefined) ??
+      (previous && !identityChanged && providerType === 'openai'
+        ? 'openai-completions'
+        : (preset?.protocol ?? provider.protocol));
     if (
-      approvedEndpoints[input.approvedEndpointId ?? previous?.approvedEndpointId]?.providerType !==
-      (input.providerType ?? previous?.providerType)
+      protocol !== provider.protocol &&
+      !(providerType === 'openai' && protocol === 'openai-completions')
     )
+      throw invalid('The protocol does not match the provider');
+    if (approvedEndpoints[endpointId]?.providerType !== providerType)
       throw invalid('The endpoint does not match the provider');
     if (input.defaultForGuests && existing?.data.testedVersion !== existing?.version)
       throw invalid('Test this model successfully before making it the guest default');
     const data: StoredModel = {
       id,
-      displayName: input.displayName ?? previous?.displayName,
-      providerType: input.providerType ?? previous?.providerType,
-      modelId: input.modelId ?? previous?.modelId,
-      approvedEndpointId: input.approvedEndpointId ?? previous?.approvedEndpointId,
+      displayName: input.displayName ?? previous?.displayName ?? preset?.name ?? modelId,
+      providerType,
+      modelId,
+      approvedEndpointId: endpointId,
+      protocol,
+      reasoning:
+        input.reasoning ??
+        (previous && !identityChanged ? (previous.reasoning ?? false) : undefined) ??
+        preset?.reasoning ??
+        false,
+      thinkingLevel:
+        input.thinkingLevel ??
+        (previous && !identityChanged ? (previous.thinkingLevel ?? 'off') : undefined) ??
+        preset?.thinkingLevel ??
+        'off',
       enabled: input.enabled ?? previous?.enabled ?? false,
       publicSelectable: input.publicSelectable ?? previous?.publicSelectable ?? false,
       defaultForGuests: input.defaultForGuests ?? previous?.defaultForGuests ?? false,
-      maxOutputTokens: input.maxOutputTokens ?? previous?.maxOutputTokens ?? 2048,
-      contextWindow: input.contextWindow ?? previous?.contextWindow ?? 128000,
+      maxOutputTokens:
+        input.maxOutputTokens ??
+        (!identityChanged ? previous?.maxOutputTokens : undefined) ??
+        preset?.defaultOutputTokens ??
+        4096,
+      contextWindow:
+        input.contextWindow ??
+        (!identityChanged ? previous?.contextWindow : undefined) ??
+        preset?.defaultContextWindow ??
+        32768,
       configVersion: (existing?.version ?? 0) + 1,
       encryptedKey: previous?.encryptedKey,
       keyFingerprint: previous?.keyFingerprint,
       testedVersion: previous?.testedVersion,
-      inputPriceMicros: input.inputPriceMicros ?? previous?.inputPriceMicros,
-      outputPriceMicros: input.outputPriceMicros ?? previous?.outputPriceMicros,
+      inputPriceMicros:
+        input.inputPriceMicros ?? (!identityChanged ? previous?.inputPriceMicros : undefined),
+      outputPriceMicros:
+        input.outputPriceMicros ?? (!identityChanged ? previous?.outputPriceMicros : undefined),
       currency: input.currency ?? previous?.currency ?? 'USD',
     };
+    const limitError = modelLimitError(
+      providerType,
+      modelId,
+      data.contextWindow,
+      data.maxOutputTokens,
+    );
+    if (limitError) throw invalid(limitError);
+    if (!data.reasoning && data.thinkingLevel !== 'off')
+      throw invalid('非思考模型的思考强度必须为 off');
+    const unchangedThinking =
+      previous &&
+      !identityChanged &&
+      data.reasoning === (previous.reasoning ?? false) &&
+      data.thinkingLevel === (previous.thinkingLevel ?? 'off');
+    if (
+      preset &&
+      !unchangedThinking &&
+      (data.reasoning !== preset.reasoning || !preset.thinkingLevels.includes(data.thinkingLevel!))
+    )
+      throw invalid('请选择该模型支持的思考设置');
     if (input.apiKey) {
       data.encryptedKey = models.secrets.encrypt(input.apiKey);
       data.keyFingerprint = sha256(input.apiKey).slice(-8);
@@ -912,7 +996,16 @@ export async function createGateway(options: GatewayOptions): Promise<FastifyIns
       previous &&
       (data.providerType !== previous.providerType ||
         data.modelId !== previous.modelId ||
-        data.approvedEndpointId !== previous.approvedEndpointId)
+        data.approvedEndpointId !== previous.approvedEndpointId ||
+        data.protocol !==
+          (previous.protocol ??
+            (previous.providerType === 'openai'
+              ? 'openai-completions'
+              : getProviderPreset(previous.providerType)?.protocol)) ||
+        data.reasoning !== (previous.reasoning ?? false) ||
+        data.thinkingLevel !== (previous.thinkingLevel ?? 'off') ||
+        data.maxOutputTokens !== previous.maxOutputTokens ||
+        data.contextWindow !== previous.contextWindow)
     )
       data.testedVersion = undefined;
     if (existing && data.testedVersion === existing.version)
@@ -960,16 +1053,7 @@ export async function createGateway(options: GatewayOptions): Promise<FastifyIns
     '/api/v1/admin/models',
     {
       schema: {
-        body: object(modelProperties, [
-          'displayName',
-          'providerType',
-          'modelId',
-          'approvedEndpointId',
-          'enabled',
-          'publicSelectable',
-          'maxOutputTokens',
-          'reason',
-        ]),
+        body: object(modelProperties, ['providerType', 'reason']),
       },
     },
     async (request, reply) => reply.code(201).send(saveModel(request, randomUUID())),
@@ -1035,7 +1119,7 @@ export async function createGateway(options: GatewayOptions): Promise<FastifyIns
       started = Date.now();
     let result;
     try {
-      result = await services.testModel({ ...config, maxOutputTokens: 32 });
+      result = await services.testModel(config);
     } catch {
       result = {
         ok: false,

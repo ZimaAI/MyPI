@@ -34,6 +34,8 @@ test('administrator manages models, rules, visitors and audit with real API and 
     await page.getByLabel('展示名称').fill('Browser Fixture');
     await page.getByLabel('模型标识').fill('fixture');
     await page.getByLabel('API Key', { exact: false }).fill('sk-browser-test-only');
+    await page.getByLabel('启用模型', { exact: true }).check();
+    await page.getByLabel('允许游客选择', { exact: true }).check();
     await page.getByLabel('变更原因').fill('浏览器集成测试');
     await page.getByRole('button', { name: '保存模型', exact: true }).click();
     const modelRow = page.getByRole('row').filter({ hasText: 'Browser Fixture' });

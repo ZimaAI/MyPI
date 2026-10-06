@@ -2,6 +2,8 @@
 
 2026-09-23 — implementation complete; final local verification is recorded in `docs/evidence/implementation.md`. Public release remains gated by the dedicated execution environment.
 
+2026-10-06 — documented model-service catalog added: 16 providers, 18 approved endpoints, 33 model presets shared by Gateway, encrypted storage, CLI and administrator UI. Defaults include protocol, context/output budgets, reasoning settings, official limits and dated sources. Real SDK loopback tests cover all provider defaults across four protocols and thinking/tool-result replay. See `docs/model-providers.md` and the latest entry in `docs/evidence/implementation.md`.
+
 - S0: Official `@earendil-works/pi-coding-agent@0.87.1` installed and locked. Real SDK tests cover native tool replacement, provider schemas, independent sessions, settled/cancel/retry/compaction, private history and disabled project resource discovery.
 - S1–S3: Standalone CLI, shared Agent Core, 25 extension tools, tasks/workflows/background/work items, SQLite/Outbox, authenticated Gateway, SSE replay, quota ledger and encrypted model administration implemented and integrated.
 - S4: Broker, constrained Docker runner, policy revocation, visitor administration, retention, backup and fail-closed execution implemented. This host lacks the required rootless Docker/runsc environment; public isolation acceptance has not run.

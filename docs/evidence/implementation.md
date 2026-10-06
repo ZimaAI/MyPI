@@ -1,5 +1,21 @@
 # 实施与最终本地验证
 
+## 2026-10-06：国内外模型服务预设
+
+通过服务商官方文档核对并新增 16 家服务商、18 个端点和 33 个文字/工具调用模型。目录、完整规格和来源见 [模型服务配置](../model-providers.md)。Gateway、CLI 和管理页共享预设；新配置自动填充协议、模型、上下文/输出预算与思考模式。未知独立输出上限保持未知，既有配置的协议、预算、凭据和关闭思考状态不会因升级自动改写。
+
+适配覆盖 OpenAI Responses、Chat Completions、Anthropic Messages 和 Gemini Developer API。为私有 SDK provider 注册显式兼容参数，补齐 Google `/v1beta`、Kimi K3 输出字段、MiniMax 国内端点与思考字段，以及 Tencent TokenHub。连接测试使用受预算限制的思考请求，空文本不能判为成功；旧配置改名不自动切换协议/思考，CLI 换服务商不继承其他服务商的私有密钥。
+
+新增测试验证各服务商真实 SDK 的路径、鉴权、工具声明、流式结算，以及 DeepSeek/Kimi/GLM/腾讯工具轮次中思考和工具结果的续传。后台测试覆盖默认草稿、端点匹配、参数上限、凭据地域和连接测试失效；浏览器覆盖预设切换、未知规格、保留编辑、失败重试、恢复默认和移动布局。桌面 1440×900、手机 390×844 截图经实际查看，见 [桌面预设](screenshots/model-presets-desktop.png) 与 [手机预设](screenshots/model-presets-mobile.png)。
+
+`pnpm format` 和最终 `pnpm verify` 均退出 0：格式、依赖边界、TypeScript、**82/82 自动测试**及生产构建通过；原始记录见 [模型适配验证](model-providers-verification.txt)。一次与镜像构建并发的 CLI 补测曾触发原有 20 秒进程超时，保留[该次输出](model-provider-cli-timeout.txt)；停止并发构建后，最终完整校验中的 CLI 实际执行/恢复测试通过，未放宽测试超时。
+
+最终完整 Playwright 套件 **6/6 通过，0 failed/skipped/flaky**，见 [原始报告](playwright-results.json)。中间轮次保留[并发构建期间的工作区创建等待超时](model-provider-browser-timeout.json)和[Windows 截图写入错误](model-provider-browser-screenshot-error.json)；后者的业务断言均已通过，移开旧截图、串行重新生成后整套通过。测试断言和超时设置保持原值。
+
+更新前已在现有容器数据卷中创建 SQLite 一致性备份 `/data/backups/before-model-presets-20261006`，保留 `.env.docker` 与 `mypi_state`。没有真实付费服务商凭据；网络请求由本地 HTTP fixture 响应，不能据此声明账号实测连通。专用主机隔离验收仍未执行，公开执行开关保持关闭。
+
+## 2026-09-23：初始实施记录
+
 2026-09-23，Windows x64、Node.js 24.16.0、pnpm 11.5.0。按后端先行顺序完成 SDK/CLI、Core/五组能力、SQLite/Gateway/Broker，再接 React 工作台与管理后台；新增 P1 同样先实现服务端行为再接界面。已有 Git 初始历史保留。
 
 ## 实际执行结果

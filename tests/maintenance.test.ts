@@ -15,7 +15,11 @@ import {
 } from '../apps/worker/src/maintenance.ts';
 import { createWorkerServices } from '../apps/worker/src/service.ts';
 import { backupDatabase } from '../scripts/backup.ts';
-import type { Conversation, RuntimeFactory } from '../packages/contracts/src/index.ts';
+import {
+  unknownUsage,
+  type Conversation,
+  type RuntimeFactory,
+} from '../packages/contracts/src/index.ts';
 
 async function temporary() {
   return fs.mkdtemp(join(tmpdir(), 'mypi-maintenance-'));
@@ -322,6 +326,61 @@ test('worker archive preserves files, export rejects truncation, deletion purges
       }),
       /test runtime creation failed/,
     );
+  } finally {
+    await sandbox.shutdown();
+    store.close();
+    await cleanup(root);
+  }
+});
+
+test('model connection tests budget reasoning and reject an empty answer while closing the session', async () => {
+  const root = await temporary(),
+    store = new SqliteStore(':memory:');
+  const sandbox = new TrustedLocalSandbox({
+    root,
+    stateRoot: join(root, 'broker'),
+    managedWorkspaces: true,
+    explicitlyTrusted: true,
+  });
+  const budgets: number[] = [];
+  let text = 'OK',
+    closed = 0;
+  const runtime: RuntimeFactory = {
+    create: async (input) => {
+      budgets.push(input.model.maxOutputTokens);
+      return {
+        prompt: async () => ({ text, usage: unknownUsage() }),
+        close: async () => {
+          closed++;
+        },
+      };
+    },
+  };
+  const worker = createWorkerServices({
+    store,
+    sandbox,
+    runtime,
+    masterKey: randomBytes(32).toString('base64'),
+  });
+  const model = {
+    id: 'test',
+    modelId: 'fixture',
+    providerType: 'openai',
+    displayName: 'Fixture',
+    maxOutputTokens: 8192,
+    contextWindow: 32768,
+    configVersion: 1,
+    reasoning: true,
+  };
+  try {
+    assert.equal((await worker.services.testModel(model)).ok, true);
+    assert.equal((await worker.services.testModel({ ...model, reasoning: false })).ok, true);
+    text = '';
+    await assert.rejects(worker.services.testModel({ ...model, maxOutputTokens: 512 }), {
+      code: 'MODEL_TEST_EMPTY',
+    });
+    assert.deepEqual(budgets, [2048, 32, 512]);
+    assert.equal(closed, 3);
   } finally {
     await sandbox.shutdown();
     store.close();

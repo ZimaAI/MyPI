@@ -1,0 +1,25 @@
+✔ CLI arguments enforce the two modes and reject ambiguous command inputs (61.608ms)
+✔ project configuration is inert unless explicitly trusted and cannot provide secrets (382.3857ms)
+✖ standalone CLI executes real Pi search, persists sessions, resumes with four tools, and never starts Gateway (20299.4647ms)
+✔ catalog defaults have official sources, unique approved HTTPS endpoints and valid token budgets (6.9108ms)
+✔ CLI uses provider defaults and key env names, supports regions and explicit overrides (384.9936ms)
+✔ stored preset transport settings survive key resolution while legacy thinking stays disabled (103.3442ms)
+ℹ tests 6
+ℹ suites 0
+ℹ pass 5
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 27813.9918
+
+✖ failing tests:
+
+test at tests\cli.test.ts:3:206
+✖ standalone CLI executes real Pi search, persists sessions, resumes with four tools, and never starts Gateway (20299.4647ms)
+  Error: CLI timed out: run 使用搜索工具查找入口 --cwd C:\Users\zima\AppData\Local\Temp\mypi-cli-e2e-yLqbrs\project --json
+
+
+      at Timeout._onTimeout (D:\Develop\Projects\MyPI\tests\cli.test.ts:75:14)
+      at listOnTimeout (node:internal/timers:605:17)
+      at process.processTimers (node:internal/timers:541:7)

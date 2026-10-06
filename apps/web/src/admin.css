@@ -705,6 +705,32 @@
   color: #7c8795;
   font-size: 12px;
 }
+.adm-model-preset {
+  border: 1px solid var(--border);
+  background: var(--bg);
+  border-radius: 12px;
+  padding: 16px;
+  color: var(--muted);
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+.adm-model-preset p {
+  margin: 10px 0;
+}
+.adm-model-limits,
+.adm-model-source {
+  display: flex;
+  gap: 12px 20px;
+  flex-wrap: wrap;
+}
+.adm-model-limits strong {
+  display: block;
+  color: var(--text);
+  font-size: 16px;
+}
+.adm-model-source a {
+  color: var(--primary);
+}
 .adm-details {
   background: #f8fafb;
   border: 1px solid #e2e7ec;

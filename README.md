@@ -21,7 +21,9 @@ pnpm dev
 1. `setup` 生成本机 `.env` 和随机密钥；已有 `.env` 会保留。密钥及运行数据不应提交 Git。
 2. `admin bootstrap` 在交互终端中询问用户名及两次密码，密码至少 12 个字符且输入时不回显。系统没有默认管理员账号。该命令写入 `.mypi/server/mypi.sqlite`，必须与服务端 `MYPI_DATA_DIR` 指向同一目录。
 3. `dev` 同时启动 Broker、Worker 和 Gateway。浏览器打开 [http://localhost:3000](http://localhost:3000)，管理后台位于 `/admin/login`。按 Ctrl+C 停止服务。
-4. 登录管理后台，在“模型管理”添加提供商、模型标识和 API Key，运行连接测试后设置游客默认模型。API Key 仅可写入或清除，不会返回浏览器；数据库使用主密钥加密保存。
+4. 登录管理后台，在“模型管理”选择服务商、地域与官方模型预设，再填入对应 API Key。端点、上下文和输出预算自动填写，官方规格和文档核对日期同时显示。保存后运行连接测试，再启用模型并设为游客默认。API Key 仅可写入或清除，不会返回浏览器；数据库使用主密钥加密保存。
+
+内置 16 家国内外服务商、18 个端点和 33 个文字/工具调用模型预设（2026-10-06 核对）。完整端点、模型标识、窗口、默认预算及官方来源见 [模型服务配置](docs/model-providers.md)。预设不包含密钥，也不会自动改写已有模型。
 
 初始配置支持创建临时身份、模板会话、浏览文件和管理配置。模型调用及代码执行需要同时满足 Broker 隔离环境就绪与后台执行策略开启；仅添加模型不会开放执行。Windows 上可独立使用下述 CLI 完成可信本机任务。
 
@@ -37,10 +39,11 @@ pnpm dev
 
 CLI 不要求启动 Web、Gateway 或 Broker，也不要求管理员账号。它在指定目录中以当前系统用户权限执行工具；启动时会显示 `trusted-local` 和实际工作目录。请使用自己信任的项目目录。
 
-把 `MYPI_API_KEY`、`MYPI_MODEL` 和 `MYPI_PROVIDER` 加入本机 `.env`，或设置终端环境变量。提供商类型支持 `openai-compatible`、`openai-responses`、`anthropic`、`google`。仓库内的 `pnpm cli` 会读取 `.env`，不会从管理后台数据库获取 CLI 模型配置。
+在本机 `.env` 或终端环境变量中设置 `MYPI_PROVIDER`（例如 `deepseek`）和该服务商的密钥变量（例如 `DEEPSEEK_API_KEY`），即可使用默认模型、端点和预算。也可用 `MYPI_API_KEY`、`MYPI_MODEL`、`MYPI_BASE_URL` 覆盖；地域由 `MYPI_ENDPOINT` 或 `--endpoint` 选择。`pnpm cli models` 查看全部预设。通用 `openai-compatible` / `openai-responses` 仍支持手动模型与端点。仓库内的 `pnpm cli` 会读取 `.env`，不会从管理后台数据库获取 CLI 模型配置。
 
 ```sh
 pnpm cli doctor
+pnpm cli models --provider deepseek --json
 pnpm cli --cwd ./your-project --mode explicit
 pnpm cli run "请使用搜索工具查找入口文件" --cwd ./your-project
 pnpm cli run "解释这个项目的结构" --cwd ./your-project --json
@@ -53,11 +56,11 @@ CLI 默认私有目录为 `~/.mypi`，可用 `--state-dir DIR` 或 `MYPI_HOME` �
 
 ```json
 {
-  "provider": "openai-compatible",
-  "model": "填写提供商支持的模型标识",
+  "provider": "deepseek",
+  "model": "deepseek-flash",
   "mode": "explicit",
-  "maxOutputTokens": 4096,
-  "contextWindow": 128000
+  "maxOutputTokens": 8192,
+  "contextWindow": 1048576
 }
 ```
 

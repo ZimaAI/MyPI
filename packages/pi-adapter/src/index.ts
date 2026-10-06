@@ -18,10 +18,15 @@ import {
   type Api,
   type AssistantMessage,
   type TSchema,
+  type OpenAICompletionsCompat,
+  type AnthropicMessagesCompat,
 } from '@earendil-works/pi-ai';
 import {
   AppError,
   unknownUsage,
+  getProviderPreset,
+  getModelPreset,
+  approvedModelEndpoints,
   type ModelConfig,
   type RuntimeCreateInput,
   type RuntimeFactory,
@@ -76,7 +81,85 @@ function providerApi(type: string): Api {
     case 'google-generative-ai':
       return 'google-generative-ai';
     default:
+      if (getProviderPreset(type)) return getProviderPreset(type)!.protocol;
       throw new AppError('UNSUPPORTED_PROVIDER', `Unsupported provider type: ${type}`, 422);
+  }
+}
+
+/** Registering private per-session provider IDs bypasses SDK provider-name detection.
+ * Keep transport quirks explicit, including when tests or trusted CLI override URLs. */
+function compatibility(
+  model: ModelConfig,
+  api: Api,
+): OpenAICompletionsCompat | AnthropicMessagesCompat | undefined {
+  const provider = model.providerType;
+  if (api === 'anthropic-messages') {
+    const adaptive =
+      provider === 'anthropic' && /^claude-(sonnet-5|opus-5|fable-5)/.test(model.modelId);
+    return {
+      forceAdaptiveThinking: adaptive || provider === 'minimax',
+      supportsTemperature: !adaptive,
+      ...(provider === 'minimax'
+        ? {
+            supportsEagerToolInputStreaming: false,
+            supportsCacheControlOnTools: false,
+            allowEmptySignature: true,
+          }
+        : {}),
+    };
+  }
+  if (api !== 'openai-completions' || !getProviderPreset(provider) || provider === 'openai')
+    return undefined;
+  const common: OpenAICompletionsCompat = {
+    supportsStore: false,
+    supportsDeveloperRole: false,
+    supportsReasoningEffort: false,
+    maxTokensField: 'max_tokens',
+    supportsUsageInStreaming: !['mistral', 'siliconflow'].includes(provider),
+  };
+  switch (provider) {
+    case 'deepseek':
+      return {
+        ...common,
+        thinkingFormat: 'deepseek',
+        supportsReasoningEffort: true,
+        requiresReasoningContentOnAssistantMessages: true,
+      };
+    case 'moonshot':
+      return {
+        ...common,
+        thinkingFormat: 'deepseek',
+        supportsReasoningEffort: model.modelId === 'kimi-k3',
+        maxTokensField: model.modelId === 'kimi-k3' ? 'max_completion_tokens' : 'max_tokens',
+        requiresReasoningContentOnAssistantMessages: true,
+      };
+    case 'zhipu':
+      return {
+        ...common,
+        thinkingFormat: 'zai',
+        supportsReasoningEffort: true,
+        requiresReasoningContentOnAssistantMessages: true,
+      };
+    case 'dashscope':
+    case 'siliconflow':
+    case 'baidu':
+      return { ...common, thinkingFormat: 'qwen' };
+    case 'tencent':
+      return {
+        ...common,
+        thinkingFormat: 'deepseek',
+        requiresReasoningContentOnAssistantMessages: true,
+      };
+    case 'mistral':
+      return { ...common, supportsReasoningEffort: true };
+    case 'volcengine':
+      return { ...common, thinkingFormat: 'deepseek', maxTokensField: 'max_completion_tokens' };
+    case 'groq':
+      return { ...common, supportsReasoningEffort: true, maxTokensField: 'max_completion_tokens' };
+    case 'openrouter':
+      return { ...common, thinkingFormat: 'openrouter' };
+    default:
+      return common;
   }
 }
 
@@ -164,7 +247,11 @@ export class PiRuntimeFactory implements RuntimeFactory {
       throw new AppError('DUPLICATE_TOOL', 'Tool names must be unique');
     if (!input.model.apiKey)
       throw new AppError('MODEL_NOT_CONFIGURED', 'The model has no API key configured', 422);
-    const api = providerApi(input.model.providerType);
+    const api = input.model.protocol ?? providerApi(input.model.providerType);
+    const provider = getProviderPreset(input.model.providerType);
+    const preset = getModelPreset(input.model.providerType, input.model.modelId);
+    const reasoning = input.model.reasoning ?? preset?.reasoning ?? false;
+    const thinkingLevel = input.model.thinkingLevel ?? preset?.thinkingLevel ?? 'off';
     const cwd = resolve(
       this.options.cwd ?? this.options.stateDir ?? join(homedir(), '.mypi', 'runtime'),
     );
@@ -177,13 +264,17 @@ export class PiRuntimeFactory implements RuntimeFactory {
     const providerId = `mypi-${createHash('sha256').update(input.model.id).digest('hex').slice(0, 16)}`;
     runtime.registerProvider(providerId, {
       api,
-      baseUrl: input.model.baseUrl ?? endpoint(api),
+      baseUrl:
+        input.model.baseUrl ??
+        (provider ? approvedModelEndpoints[provider.defaultEndpointId].baseUrl : endpoint(api)),
       models: [
         {
           id: input.model.modelId,
           name: input.model.displayName,
           api,
-          reasoning: false,
+          reasoning,
+          ...(input.model.providerType === 'mistral' ? { thinkingLevelMap: { off: 'none' } } : {}),
+          compat: compatibility(input.model, api),
           input: ['text'],
           contextWindow: input.model.contextWindow,
           maxTokens: input.model.maxOutputTokens,
@@ -232,14 +323,22 @@ export class PiRuntimeFactory implements RuntimeFactory {
                 : raw;
               const payload = (transformed ?? raw) as {
                 tools?: Array<{ name?: string; function?: { name?: string } }>;
+                thinking?: { type: string; display?: string };
+                output_config?: unknown;
               };
+              // MiniMax M2.x/M3 support adaptive thinking, but not Claude's display/effort fields.
+              if (input.model.providerType === 'minimax' && api === 'anthropic-messages') {
+                if (payload.thinking) delete payload.thinking.display;
+                if (input.model.modelId !== 'MiniMax-M3.1-Flash-Preview')
+                  delete payload.output_config;
+              }
               const tools = payload.tools ?? [];
               input.onEvent({
                 type: 'provider-tools',
                 names: tools.map((tool) => tool.function?.name ?? tool.name ?? '').filter(Boolean),
                 schemaBytes: Buffer.byteLength(JSON.stringify(tools)),
               });
-              return transformed;
+              return payload;
             },
           };
           const upstream = rawStream(requestModel, context, requestOptions);
@@ -358,7 +457,7 @@ export class PiRuntimeFactory implements RuntimeFactory {
       agentDir: resolve(this.options.stateDir ?? join(homedir(), '.mypi', 'runtime')),
       model,
       modelRuntime: runtime,
-      thinkingLevel: 'off',
+      thinkingLevel,
       resourceLoader: isolatedResourceLoader(),
       tools: names,
       customTools,

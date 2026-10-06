@@ -1,3 +1,5 @@
+import type { ModelProtocol, ModelThinkingLevel } from './model-catalog.ts';
+export * from './model-catalog.ts';
 export type Mode = 'native' | 'explicit';
 export type CapabilityGroup = 'search' | 'delegate' | 'workflow' | 'background' | 'session';
 export type RunStatus =
@@ -60,6 +62,9 @@ export interface ModelConfig {
   modelId: string;
   apiKey?: string;
   baseUrl?: string;
+  protocol?: ModelProtocol;
+  reasoning?: boolean;
+  thinkingLevel?: ModelThinkingLevel;
   maxOutputTokens: number;
   contextWindow: number;
   configVersion: number;

@@ -27,6 +27,13 @@ import { api, ApiError, setCsrf } from './api';
 import { Modal } from './ui';
 import './admin.css';
 import RuleVersions from './AdminRules';
+import {
+  MODEL_CONFIG_LIMITS,
+  type ProviderPreset,
+  type ModelPreset,
+  type ModelProtocol,
+  type ModelThinkingLevel,
+} from '../../../packages/contracts/src/model-catalog';
 
 type RecordData = Record<string, any>;
 type Page = 'overview' | 'models' | 'visitors' | 'policies' | 'executions' | 'audit';
@@ -478,6 +485,10 @@ export default function Admin({ navigate }: { navigate: (path: string) => void }
                                 <td>
                                   {model.providerType}
                                   <small className="adm-mono">{model.modelId}</small>
+                                  <small>
+                                    窗口 {number(model.contextWindow)} · 输出预算{' '}
+                                    {number(model.maxOutputTokens)}
+                                  </small>
                                 </td>
                                 <td>
                                   <div className="adm-badges">
@@ -821,6 +832,7 @@ export default function Admin({ navigate }: { navigate: (path: string) => void }
       {dialog?.type === 'model' && (
         <ModelForm
           model={dialog.item}
+          catalog={data?.catalog}
           onClose={() => setDialog(null)}
           onSaved={() => {
             setDialog(null);
@@ -1015,26 +1027,77 @@ function Overview({
 
 function ModelForm({
   model,
+  catalog,
   onClose,
   onSaved,
 }: {
   model?: RecordData;
+  catalog?: { verifiedAt: string; providers: ProviderPreset[] };
   onClose: () => void;
   onSaved: () => void;
 }) {
-  const [provider, setProvider] = useState(model?.providerType ?? 'openai'),
+  const initialProvider =
+    catalog?.providers.find((item) => item.id === model?.providerType) ?? catalog?.providers[0];
+  const initialPreset = initialProvider?.models.find(
+    (item) => item.id === (model?.modelId ?? initialProvider.defaultModelId),
+  );
+  const [draft, setDraft] = useState({
+    providerType: model?.providerType ?? initialProvider?.id ?? '',
+    endpointId: model?.approvedEndpointId ?? initialProvider?.defaultEndpointId ?? '',
+    modelId: model?.modelId ?? initialPreset?.id ?? '',
+    displayName: model?.displayName ?? initialPreset?.name ?? '',
+    contextWindow: String(model?.contextWindow ?? initialPreset?.defaultContextWindow ?? 32768),
+    maxOutputTokens: String(model?.maxOutputTokens ?? initialPreset?.defaultOutputTokens ?? 4096),
+    protocol: (model?.protocol ??
+      (model?.providerType === 'openai'
+        ? 'openai-completions'
+        : initialProvider?.protocol)) as ModelProtocol,
+    reasoning: model ? (model.reasoning ?? false) : (initialPreset?.reasoning ?? false),
+    thinkingLevel: (model
+      ? (model.thinkingLevel ?? 'off')
+      : (initialPreset?.thinkingLevel ?? 'off')) as ModelThinkingLevel,
+  });
+  const [apiKey, setApiKey] = useState(''),
     [error, setError] = useState(''),
     [busy, setBusy] = useState(false);
+  const provider = catalog?.providers.find((item) => item.id === draft.providerType);
+  const preset = provider?.models.find((item) => item.id === draft.modelId);
+  const endpoint = provider?.endpoints.find((item) => item.id === draft.endpointId);
+  const sameModel = model?.providerType === draft.providerType && model?.modelId === draft.modelId;
+  const sameEndpoint =
+    model?.providerType === draft.providerType && model?.approvedEndpointId === draft.endpointId;
+  const change = (key: keyof typeof draft, value: string | boolean) =>
+    setDraft((previous) => ({ ...previous, [key]: value }));
+  function applyPreset(nextProvider: ProviderPreset, next: ModelPreset) {
+    setDraft((previous) => ({
+      providerType: nextProvider.id,
+      endpointId:
+        previous.providerType === nextProvider.id
+          ? previous.endpointId
+          : nextProvider.defaultEndpointId,
+      modelId: next.id,
+      displayName: next.name,
+      contextWindow: String(next.defaultContextWindow),
+      maxOutputTokens: String(next.defaultOutputTokens),
+      protocol: next.protocol ?? nextProvider.protocol,
+      reasoning: next.reasoning,
+      thinkingLevel: next.thinkingLevel,
+    }));
+    setError('');
+  }
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const values = new FormData(event.currentTarget),
       text = (key: string) => String(values.get(key) ?? '');
     const body: RecordData = {
-      displayName: text('displayName'),
-      providerType: provider,
-      approvedEndpointId: provider,
-      modelId: text('modelId'),
-      apiKey: text('apiKey'),
+      displayName: draft.displayName,
+      providerType: draft.providerType,
+      approvedEndpointId: draft.endpointId,
+      modelId: draft.modelId,
+      protocol: draft.protocol,
+      reasoning: draft.reasoning,
+      thinkingLevel: draft.thinkingLevel,
+      apiKey,
       enabled: values.has('enabled'),
       publicSelectable: values.has('publicSelectable'),
       maxOutputTokens: Number(values.get('maxOutputTokens')),
@@ -1076,47 +1139,145 @@ function ModelForm({
           <button className="adm-button" onClick={onClose}>
             取消
           </button>
-          <button className="adm-button primary" form="adm-model-form" disabled={busy}>
+          <button className="adm-button primary" form="adm-model-form" disabled={busy || !provider}>
             {busy ? '正在保存…' : '保存模型'}
           </button>
         </>
       }
     >
       <form id="adm-model-form" className="adm-form" onSubmit={submit}>
+        {!catalog && <Notice danger>预设目录尚未加载，请关闭弹窗并刷新模型列表后重试。</Notice>}
         <div className="adm-fields">
-          <Field label="展示名称">
-            <input
-              name="displayName"
-              required
-              maxLength={100}
-              defaultValue={model?.displayName ?? ''}
-              placeholder="例如：Coding Model"
-              autoFocus
-            />
-          </Field>
           <Field label="提供商">
-            <select value={provider} onChange={(event) => setProvider(event.target.value)}>
-              <option value="openai">OpenAI</option>
-              <option value="anthropic">Anthropic</option>
-              <option value="google">Google</option>
+            <select
+              value={draft.providerType}
+              autoFocus
+              onChange={(event) => {
+                const next = catalog?.providers.find((item) => item.id === event.target.value);
+                if (next) {
+                  applyPreset(next, next.models.find((item) => item.id === next.defaultModelId)!);
+                  setApiKey('');
+                }
+              }}
+            >
+              {(['domestic', 'international'] as const).map((region) => (
+                <optgroup key={region} label={region === 'domestic' ? '国内服务商' : '国际服务商'}>
+                  {catalog?.providers
+                    .filter((item) => item.region === region)
+                    .map((item) => (
+                      <option key={item.id} value={item.id}>
+                        {item.name}
+                      </option>
+                    ))}
+                </optgroup>
+              ))}
+            </select>
+          </Field>
+          <Field label="服务地域">
+            <select
+              value={draft.endpointId}
+              onChange={(event) => {
+                change('endpointId', event.target.value);
+                setApiKey('');
+              }}
+            >
+              {provider?.endpoints.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.name}
+                </option>
+              ))}
             </select>
           </Field>
         </div>
+        <Field label="官方模型预设">
+          <select
+            value={preset?.id ?? ''}
+            onChange={(event) => {
+              const next = provider?.models.find((item) => item.id === event.target.value);
+              if (provider && next) applyPreset(provider, next);
+              else {
+                change('modelId', '');
+                change('displayName', '');
+                change('reasoning', false);
+                change('thinkingLevel', 'off');
+              }
+            }}
+          >
+            {provider?.models.map((item) => (
+              <option key={item.id} value={item.id}>
+                {item.name}
+                {item.preview ? ' · 预览' : ''}
+              </option>
+            ))}
+            <option value="">手动填写模型 ID</option>
+          </select>
+        </Field>
+        <div className="adm-model-preset">
+          <div className="adm-model-limits">
+            <span>
+              官方上下文{' '}
+              <strong>{preset?.contextWindow ? number(preset.contextWindow) : '未知'}</strong>
+            </span>
+            <span>
+              官方输出上限{' '}
+              <strong>{preset?.maxOutputTokens ? number(preset.maxOutputTokens) : '未知'}</strong>
+            </span>
+            {preset?.maxInputTokens && (
+              <span>
+                官方输入上限 <strong>{number(preset.maxInputTokens)}</strong>
+              </span>
+            )}
+          </div>
+          <p>
+            {preset?.notes ??
+              provider?.notes ??
+              '预设覆盖适合文字与工具调用的主要模型，账号可用性以连接测试为准。'}
+          </p>
+          {preset?.notes && provider?.notes && <p>{provider.notes}</p>}
+          <div className="adm-model-source">
+            <span>官方文档核对：{catalog?.verifiedAt ?? '未知'}</span>
+            <a href={preset?.sources[0] ?? provider?.sources[0]} target="_blank" rel="noreferrer">
+              查看官方说明
+            </a>
+            {preset && provider && (
+              <button
+                type="button"
+                className="adm-link"
+                onClick={() => applyPreset(provider, preset)}
+              >
+                恢复预设参数
+              </button>
+            )}
+          </div>
+        </div>
+        <Field label="模型端点" hint="地域需与密钥匹配；端点由服务端预设目录提供。">
+          <input readOnly value={endpoint?.baseUrl ?? ''} className="adm-mono" />
+        </Field>
+        <Field label="展示名称">
+          <input
+            name="displayName"
+            required
+            maxLength={100}
+            value={draft.displayName}
+            onChange={(event) => change('displayName', event.target.value)}
+          />
+        </Field>
         <Field label="模型标识">
           <input
             name="modelId"
             required
             maxLength={200}
-            defaultValue={model?.modelId ?? ''}
+            value={draft.modelId}
+            onChange={(event) => change('modelId', event.target.value)}
             placeholder="提供商的完整模型 ID"
           />
         </Field>
         <Field
           label="API Key"
           hint={
-            model?.keyConfigured
+            model?.keyConfigured && sameEndpoint
               ? '已配置凭据。留空保留现有密钥，输入新值将替换。'
-              : '密钥仅写入服务器，保存后不会回显。'
+              : '输入此服务商及地域的密钥，仅写入服务器，保存后不会回显。'
           }
         >
           <input
@@ -1124,32 +1285,92 @@ function ModelForm({
             type="password"
             autoComplete="new-password"
             maxLength={8192}
-            placeholder={model?.keyConfigured ? '保留现有密钥' : '输入 API Key'}
+            value={apiKey}
+            onChange={(event) => setApiKey(event.target.value)}
+            required={!!model?.keyConfigured && !sameEndpoint}
+            placeholder={model?.keyConfigured && sameEndpoint ? '保留现有密钥' : '输入 API Key'}
           />
         </Field>
         <div className="adm-fields">
-          <Field label="最大输出 Token">
+          <Field
+            label="最大输出 Token"
+            hint="MyPI 单次请求预算，可低于官方上限。思考模型通常与思考内容共享此预算。"
+          >
             <input
               name="maxOutputTokens"
               type="number"
               required
-              min={1}
-              max={16384}
-              defaultValue={model?.maxOutputTokens ?? 2048}
+              min={16}
+              max={Math.min(
+                preset?.maxOutputTokens ?? MODEL_CONFIG_LIMITS.maxOutputTokens,
+                MODEL_CONFIG_LIMITS.maxOutputTokens,
+                Number(draft.contextWindow) || MODEL_CONFIG_LIMITS.contextWindow,
+              )}
+              value={draft.maxOutputTokens}
+              onChange={(event) => change('maxOutputTokens', event.target.value)}
             />
           </Field>
-          <Field label="上下文窗口">
+          <Field
+            label="上下文窗口"
+            hint="MyPI 用于上下文管理的 Token 预算。未知规格时请按供应商模型详情调整。"
+          >
             <input
               name="contextWindow"
               type="number"
               required
               min={1024}
-              max={2000000}
-              defaultValue={model?.contextWindow ?? 128000}
+              max={preset?.contextWindow ?? MODEL_CONFIG_LIMITS.contextWindow}
+              value={draft.contextWindow}
+              onChange={(event) => change('contextWindow', event.target.value)}
             />
           </Field>
         </div>
         <details className="adm-details">
+          <summary>协议与思考设置</summary>
+          <Field label="调用协议">
+            <select
+              value={draft.protocol}
+              onChange={(event) => change('protocol', event.target.value)}
+            >
+              {(draft.providerType === 'openai'
+                ? ['openai-responses', 'openai-completions']
+                : [provider?.protocol ?? draft.protocol]
+              ).map((item) => (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              ))}
+            </select>
+          </Field>
+          <Field label="思考设置">
+            <select
+              value={draft.thinkingLevel}
+              onChange={(event) => {
+                change('thinkingLevel', event.target.value);
+                if (!preset) change('reasoning', event.target.value !== 'off');
+              }}
+            >
+              {model &&
+                sameModel &&
+                preset &&
+                !preset.thinkingLevels.includes(draft.thinkingLevel) && (
+                  <option value={draft.thinkingLevel}>
+                    保留原思考设置（{draft.thinkingLevel}）
+                  </option>
+                )}
+              {(preset?.thinkingLevels ?? ['off', 'low', 'medium', 'high']).map((item) => (
+                <option key={item} value={item}>
+                  {item === 'off'
+                    ? '关闭思考'
+                    : preset && !preset.thinkingLevels.includes('high')
+                      ? '开启思考（模型默认）'
+                      : item}
+                </option>
+              ))}
+            </select>
+          </Field>
+        </details>
+        <details className="adm-details" key={`${draft.providerType}:${draft.modelId}`}>
           <summary>计费价格（每百万 Token）</summary>
           <p>
             整数 micro 单位；1,000,000 micro = 1
@@ -1162,7 +1383,7 @@ function ModelForm({
                 type="number"
                 min={0}
                 max={1000000000}
-                defaultValue={model?.inputPriceMicros ?? ''}
+                defaultValue={sameModel ? (model?.inputPriceMicros ?? '') : ''}
               />
             </Field>
             <Field label="输出价格 · micro">
@@ -1171,7 +1392,7 @@ function ModelForm({
                 type="number"
                 min={0}
                 max={1000000000}
-                defaultValue={model?.outputPriceMicros ?? ''}
+                defaultValue={sameModel ? (model?.outputPriceMicros ?? '') : ''}
               />
             </Field>
           </div>
@@ -1185,14 +1406,14 @@ function ModelForm({
         </details>
         <div className="adm-checkboxes">
           <label>
-            <input name="enabled" type="checkbox" defaultChecked={model?.enabled ?? true} />
+            <input name="enabled" type="checkbox" defaultChecked={model?.enabled ?? false} />
             启用模型
           </label>
           <label>
             <input
               name="publicSelectable"
               type="checkbox"
-              defaultChecked={model?.publicSelectable ?? true}
+              defaultChecked={model?.publicSelectable ?? false}
             />
             允许游客选择
           </label>

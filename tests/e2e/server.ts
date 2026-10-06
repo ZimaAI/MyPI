@@ -136,6 +136,9 @@ const services = {
     worker.services.testModel({
       ...config,
       providerType: 'openai-compatible',
+      protocol: 'openai-completions',
+      reasoning: false,
+      thinkingLevel: 'off',
       baseUrl: model.baseUrl,
       apiKey: 'fixture-only',
     }),
