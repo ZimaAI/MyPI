@@ -1,0 +1,49 @@
+name: mypi
+services:
+  app:
+    build:
+      context: .
+      dockerfile: deployment/Dockerfile.local
+    image: mypi-local:1.0.0
+    init: true
+    env_file: .env.docker
+    environment:
+      MYPI_PROFILE: local
+      MYPI_HOST: 127.0.0.1
+      MYPI_PORT: 4100
+      MYPI_ORIGIN: http://localhost:3000
+      MYPI_DATA_DIR: /data/server
+      MYPI_BROKER_STATE: /data/broker
+      MYPI_WORKER_URL: http://127.0.0.1:4101
+      MYPI_WORKER_PORT: 4101
+      MYPI_BROKER_URL: http://127.0.0.1:4102
+      MYPI_BROKER_PORT: 4102
+      PUBLIC_EXECUTION_ENABLED: 'false'
+      MYPI_ENABLE_IMPORTS: 'false'
+    volumes:
+      - state:/data
+    ports:
+      - '127.0.0.1:3000:8080'
+    stop_grace_period: 45s
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "fetch('http://127.0.0.1:4100/health/live').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 15s
+      timeout: 5s
+      start_period: 30s
+      retries: 3
+  web:
+    image: nginx:stable-alpine
+    network_mode: service:app
+    depends_on:
+      app:
+        condition: service_healthy
+    volumes:
+      - ./deployment/nginx.local.conf:/etc/nginx/conf.d/default.conf:ro
+volumes:
+  state:

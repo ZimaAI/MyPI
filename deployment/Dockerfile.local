@@ -1,0 +1,10 @@
+FROM node:24-bookworm-slim
+WORKDIR /app
+RUN npm install --global pnpm@11.5.0
+COPY . .
+RUN pnpm install --frozen-lockfile && pnpm build \
+    && mkdir -p /data/server /data/broker \
+    && chown -R node:node /data
+ENV NODE_ENV=production
+USER node
+CMD ["node", "scripts/dev.mjs"]

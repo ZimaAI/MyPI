@@ -1,5 +1,43 @@
 # Deployment
 
+## Local Docker Desktop
+
+From the repository root, with Docker Desktop running Linux containers:
+
+```sh
+node scripts/setup-docker.mjs
+docker compose up -d --build --wait
+```
+
+Open http://localhost:3000 (use this exact origin for cookie/CSRF validation).
+Compose publishes only `127.0.0.1:3000`. Nginx proxies to the local-profile
+Gateway; Gateway, Worker and Broker share a private container network namespace
+and retain their loopback listeners. The application runs as the non-root `node`
+user. No Docker socket or host project directory is mounted into the application.
+
+Secrets are generated once in ignored `.env.docker`. Keep this file when updating:
+the master key is required to decrypt saved model configuration. SQLite, private
+SDK state and Broker workspaces persist in the `mypi_state` named volume.
+There is no default administrator. To create one interactively:
+
+```sh
+docker compose exec app node --import tsx apps/cli/src/main.ts admin bootstrap --state-dir /data/server
+```
+
+`docker compose logs --tail=100` shows service output. Use `docker compose stop`
+to stop gracefully and `docker compose up -d --wait` to start again. Use
+`docker compose down` to remove containers while retaining data; adding `-v`
+also destroys the database/workspaces. Back up the volume and `.env.docker`
+together while services are stopped. A forced kill can leave `worker.lock`:
+only remove that file after confirming the old Worker is stopped.
+
+This local deployment supports the UI, guest sessions, conversations and template
+files. Execution and optional imports remain explicitly disabled. `/health/live`
+returns 200, while `/health/ready` returns 503 until the execution release gate is
+met. The expected Broker orphan-cleanup warning reflects the deliberately absent
+Docker socket/CLI. Docker Desktop deployment does not satisfy that release gate;
+do not enable execution here or substitute a trusted-local runner.
+
 The public execution switch defaults to **off**. The broker has no host execution fallback. A running Docker Desktop installation is not evidence of production isolation.
 
 Use Node.js 24+, the committed package lock, one Gateway and one Worker. Build the frontend with `pnpm build`. Configure Nginx using `deployment/nginx.conf`, adjusting the actual static output path and domain. Only Nginx may expose a public port. Gateway, Worker and Broker remain private. Keep their private state outside every project workspace. Supply separate secrets at runtime; never mount model credentials into code containers.

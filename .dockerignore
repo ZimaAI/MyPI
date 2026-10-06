@@ -1,0 +1,16 @@
+**/node_modules
+.git
+.env
+.env.*
+.mypi
+.data
+data
+dist
+dist-sandbox
+coverage
+test-results
+playwright-report
+docs
+**/*.log
+**/*.db*
+**/*.sqlite*
