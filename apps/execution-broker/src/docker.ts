@@ -17,11 +17,17 @@ export interface DockerSandboxOptions {
   stateRoot: string;
   image: string;
   publicExecutionEnabled: boolean;
+  localExecutionEnabled?: boolean;
   runtime?: string;
   dockerBinary?: string;
 }
 export function dockerArguments(options: DockerSandboxOptions, name: string): string[] {
-  if (!/^[a-zA-Z0-9][a-zA-Z0-9._/:-]*@sha256:[a-f0-9]{64}$/.test(options.image))
+  if (options.localExecutionEnabled && options.publicExecutionEnabled)
+    throw new SandboxError('INVALID_INPUT', '本机与公网执行配置不能同时启用');
+  if (
+    !/^[a-zA-Z0-9][a-zA-Z0-9._/:-]*@sha256:[a-f0-9]{64}$/.test(options.image) &&
+    !(options.localExecutionEnabled && /^sha256:[a-f0-9]{64}$/.test(options.image))
+  )
     throw new SandboxError('SANDBOX_UNAVAILABLE', '沙箱镜像必须固定 sha256 digest');
   if (!/^[a-zA-Z0-9_-]+$/.test(options.runtime ?? 'runsc'))
     throw new SandboxError('INVALID_INPUT', '无效 runtime');
@@ -35,7 +41,7 @@ export function dockerArguments(options: DockerSandboxOptions, name: string): st
     '--label',
     'mypi.sandbox=true',
     '--runtime',
-    options.runtime ?? 'runsc',
+    options.localExecutionEnabled ? 'runc' : (options.runtime ?? 'runsc'),
     '--network=none',
     '--read-only',
     '--user=10001:10001',
@@ -98,7 +104,7 @@ export class DockerSandbox extends TrustedLocalSandbox {
     });
   }
   override async health(): Promise<SandboxHealth> {
-    if (!this.dockerOptions.publicExecutionEnabled)
+    if (!this.dockerOptions.publicExecutionEnabled && !this.dockerOptions.localExecutionEnabled)
       return {
         ready: false,
         profile: 'isolated',
@@ -112,7 +118,8 @@ export class DockerSandbox extends TrustedLocalSandbox {
       const info = JSON.parse(await this.docker(['info', '--format', '{{json .}}']));
       if (
         info.OSType !== 'linux' ||
-        !info.SecurityOptions?.some((item: string) => item.includes('rootless')) ||
+        (!this.dockerOptions.localExecutionEnabled &&
+          !info.SecurityOptions?.some((item: string) => item.includes('rootless'))) ||
         !info.SecurityOptions?.some((item: string) => item.includes('seccomp')) ||
         String(info.CgroupVersion) !== '2' ||
         !info.CgroupDriver ||
@@ -122,15 +129,24 @@ export class DockerSandbox extends TrustedLocalSandbox {
           'SANDBOX_UNAVAILABLE',
           '需要 Linux rootless、seccomp 和有效 cgroup v2 限额',
         );
-      if (!info.Runtimes?.[this.dockerOptions.runtime ?? 'runsc'])
+      const runtime = this.dockerOptions.localExecutionEnabled
+        ? 'runc'
+        : (this.dockerOptions.runtime ?? 'runsc');
+      if (!info.Runtimes?.[runtime])
         throw new SandboxError('SANDBOX_UNAVAILABLE', '固定隔离 runtime 未安装');
       await this.docker(['image', 'inspect', this.dockerOptions.image]);
-      health = { ready: true, profile: 'isolated', publicExecutionEnabled: true };
+      health = {
+        ready: true,
+        profile: this.dockerOptions.localExecutionEnabled ? 'isolated-local' : 'isolated',
+        publicExecutionEnabled: this.dockerOptions.publicExecutionEnabled,
+        localExecutionEnabled: this.dockerOptions.localExecutionEnabled === true,
+      };
     } catch (error) {
       health = {
         ready: false,
-        profile: 'isolated',
-        publicExecutionEnabled: true,
+        profile: this.dockerOptions.localExecutionEnabled ? 'isolated-local' : 'isolated',
+        publicExecutionEnabled: this.dockerOptions.publicExecutionEnabled,
+        localExecutionEnabled: this.dockerOptions.localExecutionEnabled === true,
         reason: error instanceof SandboxError ? error.message : '沙箱配置检查失败',
       };
     }
@@ -166,18 +182,19 @@ export class DockerSandbox extends TrustedLocalSandbox {
     if (!ready.ready)
       throw new SandboxError('SANDBOX_UNAVAILABLE', ready.reason ?? '隔离执行器不可用');
     if (signal?.aborted) throw new SandboxError('CANCELLED', '执行已取消');
-    if (this.activeContainers.size >= 2)
-      throw new SandboxError('LIMIT_EXCEEDED', '全局执行沙箱已达 2 个');
+    const limit = this.dockerOptions.localExecutionEnabled ? 1 : 2;
+    if (this.activeContainers.size >= limit)
+      throw new SandboxError('LIMIT_EXCEEDED', `全局执行沙箱已达 ${limit} 个`);
     const name = `mypi-${randomUUID()}`;
     this.activeContainers.add(name);
-    const files = await snapshot(root);
-    const argv = dockerArguments(this.dockerOptions, name);
     const timeoutMs =
       Math.min(
         600000,
         typeof request.args.timeoutMs === 'number' ? request.args.timeoutMs : 60000,
       ) + 5000;
     try {
+      const files = await snapshot(root);
+      const argv = dockerArguments(this.dockerOptions, name);
       const result = await new Promise<{ result: ToolResult; files: typeof files }>(
         (resolve, reject) => {
           const child = spawn(this.dockerOptions.dockerBinary ?? 'docker', argv, {

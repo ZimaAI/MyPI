@@ -1,5 +1,7 @@
 # MyPI implementation state
 
+2026-10-06 — user-authorized single-user Docker Desktop execution is deployed on localhost. The explicit local Broker profile uses runc, immutable local image IDs, no task-container network or host mounts, a 1 CPU / 1 GiB task limit and one execution slot. Gateway/Worker and Nginx have no Docker socket; only the separate trusted Broker controls Docker. Public rootless/runsc acceptance remains NOT_RUN and public profiles reject local-only health. See `deployment/local-docker.md` and `docs/evidence/local-docker.md`. Real DeepSeek file write/read and refresh recovery passed after reducing the configured output ceiling from 100,000 to 8,192 tokens to fit the unchanged 50,000-token daily budget.
+
 2026-09-23 — implementation complete; final local verification is recorded in `docs/evidence/implementation.md`. Public release remains gated by the dedicated execution environment.
 
 2026-10-06 — model-service catalog now covers 16 providers / 18 service offerings (including Volcengine Agent Plan and Coding Plan), 22 official endpoints and 61 model presets. Administrators can configure custom public HTTPS endpoints using Chat Completions, Responses or Anthropic Messages, with DNS-pinned transport and no redirects. Gateway, encrypted storage, CLI and UI share endpoint/protocol validation; changing destination requires matching credentials and a new connection test. Gemini web configuration retains the official endpoint because the current SDK cannot inject a safe custom transport. See `docs/model-providers.md` and the latest entry in `docs/evidence/implementation.md`.
@@ -11,6 +13,6 @@
 - P1: Limited rule drafts, golden validation, immutable publication/rollback and controlled ZIP/public GitHub imports implemented. Imports default off; they require the explicit deployment switch.
 - S6: Reproducible local tests, browser fixtures, actual three-service startup/shutdown checks, CI configuration and deployment/evidence documents are provided. See the latest verification record for commands, counts and remaining environment checks.
 
-No paid-provider credential has been supplied. Deterministic loopback HTTP fixtures exercise the real Pi SDK but do not establish model quality, paid cost savings or production performance. The 316-case intent dataset is a regression set, not an independently annotated held-out evaluation. Hosted CI, paid-provider comparisons and dedicated-host SEC acceptance remain NOT_RUN.
+Initial implementation used deterministic loopback HTTP fixtures. On 2026-10-06, the user's configured provider passed a connection test and one live local Docker browser task; this does not establish model quality, paid cost savings or production performance. The 316-case intent dataset is a regression set, not an independently annotated held-out evaluation. Hosted CI, paid-provider comparisons and dedicated-host SEC acceptance remain NOT_RUN.
 
 The existing Git repository and initial commit are preserved. No credentials, SDK sessions, databases, dependencies or build output belong in version control.

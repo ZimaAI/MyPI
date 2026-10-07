@@ -1,0 +1,8 @@
+file:///D:/Develop/Projects/MyPI/scripts/check-local-browser.mjs:42
+    throw new Error(`Live run ${run.status}: ${JSON.stringify(run.error ?? run.failure ?? {})}`);
+          ^
+
+Error: Live run budget_exceeded: {"code":"QUOTA_EXCEEDED","message":"执行失败，请查看运行记录"}
+    at file:///D:/Develop/Projects/MyPI/scripts/check-local-browser.mjs:42:11
+
+Node.js v24.16.0

@@ -70,8 +70,9 @@ export interface WorkspaceDiff {
 }
 export interface SandboxHealth {
   ready: boolean;
-  profile: 'trusted-local' | 'isolated';
+  profile: 'trusted-local' | 'isolated' | 'isolated-local';
   publicExecutionEnabled: boolean;
+  localExecutionEnabled?: boolean;
   reason?: string;
 }
 export interface WorkspaceFile {

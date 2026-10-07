@@ -5,6 +5,8 @@ import staticFiles from '@fastify/static';
 import { SqliteStore } from '@mypi/storage-sqlite';
 import { createGateway } from './index.js';
 import { WorkerClient } from './client.js';
+import { localDockerEnabled } from '../../../packages/sandbox-client/src/deployment.ts';
+localDockerEnabled(process.env);
 
 const dataDir = resolve(process.env.MYPI_DATA_DIR ?? join(homedir(), '.mypi'));
 const publicProfile = process.env.MYPI_PROFILE === 'public-demo';

@@ -32,7 +32,7 @@ export interface WorkerOptions {
   masterKey: string;
   importsEnabled?: boolean;
   runtimeStateDir?: string;
-  profile?: 'public-demo' | 'trusted-local';
+  profile?: 'public-demo' | 'trusted-local' | 'local-docker';
   resolveModel?: (id?: string) => ModelConfig;
 }
 export function createWorkerServices(options: WorkerOptions) {
@@ -280,7 +280,11 @@ export function createWorkerServices(options: WorkerOptions) {
     ready: async () => {
       const health = await sandbox.health();
       return {
-        ready: health.ready,
+        ready:
+          health.ready &&
+          (options.profile === 'local-docker'
+            ? health.profile === 'isolated-local' && health.localExecutionEnabled === true
+            : options.profile === 'trusted-local' || health.profile === 'isolated'),
         sandboxEnforced:
           health.ready && health.profile === 'isolated' && health.publicExecutionEnabled,
         profile: health.profile,

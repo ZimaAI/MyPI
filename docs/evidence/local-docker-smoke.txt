@@ -1,0 +1,1 @@
+{"passed":true,"health":{"ready":true,"profile":"isolated-local","publicExecutionEnabled":false,"localExecutionEnabled":true},"checks":["non-root","no host state or secrets","read-only root","cgroup limits","seccomp","no capabilities","no outbound/metadata network","snapshot persistence","single execution slot","cancel cleanup"]}

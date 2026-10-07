@@ -1,0 +1,6 @@
+FROM docker:28-cli AS docker-cli
+FROM mypi-local:1.0.0
+USER root
+COPY --from=docker-cli /usr/local/bin/docker /usr/local/bin/docker
+COPY scripts/smoke-local-execution.ts /app/scripts/smoke-local-execution.ts
+CMD ["node", "--import", "tsx", "apps/execution-broker/src/main.ts"]

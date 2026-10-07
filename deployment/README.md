@@ -2,6 +2,8 @@
 
 ## Local Docker Desktop
 
+For the explicitly authorized **single-user localhost execution** profile, see [local-docker.md](local-docker.md). The base Compose deployment below remains execution-disabled; the local overlay does not establish public-host security acceptance.
+
 From the repository root, with Docker Desktop running Linux containers:
 
 ```sh

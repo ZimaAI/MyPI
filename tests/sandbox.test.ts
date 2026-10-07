@@ -8,6 +8,46 @@ import { TrustedLocalSandbox, BrokerSandboxClient } from '../packages/sandbox-cl
 import { relativePath } from '../packages/sandbox-client/src/engine.js';
 import { DockerSandbox, dockerArguments } from '../apps/execution-broker/src/docker.js';
 import { createBrokerServer } from '../apps/execution-broker/src/server.js';
+import { localDockerEnabled } from '../packages/sandbox-client/src/deployment.js';
+
+test('local Docker opt-in rejects public profiles, public origins and mutable images', () => {
+  const env = {
+    MYPI_LOCAL_DOCKER_ENABLED: 'true',
+    MYPI_PROFILE: 'local',
+    MYPI_HOST: '127.0.0.1',
+    MYPI_ORIGIN: 'http://localhost:3000',
+    PUBLIC_EXECUTION_ENABLED: 'false',
+  };
+  assert.equal(localDockerEnabled(env), true);
+  assert.equal(localDockerEnabled({}), false);
+  for (const change of [
+    { MYPI_PROFILE: 'public-demo' },
+    { MYPI_HOST: '0.0.0.0' },
+    { MYPI_ORIGIN: 'http://example.com' },
+    { PUBLIC_EXECUTION_ENABLED: 'true' },
+  ])
+    assert.throws(() => localDockerEnabled({ ...env, ...change }));
+  const options = {
+    stateRoot: '.',
+    image: `sha256:${'b'.repeat(64)}`,
+    publicExecutionEnabled: false,
+    localExecutionEnabled: true,
+  };
+  const args = dockerArguments(options, 'mypi-test');
+  assert.equal(args[args.indexOf('--runtime') + 1], 'runc');
+  assert.ok(args.includes('--network=none'));
+  assert.ok(args.includes('--user=10001:10001'));
+  assert.ok(args.includes('--memory=1024m'));
+  assert.ok(!args.some((value) => /--mount|--volume|--privileged/.test(value)));
+  assert.throws(() => dockerArguments({ ...options, publicExecutionEnabled: true }, 'mypi-test'));
+  assert.throws(() =>
+    dockerArguments(
+      { ...options, localExecutionEnabled: false, publicExecutionEnabled: true },
+      'mypi-test',
+    ),
+  );
+  assert.throws(() => dockerArguments({ ...options, image: 'mypi-sandbox:local' }, 'mypi-test'));
+});
 
 const owner = { principalId: 'principal-a', conversationId: 'conversation-a' };
 async function fixture() {

@@ -15,7 +15,7 @@ function stop() {
   deadline.unref();
 }
 for (const entry of [
-  'apps/execution-broker/src/main.ts',
+  ...(process.env.MYPI_EXTERNAL_BROKER === 'true' ? [] : ['apps/execution-broker/src/main.ts']),
   'apps/worker/src/main.ts',
   'apps/gateway/src/main.ts',
 ]) {

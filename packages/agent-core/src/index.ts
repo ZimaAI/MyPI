@@ -45,7 +45,7 @@ export interface AgentServiceOptions {
   resolveModel: (modelId?: string) => Promise<ModelConfig> | ModelConfig;
   policy?: () => Policy;
   authorize?: (ownerId: string) => void | Promise<void>;
-  profile?: 'trusted-local' | 'public-demo';
+  profile?: 'trusted-local' | 'public-demo' | 'local-docker';
   budget?: BudgetPort;
 }
 interface WorkRecord {
@@ -205,7 +205,11 @@ export class AgentService {
     if (this.options.profile !== 'trusted-local') {
       if (!policy.publicExecution) throw new AppError('SERVICE_PAUSED', '公开执行尚未开启', 503);
       const health = await this.options.sandbox.health();
-      if (!health.ready || health.profile !== 'isolated' || !health.publicExecutionEnabled)
+      const allowed =
+        this.options.profile === 'local-docker'
+          ? health.profile === 'isolated-local' && health.localExecutionEnabled === true
+          : health.profile === 'isolated' && health.publicExecutionEnabled;
+      if (!health.ready || !allowed)
         throw new AppError('SANDBOX_UNAVAILABLE', '隔离执行器尚未就绪', 503);
     }
     const model = await this.options.resolveModel(input.modelId ?? conversation.defaultModelId);

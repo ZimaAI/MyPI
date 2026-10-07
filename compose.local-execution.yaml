@@ -1,0 +1,56 @@
+# Explicit localhost-only overlay. Always include compose.yaml first.
+services:
+  app:
+    restart: unless-stopped
+    environment:
+      MYPI_LOCAL_DOCKER_ENABLED: 'true'
+      MYPI_EXTERNAL_BROKER: 'true'
+    cpus: 1.0
+    mem_limit: 1g
+    memswap_limit: 1g
+    pids_limit: 256
+  web:
+    restart: unless-stopped
+    cpus: 0.25
+    mem_limit: 128m
+    memswap_limit: 128m
+    pids_limit: 64
+  broker:
+    build:
+      context: .
+      dockerfile: deployment/Dockerfile.broker-local
+    image: mypi-broker-local:1.0.0
+    init: true
+    network_mode: service:app
+    depends_on:
+      app:
+        condition: service_healthy
+    environment:
+      MYPI_PROFILE: local
+      MYPI_HOST: 127.0.0.1
+      MYPI_ORIGIN: http://localhost:3000
+      MYPI_LOCAL_DOCKER_ENABLED: 'true'
+      PUBLIC_EXECUTION_ENABLED: 'false'
+      MYPI_BROKER_STATE: /data/broker
+      MYPI_BROKER_PORT: 4102
+      MYPI_BROKER_TOKEN: ${MYPI_BROKER_TOKEN:?Load .env.docker with --env-file}
+      MYPI_SANDBOX_IMAGE: ${MYPI_LOCAL_SANDBOX_IMAGE:?Run scripts/setup-local-execution.mjs first}
+    volumes:
+      - state:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    cpus: 0.5
+    mem_limit: 512m
+    memswap_limit: 512m
+    pids_limit: 128
+    stop_grace_period: 45s
+    restart: unless-stopped
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:4102/rpc',{method:'POST',headers:{authorization:'Bearer '+process.env.MYPI_BROKER_TOKEN,'content-type':'application/json'},body:JSON.stringify({requestId:'health',method:'health',params:{}})}).then(async r=>{const b=await r.json();process.exit(r.ok&&b.data?.ready&&b.data?.profile==='isolated-local'?0:1)}).catch(()=>process.exit(1))"
+      interval: 20s
+      timeout: 10s
+      start_period: 30s
+      retries: 3

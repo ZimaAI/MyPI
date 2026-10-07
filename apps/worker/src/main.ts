@@ -6,6 +6,8 @@ import { PiRuntimeFactory } from '../../../packages/pi-adapter/src/index.ts';
 import { BrokerSandboxClient } from '../../../packages/sandbox-client/src/client.ts';
 import { createWorkerServices } from './service.ts';
 import { createWorkerServer } from './server.ts';
+import { localDockerEnabled } from '../../../packages/sandbox-client/src/deployment.ts';
+const localDocker = localDockerEnabled(process.env);
 const stateDir = resolve(process.env.MYPI_DATA_DIR ?? join(homedir(), '.mypi'));
 await mkdir(stateDir, { recursive: true, mode: 0o700 });
 const lockPath = join(stateDir, 'worker.lock');
@@ -28,6 +30,7 @@ try {
   });
   const runtimeStateDir = join(stateDir, 'private');
   const worker = createWorkerServices({
+    profile: localDocker ? 'local-docker' : 'public-demo',
     store,
     runtime: new PiRuntimeFactory({ stateDir: runtimeStateDir }),
     runtimeStateDir,

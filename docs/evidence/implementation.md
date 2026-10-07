@@ -1,5 +1,11 @@
 # 实施与最终本地验证
 
+## 2026-10-06：单人本机 Docker Desktop 执行
+
+用户明确授权新增仅本机 Docker 执行例外。独立 Broker 使用 runc；任务容器仍禁网、无宿主挂载、非 root、只读根目录并受 cgroup 限制。`isolated-local` 就绪状态只由显式本机 Worker 接受，公网 profile 和原 rootless/runsc 发布门禁保持不变。入口仅 `127.0.0.1:3000`，原凭据/数据卷保留，应用模型并发与任务容器并发均为 1。
+
+`pnpm format`、`pnpm verify` 退出 0，88/88 自动测试和构建通过；最终新增验收脚本又通过类型及格式检查。聊天/管理后台定向浏览器测试 4/4 通过。真实 Broker 验证容器限制、禁网、快照持久化、单执行名额和取消清理；真实 DeepSeek 网页任务完成写文件、读文件和刷新恢复，验收会话随后删除。首次真实模型请求暴露单次输出上限 100,000 超过每日额度 50,000；将输出限制调至 8,192 并重新连接测试通过后，最终任务成功。其他模型参数和密钥未改动。详细证据、首次失败与边界见 [本机部署验收](local-docker.md)。
+
 ## 2026-10-06：火山套餐与自定义模型端点
 
 新增 `volcengine-agent-plan` 与 `volcengine-coding-plan`，分别使用 `/api/plan`、`/api/coding` 专用地址，支持 Chat Completions、Responses、Anthropic Messages 三种协议；不混用普通按量端点与套餐凭据。各提供 14 个模型预设（含 `ark-code-latest` 控制台别名），全目录现有 18 类服务、22 个官方端点、61 条模型预设，另有自定义入口。套餐规格、默认预算与官方来源见[模型服务配置](../model-providers.md)。Agent Plan 接入示例的参数仅作为默认预算，不冒充官方硬上限。

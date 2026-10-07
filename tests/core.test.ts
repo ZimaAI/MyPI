@@ -356,3 +356,42 @@ test('public profile fails closed even when a trusted local port is injected', a
     await f.cleanup();
   }
 });
+
+test('public core rejects local Docker health and local core rejects disabled execution', async () => {
+  const f = await fixture();
+  try {
+    f.sandbox.health = async () => ({
+      ready: true,
+      profile: 'isolated-local',
+      publicExecutionEnabled: false,
+      localExecutionEnabled: true,
+    });
+    const publicService = new AgentService({
+      ...f.service.options,
+      profile: 'public-demo',
+      policy: () => ({ ...defaultPolicy, publicExecution: true }),
+    });
+    await assert.rejects(
+      publicService.submit('alice', f.conversation.id, { text: 'hello' }, 'public'),
+      /隔离执行器/,
+    );
+    const localService = new AgentService({
+      ...f.service.options,
+      profile: 'local-docker',
+      policy: () => ({ ...defaultPolicy, publicExecution: true }),
+    });
+    f.sandbox.health = async () => ({
+      ready: true,
+      profile: 'isolated-local',
+      publicExecutionEnabled: false,
+      localExecutionEnabled: false,
+    });
+    await assert.rejects(
+      localService.submit('alice', f.conversation.id, { text: 'hello' }, 'local'),
+      /隔离执行器/,
+    );
+    assert.equal(f.store.list('run').length, 0);
+  } finally {
+    await f.cleanup();
+  }
+});

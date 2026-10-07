@@ -3,6 +3,7 @@ import { timingSafeEqual } from 'node:crypto';
 import * as fs from 'node:fs/promises';
 import path from 'node:path';
 import { DockerSandbox } from './docker.js';
+import { localDockerEnabled } from '../../../packages/sandbox-client/src/deployment.ts';
 import { SandboxError, type SandboxPort } from '../../../packages/sandbox-client/src/types.js';
 
 const METHODS = new Set([
@@ -107,14 +108,16 @@ export function createBrokerServer(sandbox: SandboxPort, token: string): http.Se
   });
 }
 export async function startBroker(): Promise<void> {
+  const localExecutionEnabled = localDockerEnabled(process.env);
   const token = process.env.MYPI_BROKER_TOKEN ?? '';
   const sandbox = new DockerSandbox({
     stateRoot: path.resolve(process.env.MYPI_BROKER_STATE ?? '.data/broker'),
     image: process.env.MYPI_SANDBOX_IMAGE ?? '',
     publicExecutionEnabled: process.env.PUBLIC_EXECUTION_ENABLED === 'true',
+    localExecutionEnabled,
     runtime: process.env.MYPI_SANDBOX_RUNTIME ?? 'runsc',
   });
-  if (process.env.PUBLIC_EXECUTION_ENABLED === 'true') {
+  if (process.env.PUBLIC_EXECUTION_ENABLED === 'true' || localExecutionEnabled) {
     const health = await sandbox.health();
     if (!health.ready) throw new Error(health.reason);
   }
@@ -122,7 +125,7 @@ export async function startBroker(): Promise<void> {
   try {
     await sandbox.cleanupOrphans();
   } catch (error) {
-    if (process.env.PUBLIC_EXECUTION_ENABLED === 'true') throw error;
+    if (process.env.PUBLIC_EXECUTION_ENABLED === 'true' || localExecutionEnabled) throw error;
     console.error('Broker orphan cleanup unavailable; execution remains disabled');
   }
   const server = createBrokerServer(sandbox, token);
