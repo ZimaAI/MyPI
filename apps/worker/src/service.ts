@@ -33,6 +33,7 @@ export interface WorkerOptions {
   importsEnabled?: boolean;
   runtimeStateDir?: string;
   profile?: 'public-demo' | 'trusted-local' | 'local-docker';
+  globalBudget?: { tokens: number; roots: number };
   resolveModel?: (id?: string) => ModelConfig;
 }
 export function createWorkerServices(options: WorkerOptions) {
@@ -55,7 +56,7 @@ export function createWorkerServices(options: WorkerOptions) {
     policy: () => effectivePolicy(store),
     authorize,
     profile: options.profile ?? 'public-demo',
-    budget: new SqliteBudget(store),
+    budget: new SqliteBudget(store, options.globalBudget),
   });
   const imports = createProjectImports(store, sandbox, options.importsEnabled ?? false, authorize);
   const maintenance = createMaintenance({

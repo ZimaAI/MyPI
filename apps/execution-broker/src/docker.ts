@@ -18,19 +18,26 @@ export interface DockerSandboxOptions {
   image: string;
   publicExecutionEnabled: boolean;
   localExecutionEnabled?: boolean;
+  lowResourcePublic?: boolean;
   runtime?: string;
   dockerBinary?: string;
 }
 export function dockerArguments(options: DockerSandboxOptions, name: string): string[] {
   if (options.localExecutionEnabled && options.publicExecutionEnabled)
     throw new SandboxError('INVALID_INPUT', '本机与公网执行配置不能同时启用');
+  if (options.localExecutionEnabled && options.lowResourcePublic)
+    throw new SandboxError('INVALID_INPUT', '本机与公网资源配置不能混用');
   if (
     !/^[a-zA-Z0-9][a-zA-Z0-9._/:-]*@sha256:[a-f0-9]{64}$/.test(options.image) &&
-    !(options.localExecutionEnabled && /^sha256:[a-f0-9]{64}$/.test(options.image))
+    !(
+      (options.localExecutionEnabled || options.lowResourcePublic) &&
+      /^sha256:[a-f0-9]{64}$/.test(options.image)
+    )
   )
     throw new SandboxError('SANDBOX_UNAVAILABLE', '沙箱镜像必须固定 sha256 digest');
   if (!/^[a-zA-Z0-9_-]+$/.test(options.runtime ?? 'runsc'))
     throw new SandboxError('INVALID_INPUT', '无效 runtime');
+  const lowResource = options.lowResourcePublic === true;
   return [
     'run',
     '--rm',
@@ -47,13 +54,15 @@ export function dockerArguments(options: DockerSandboxOptions, name: string): st
     '--user=10001:10001',
     '--cap-drop=ALL',
     '--security-opt=no-new-privileges:true',
-    '--cpus=1',
-    '--memory=1024m',
-    '--memory-swap=1024m',
-    '--pids-limit=128',
+    lowResource ? '--cpus=0.5' : '--cpus=1',
+    lowResource ? '--memory=512m' : '--memory=1024m',
+    lowResource ? '--memory-swap=512m' : '--memory-swap=1024m',
+    lowResource ? '--pids-limit=64' : '--pids-limit=128',
     '--ulimit=nofile=1024:1024',
     '--ulimit=fsize=2097152:2097152',
-    '--tmpfs=/workspace:rw,nosuid,nodev,size=256m,mode=0700,uid=10001,gid=10001',
+    lowResource
+      ? '--tmpfs=/workspace:rw,nosuid,nodev,size=128m,mode=0700,uid=10001,gid=10001'
+      : '--tmpfs=/workspace:rw,nosuid,nodev,size=256m,mode=0700,uid=10001,gid=10001',
     '--tmpfs=/tmp:rw,nosuid,nodev,noexec,size=32m,mode=1777',
     '--shm-size=16m',
     '--workdir=/workspace',
@@ -182,7 +191,8 @@ export class DockerSandbox extends TrustedLocalSandbox {
     if (!ready.ready)
       throw new SandboxError('SANDBOX_UNAVAILABLE', ready.reason ?? '隔离执行器不可用');
     if (signal?.aborted) throw new SandboxError('CANCELLED', '执行已取消');
-    const limit = this.dockerOptions.localExecutionEnabled ? 1 : 2;
+    const limit =
+      this.dockerOptions.localExecutionEnabled || this.dockerOptions.lowResourcePublic ? 1 : 2;
     if (this.activeContainers.size >= limit)
       throw new SandboxError('LIMIT_EXCEEDED', `全局执行沙箱已达 ${limit} 个`);
     const name = `mypi-${randomUUID()}`;

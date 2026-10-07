@@ -22,7 +22,7 @@ curl -fsS http://127.0.0.1:13080/health/live
 
 ## 系统 Nginx 与证书
 
-安装脚本不会更改系统 Nginx。确认 `mypi.zimagent.top` 的 DNS A 记录指向本机公网入口，且入口将 80/443 转发到这台主机。具有 sudo 权限的管理员执行：
+安装脚本不会更改系统 Nginx。本站点已安装并由 Certbot 签发证书；以下命令用于在新机器重建。确认 `mypi.zimagent.top` 的 DNS A 记录指向公网入口，且入口将 80/443 转发到这台主机。具有 sudo 权限的管理员执行：
 
 ```sh
 sudo install -m 644 deployment/nginx.mypi.zimagent.top.conf /etc/nginx/sites-available/mypi.zimagent.top

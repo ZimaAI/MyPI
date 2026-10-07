@@ -5,6 +5,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { createAdmin, SqliteStore, verifyPassword } from '../src/index.js';
 import { SecretBox } from '../src/security.js';
+import { SqliteBudget } from '../src/entity-store.js';
 
 test('versioned entities, ownership, transactions and idempotency survive reopen', () => {
   const dir = mkdtempSync(join(tmpdir(), 'mypi-store-')),
@@ -68,6 +69,19 @@ test('all quota buckets reserve atomically and unknown usage remains held', () =
     store.adjustQuota(a.id, 'admin', 50, 1, 'approved test quota', 'adjust1');
     assert.equal(store.quota('principal', 'a')?.tokenLimit, 150);
     assert.equal(store.quota('principal', 'a')?.tokensUsed, 30);
+  } finally {
+    store.close();
+  }
+});
+test('low-resource public budget tightens an existing global daily bucket', () => {
+  const store = new SqliteStore();
+  try {
+    store.ensureQuota('global', 'global', { tokens: 500000, roots: 1000 });
+    new SqliteBudget(store, { tokens: 60000, roots: 20 });
+    const global = store.quota('global', 'global')!;
+    assert.equal(global.tokenLimit, 60000);
+    assert.equal(global.rootLimit, 20);
+    assert.throws(() => store.reserveQuota('too-large', [global.id], 60001), /budget exhausted/);
   } finally {
     store.close();
   }

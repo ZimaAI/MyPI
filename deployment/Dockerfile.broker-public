@@ -1,0 +1,9 @@
+FROM docker:28-cli AS docker-cli
+FROM node:24-bookworm-slim
+WORKDIR /app
+RUN npm install --global pnpm@11.5.0 && mkdir -p /data/broker
+COPY --from=docker-cli /usr/local/bin/docker /usr/local/bin/docker
+COPY . .
+RUN pnpm install --frozen-lockfile
+ENV NODE_ENV=production
+CMD ["node", "--import", "tsx", "apps/execution-broker/src/main.ts"]

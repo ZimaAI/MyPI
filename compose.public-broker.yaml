@@ -1,0 +1,40 @@
+name: mypi-public-broker
+services:
+  broker:
+    build:
+      context: .
+      dockerfile: deployment/Dockerfile.broker-public
+    image: mypi-broker-public:1.0.0
+    init: true
+    restart: unless-stopped
+    env_file: /home/mypi-broker/.config/mypi/broker.env
+    environment:
+      MYPI_PROFILE: public-demo
+      MYPI_BROKER_HOST: 0.0.0.0
+      MYPI_BROKER_PRIVATE_CONTAINER: 'true'
+      MYPI_BROKER_PORT: 4102
+      MYPI_BROKER_STATE: /data/broker
+      MYPI_PUBLIC_LOW_RESOURCE: 'true'
+      PUBLIC_EXECUTION_ENABLED: 'true'
+    volumes:
+      - state:/data/broker
+      - /run/user/1004/docker.sock:/var/run/docker.sock
+    ports:
+      - '127.0.0.1:14102:4102'
+    cpus: 0.5
+    mem_limit: 512m
+    memswap_limit: 512m
+    pids_limit: 128
+    stop_grace_period: 45s
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:4102/rpc',{method:'POST',headers:{authorization:'Bearer '+process.env.MYPI_BROKER_TOKEN,'content-type':'application/json'},body:JSON.stringify({requestId:'health',method:'health',params:{}})}).then(async r=>{const b=await r.json();process.exit(r.ok&&b.data?.ready&&b.data?.profile==='isolated'&&b.data?.publicExecutionEnabled?0:1)}).catch(()=>process.exit(1))"
+      interval: 20s
+      timeout: 10s
+      start_period: 45s
+      retries: 3
+volumes:
+  state:

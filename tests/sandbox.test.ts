@@ -49,6 +49,35 @@ test('local Docker opt-in rejects public profiles, public origins and mutable im
   assert.throws(() => dockerArguments({ ...options, image: 'mypi-sandbox:local' }, 'mypi-test'));
 });
 
+test('low-resource public sandbox has bounded runsc limits and cannot mix with local mode', () => {
+  const options = {
+    stateRoot: '.',
+    image: `sha256:${'a'.repeat(64)}`,
+    publicExecutionEnabled: true,
+    lowResourcePublic: true,
+  };
+  const args = dockerArguments(options, 'mypi-test');
+  assert.equal(args[args.indexOf('--runtime') + 1], 'runsc');
+  for (const flag of [
+    '--network=none',
+    '--read-only',
+    '--cpus=0.5',
+    '--memory=512m',
+    '--memory-swap=512m',
+    '--pids-limit=64',
+  ])
+    assert.ok(args.includes(flag), flag);
+  assert.ok(args.some((arg) => arg.startsWith('--tmpfs=/workspace:') && arg.includes('size=128m')));
+  assert.ok(!args.some((value) => /--mount|--volume|--privileged/.test(value)));
+  assert.throws(() => dockerArguments({ ...options, image: 'mypi-sandbox:latest' }, 'mypi-test'));
+  assert.throws(() =>
+    dockerArguments(
+      { ...options, localExecutionEnabled: true, image: `sha256:${'a'.repeat(64)}` },
+      'mypi-test',
+    ),
+  );
+});
+
 const owner = { principalId: 'principal-a', conversationId: 'conversation-a' };
 async function fixture() {
   const root = await fs.mkdtemp(path.join(os.tmpdir(), 'mypi-sandbox-test-'));
