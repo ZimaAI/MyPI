@@ -31,10 +31,6 @@ try {
   const runtimeStateDir = join(stateDir, 'private');
   const worker = createWorkerServices({
     profile: localDocker ? 'local-docker' : 'public-demo',
-    globalBudget:
-      process.env.MYPI_PUBLIC_LOW_RESOURCE === 'true' && !localDocker
-        ? { tokens: 60000, roots: 20 }
-        : undefined,
     store,
     runtime: new PiRuntimeFactory({ stateDir: runtimeStateDir }),
     runtimeStateDir,

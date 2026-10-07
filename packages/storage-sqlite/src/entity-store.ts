@@ -39,30 +39,14 @@ export class AgentEntityStore implements EntityStore {
 }
 /** Uses the same quota ledger that administrators inspect and adjust. */
 export class SqliteBudget {
-  constructor(
-    readonly store: SqliteStore,
-    readonly globalLimits: { tokens: number; roots: number } = { tokens: 500000, roots: 1000 },
-  ) {
-    const global = store.ensureQuota('global', 'global', globalLimits);
-    const tokenDelta = Math.min(0, globalLimits.tokens - global.tokenLimit);
-    const rootDelta = Math.min(0, globalLimits.roots - global.rootLimit);
-    if (tokenDelta || rootDelta)
-      store.adjustQuota(
-        global.id,
-        'system:deployment',
-        tokenDelta,
-        rootDelta,
-        'Deployment-wide public budget cap',
-        randomUUID(),
-      );
-  }
+  constructor(readonly store: SqliteStore) {}
   private buckets(ownerId: string, p: Policy) {
     return [
       this.store.ensureQuota('principal', ownerId, {
         tokens: p.dailyTokens,
         roots: p.dailyRootRuns,
       }),
-      this.store.ensureQuota('global', 'global', this.globalLimits),
+      this.store.ensureQuota('global', 'global', { tokens: 500000, roots: 1000 }),
     ];
   }
   accept(ownerId: string, p: Policy) {

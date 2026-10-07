@@ -115,7 +115,6 @@ export async function startBroker(): Promise<void> {
     image: process.env.MYPI_SANDBOX_IMAGE ?? '',
     publicExecutionEnabled: process.env.PUBLIC_EXECUTION_ENABLED === 'true',
     localExecutionEnabled,
-    lowResourcePublic: process.env.MYPI_PUBLIC_LOW_RESOURCE === 'true',
     runtime: process.env.MYPI_SANDBOX_RUNTIME ?? 'runsc',
   });
   if (process.env.PUBLIC_EXECUTION_ENABLED === 'true' || localExecutionEnabled) {
@@ -147,15 +146,7 @@ export async function startBroker(): Promise<void> {
   } else
     await new Promise<void>((resolve, reject) => {
       server.once('error', reject);
-      const host = process.env.MYPI_BROKER_HOST ?? '127.0.0.1';
-      if (
-        !['127.0.0.1', '0.0.0.0'].includes(host) ||
-        (host === '0.0.0.0' && process.env.MYPI_BROKER_PRIVATE_CONTAINER !== 'true')
-      ) {
-        reject(new Error('Invalid Broker listen host'));
-        return;
-      }
-      server.listen(Number(process.env.MYPI_BROKER_PORT ?? 4102), host, () => resolve());
+      server.listen(Number(process.env.MYPI_BROKER_PORT ?? 4102), '127.0.0.1', () => resolve());
     });
   console.log(
     JSON.stringify({
