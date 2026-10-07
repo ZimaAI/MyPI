@@ -1,5 +1,7 @@
 # Deployment
 
+For this host's `https://mypi.zimagent.top` entry point, see [public-host.md](public-host.md). It uses the existing system Nginx, a separate loopback service and the execution-disabled public profile.
+
 ## Local Docker Desktop
 
 For the explicitly authorized **single-user localhost execution** profile, see [local-docker.md](local-docker.md). The base Compose deployment below remains execution-disabled; the local overlay does not establish public-host security acceptance.
