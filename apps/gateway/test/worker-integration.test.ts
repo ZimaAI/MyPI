@@ -104,10 +104,24 @@ test('Gateway -> authenticated Worker RPC -> Core -> SQLite completes and restor
       method: 'POST',
       url: '/api/v1/conversations',
       headers,
-      payload: { title: 'Integration', mode: 'explicit', templateId: 'javascript-starter' },
+      payload: { title: 'Integration', mode: 'explicit' },
     });
     assert.equal(created.statusCode, 201, created.body);
     const id = created.json().id;
+    const workspace = await gateway.inject({
+      url: `/api/v1/conversations/${id}/workspace`,
+      headers: { cookie },
+    });
+    assert.equal(workspace.statusCode, 200, workspace.body);
+    assert.deepEqual(workspace.json().files, []);
+    const replay = await gateway.inject({
+      method: 'POST',
+      url: '/api/v1/conversations',
+      headers,
+      payload: { title: 'Integration', mode: 'explicit' },
+    });
+    assert.equal(replay.statusCode, 201, replay.body);
+    assert.equal(replay.json().id, id);
     const accepted = await gateway.inject({
       method: 'POST',
       url: `/api/v1/conversations/${id}/runs`,

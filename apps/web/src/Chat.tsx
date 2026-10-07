@@ -3,9 +3,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import ReactMarkdown from 'react-markdown';
 import {
   ArrowUp,
-  ArrowUpRight,
   Box,
-  Check,
   CheckCheck,
   ChevronRight,
   CircleHelp,
@@ -57,18 +55,6 @@ const groupText = {
   background: '长期进程与有界日志',
   session: '工作项与目标记录',
 };
-const shortcuts: Record<CapabilityGroup, string> = {
-  search: '使用搜索工具查找项目入口',
-  delegate: '使用子代理分别检查实现和测试',
-  workflow: '使用工作流编排检查与修复',
-  background: '在后台运行测试',
-  session: '使用任务管理工具创建待办',
-};
-const templates = [
-  { id: 'javascript-starter', name: 'JavaScript 工具库', detail: 'Node.js 函数与离线单元测试' },
-  { id: 'web-starter', name: '静态网页', detail: 'HTML、CSS 和 JavaScript' },
-  { id: 'empty', name: '空白项目', detail: '从 README 开始' },
-];
 export default function Chat({
   route,
   navigate,
@@ -95,8 +81,6 @@ export default function Chat({
     [panel, setPanel] = useState('tools'),
     [navOpen, setNavOpen] = useState(false),
     [panelOpen, setPanelOpen] = useState(false),
-    [newOpen, setNewOpen] = useState(false),
-    [template, setTemplate] = useState('javascript-starter'),
     [file, setFile] = useState<any>(),
     [copied, setCopied] = useState(false),
     [danger, setDanger] = useState<'delete' | 'archive' | null>(null),
@@ -230,22 +214,20 @@ export default function Chat({
     addEventListener('keydown', escape);
     return () => removeEventListener('keydown', escape);
   }, []);
-  const insert = (value: string) => {
-    setText(value);
-    composer.current?.focus();
-  };
-  async function createConversation() {
+  async function createConversation(resetDraft = false) {
     setPending(true);
     setError(undefined);
     try {
       const c = await api<any>('/api/v1/conversations', {
         method: 'POST',
-        body: { mode, templateId: template },
+        body: { mode },
       });
       await client.invalidateQueries({ queryKey: ['conversations'] });
-      setNewOpen(false);
       setNavOpen(false);
+      setFile(undefined);
+      if (resetDraft) setText('');
       navigate(`/c/${c.id}`);
+      composer.current?.focus();
       return c.id as string;
     } catch (e) {
       setError(e);
@@ -389,7 +371,11 @@ export default function Chat({
             <small>CODING AGENT</small>
           </span>
         </a>
-        <Button className="new-chat" onClick={() => setNewOpen(true)} disabled={!me.data}>
+        <Button
+          className="new-chat"
+          onClick={() => void createConversation(true)}
+          disabled={!me.data || pending}
+        >
           <Plus size={18} />
           新的对话<span className="key-hint">＋</span>
         </Button>
@@ -606,63 +592,6 @@ export default function Chat({
                       <Code2 size={29} strokeWidth={1.5} />
                     </div>
                     <p className="eyebrow">YOUR IDEAS. YOUR AGENT.</p>
-                    <h1>
-                      把想法，写成
-                      <br />
-                      <span>可运行的代码。</span>
-                    </h1>
-                    <p className="welcome-intro">
-                      描述任务，让 MyPI 帮你理解代码、完成修改。
-                      <br className="desktop-break" />
-                      需要更强的能力时，再明确告诉它。
-                    </p>
-                    <div className="examples">
-                      {[
-                        {
-                          Icon: Code2,
-                          title: '从一个小改动开始',
-                          description: '补充输入校验和单元测试 · 仅四个原生工具',
-                          text: '请检查 sum 函数，为它补充输入校验和单元测试。',
-                        },
-                        {
-                          Icon: Search,
-                          title: '先读懂这个项目',
-                          description: '明确调用搜索工具 · 按需加载搜索能力',
-                          text: shortcuts.search,
-                        },
-                        {
-                          Icon: GitBranch,
-                          title: '让两个子代理并行协作',
-                          description: '独立检查实现与测试 · 主对话无需等待',
-                          text: shortcuts.delegate,
-                        },
-                      ].map(({ Icon, title, description, text }) => (
-                        <button className="example" key={title} onClick={() => insert(text)}>
-                          <span className="example-icon">
-                            <Icon size={20} />
-                          </span>
-                          <span>
-                            <strong>{title}</strong>
-                            <small>{description}</small>
-                          </span>
-                          <ArrowUpRight size={16} />
-                        </button>
-                      ))}
-                    </div>
-                    <div className="welcome-foot">
-                      <span>
-                        <ShieldCheck size={14} />
-                        工作区执行
-                      </span>
-                      <span>
-                        <MessageSquare size={14} />
-                        免注册体验
-                      </span>
-                      <span>
-                        <Layers3 size={14} />
-                        按需能力
-                      </span>
-                    </div>
                   </div>
                 ) : (
                   <div className="messages">
@@ -708,17 +637,6 @@ export default function Chat({
               </div>
             </div>
             <div className="composer-area">
-              <div className="cap-shortcuts">
-                {(Object.keys(GROUPS) as CapabilityGroup[]).map((g) => {
-                  const Icon = groupIcons[g];
-                  return (
-                    <button key={g} onClick={() => insert(shortcuts[g])}>
-                      <Icon size={14} />
-                      {GROUPS[g].label}
-                    </button>
-                  );
-                })}
-              </div>
               <div className="composer">
                 <textarea
                   ref={composer}
@@ -746,9 +664,9 @@ export default function Chat({
                   }}
                 />
                 <div className="composer-bottom">
-                  <button className="workspace-picker" onClick={() => setNewOpen(true)}>
+                  <button className="workspace-picker" onClick={() => selectPanel('files')}>
                     <Folder size={15} />
-                    {conversation ? '当前项目工作区' : '选择模板工作区'}
+                    {conversationId ? '当前项目工作区' : '空白工作区'}
                   </button>
                   <button
                     className="send-button"
@@ -773,7 +691,7 @@ export default function Chat({
                 <span className="desktop-detail">Enter 发送 · Shift + Enter 换行</span>
               </div>
               {disabledReason && (
-                <div className="execution-note">{disabledReason}。你仍可浏览模板、准备任务。</div>
+                <div className="execution-note">{disabledReason}。你仍可浏览工作区、准备任务。</div>
               )}
               <p className="composer-footer">
                 勿提交生产凭据或敏感数据 · 临时工作区默认保留 24 小时 ·{' '}
@@ -1005,13 +923,22 @@ export default function Chat({
                     </div>
                   ) : (
                     <EmptyState
-                      title="选择一个项目模板"
-                      description="创建对话后即可浏览自己的工作区文件。"
+                      title={conversationId ? '工作区为空' : '尚未创建工作区'}
+                      description={
+                        conversationId
+                          ? '描述任务以创建文件，或导入已有项目。'
+                          : '发送消息或新建对话，即可开始使用空白工作区。'
+                      }
                     >
-                      <Button onClick={() => setNewOpen(true)}>
-                        <Plus size={15} />
-                        创建工作区
-                      </Button>
+                      {!conversationId && (
+                        <Button
+                          disabled={!me.data || pending}
+                          onClick={() => void createConversation(true)}
+                        >
+                          <Plus size={15} />
+                          {pending ? '正在创建…' : '创建工作区'}
+                        </Button>
+                      )}
                     </EmptyState>
                   )}
                   {conversationId && (
@@ -1056,45 +983,6 @@ export default function Chat({
           </aside>
         </div>
       </main>
-      {newOpen && (
-        <Modal
-          title="开始一段新的对话"
-          onClose={() => setNewOpen(false)}
-          footer={
-            <>
-              <Button onClick={() => setNewOpen(false)}>取消</Button>
-              <Button
-                variant="primary"
-                disabled={pending || !me.data}
-                onClick={() => void createConversation()}
-              >
-                {pending ? '正在创建…' : '创建工作区'}
-              </Button>
-            </>
-          }
-        >
-          <p className="muted">选择一个离线模板，所有修改保存在你的临时工作区。</p>
-          <div className="template-options">
-            {templates.map((t) => (
-              <label key={t.id} className={template === t.id ? 'chosen' : ''}>
-                <input
-                  type="radio"
-                  name="template"
-                  checked={template === t.id}
-                  onChange={() => setTemplate(t.id)}
-                />
-                <Box size={20} />
-                <span>
-                  <strong>{t.name}</strong>
-                  <small>{t.detail}</small>
-                </span>
-                {template === t.id && <Check size={18} />}
-              </label>
-            ))}
-          </div>
-          <ErrorNotice error={error} />
-        </Modal>
-      )}
       {importOpen && conversationId && (
         <ImportProject
           conversationId={conversationId}

@@ -390,9 +390,13 @@ export async function createGateway(options: GatewayOptions): Promise<FastifyIns
           {
             title: string(0, 100),
             mode,
-            templateId: { type: 'string', enum: ['javascript-starter', 'web-starter', 'empty'] },
+            templateId: {
+              type: 'string',
+              enum: ['javascript-starter', 'web-starter', 'empty'],
+              default: 'empty',
+            },
           },
-          ['mode', 'templateId'],
+          ['mode'],
         ),
       },
     },

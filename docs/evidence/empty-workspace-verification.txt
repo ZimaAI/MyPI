@@ -1,0 +1,118 @@
+$ pnpm lint && pnpm typecheck && pnpm test && pnpm build
+$ node scripts/check-boundaries.mjs && pnpm format:check
+Dependency boundaries passed.
+$ prettier --check apps packages scripts tests package.json tsconfig.json playwright.config.ts pnpm-workspace.yaml .github .prettierrc.json
+Checking formatting...
+All matched files use Prettier code style!
+$ tsc --noEmit
+$ tsx --test --test-concurrency=1 tests/*.test.ts packages/storage-sqlite/test/*.test.ts apps/gateway/test/*.test.ts
+✔ provider presets resolve server defaults and enforce endpoint, limits and credential boundaries (472.3872ms)
+✔ plan protocols and administrator custom endpoints persist, protect keys and invalidate tests (210.3608ms)
+✔ guest identity is reused, CSRF and additional role fields are rejected, objects remain private (70.174ms)
+✔ model keys are write-only, tested default gates execution, run submission is idempotent (166.5607ms)
+✔ SSE resumes persisted events and emits reset for expired cursor (141.0096ms)
+✔ clearing cookies does not bypass IP bootstrap cap or replenish an existing principal (382.3071ms)
+✔ public proxy separates visitor limits and ignores forwarded IPs from other peers (133.3949ms)
+✔ published quota tightening updates existing buckets without discarding spending or reservations (156.8621ms)
+✔ Gateway -> authenticated Worker RPC -> Core -> SQLite completes and restores a real tool run (769.1187ms)
+✔ versioned entities, ownership, transactions and idempotency survive reopen (36.9564ms)
+✔ all quota buckets reserve atomically and unknown usage remains held (3.4771ms)
+✔ events/outbox commit together and no event is published from rolled-back transaction (3.2258ms)
+✔ admin passwords and model keys never persist as plaintext (154.2589ms)
+✔ AC-10: old task completion waits behind a new user request and summarizes only the origin run with no tools (374.1583ms)
+✔ AC-11: workflow runs independent nodes concurrently, sequences dependencies and skips descendants of a failed node (1192.9695ms)
+✔ AC-17: revocation blocks the next model request, and cancelling the origin settles the whole child tree (490.3083ms)
+✔ AC-18: run snapshots versions and batches ordered text without losing the final buffer (165.0211ms)
+✔ AC-17: a model waiting for a concurrency slot rechecks revocation before dispatch (527.4704ms)
+✔ AC-17: sibling model calls contend for one SQLite budget without overspending (563.6382ms)
+✔ CLI arguments enforce the two modes and reject ambiguous command inputs (4.0681ms)
+✔ project configuration is inert unless explicitly trusted and cannot provide secrets (50.144ms)
+✔ standalone CLI executes real Pi search, persists sessions, resumes with four tools, and never starts Gateway (16960.0716ms)
+✔ cancellation publishes terminal only after provider settlement and runtime/tool cleanup (181.2274ms)
+✔ queued cancellation does not run its model or wait for the prior request (132.382ms)
+✔ root usage includes both child sessions and tool-free result summary and records their sources (512.7293ms)
+✔ cancelling a running summary waits for its cleanup and cannot publish a late successful summary (343.4381ms)
+✔ estimated prices still settle authoritative token counts (1.7867ms)
+✔ intent excludes negation, conditions, quotes, nonhuman and maps original evidence (8.403ms)
+✔ bounded DAG rejects cycles, missing edges, duplicate nodes and depth (4.063ms)
+✔ ordinary provider surface is 4, explicit search executes, next run releases grant (282.9944ms)
+✔ idempotency is atomic across parallel submits and one session has one writer (174.2442ms)
+✔ independent child sessions have narrowed grants, distinct snapshots, one origin summary (554.3376ms)
+✔ work items require evidence and optimistic version; next ordinary run has no tools (371.2757ms)
+✔ quota reservation is atomic for shared root and unknown usage stays reserved (2.1085ms)
+✔ tool schema rejects unknown props and limit overflow (3.2511ms)
+✔ public profile fails closed even when a trusted local port is injected (362.4078ms)
+✔ public core rejects local Docker health and local core rejects disabled execution (370.0047ms)
+✔ 1000 result groups survive reordered delivery, duplicates, and snapshot/reconnect replay without duplicate presentation (126.7125ms)
+✔ 1000 committed result/inbox records recover after lost notifications, rollback, replay and process reopen (4419.1952ms)
+✔ real Pi SDK -> core -> SQLite -> Gateway: guest, model loop, files, replay, quotas, ownership (1306.9441ms)
+✔ worker private RPC rejects unauthenticated and unknown methods (17.8805ms)
+✔ intent regression dataset has at least 200 distinct labelled cases, preserves source/mode, and reports per-group metrics (38.9278ms)
+ℹ {"dataset":"fixtures/golden-intents.json","annotation":"Agent-authored regression expectations plus all provided prototype cases. Not independently human-labelled; no held-out evaluation claim.","cases":316,"negativeCount":187,"negativeTriggered":0,"negativeFalsePositiveRate":0,"exactSetAccuracy":1,"refusalRate":0.5917721518987342,"metrics":{"search":{"tp":42,"fp":0,"fn":0,"precision":1,"recall":1,"f1":1},"delegate":{"tp":33,"fp":0,"fn":0,"precision":1,"recall":1,"f1":1},"workflow":{"tp":20,"fp":0,"fn":0,"precision":1,"recall":1,"f1":1},"background":{"tp":24,"fp":0,"fn":0,"precision":1,"recall":1,"f1":1},"session":{"tp":22,"fp":0,"fn":0,"precision":1,"recall":1,"f1":1}},"failures":[]}
+✔ expired guest cleanup removes bodies, events, inbox, patches, artifacts and selected SDK files while retaining minimal metering (250.5879ms)
+✔ failed cleanup remains inaccessible and retries without losing deletion references (4.3039ms)
+✔ worker archive preserves files, export rejects truncation, deletion purges content and expired read is denied (236.9057ms)
+✔ model connection tests budget reasoning and reject an empty answer while closing the session (4.3375ms)
+✔ SQLite backup captures WAL records, validates restore and rejects overwrite (107.1755ms)
+✔ catalog defaults have official sources, unique approved HTTPS endpoints and valid token budgets (1.9842ms)
+✔ CLI uses provider defaults and key env names, supports regions and explicit overrides (29.1591ms)
+✔ stored preset transport settings survive key resolution while legacy thinking stays disabled (11.0526ms)
+✔ custom endpoints reject private URLs, credentials, fragments and full operation paths (9.5354ms)
+✔ custom model fetch pins public DNS, streams responses and rejects rebinding, redirects, oversized bodies and cancellation (148.3477ms)
+✔ all provider defaults stream through the real SDK with correct paths, auth, tools and output budgets (1506.3314ms)
+✔ Ark plan endpoint variants and custom public endpoints use all three real SDK transports (189.1343ms)
+✔ thinking tool calls replay reasoning and results without leaking tools or losing usage (124.9378ms)
+✔ SDK is pinned and resource loader never discovers project extensions, settings or instructions (9.285ms)
+✔ real Pi provider requests have exactly the granted schemas; independent sessions do not share history (922.0628ms)
+✔ all four native tool implementations are redirected to injected ports, stable until the SDK settles (58.4808ms)
+✔ aborting waits for in-flight tool cancellation before prompt rejects and close settles (29.9095ms)
+✔ provider retry reserves every attempt and quota failure never reaches provider (108.4488ms)
+✔ workspace extensions cannot execute; SDK history is restored from private storage without previous grants (83.8094ms)
+✔ SDK automatic compaction remains inside prompt settlement and reserves its tool-free provider call (59.5941ms)
+✔ Gateway and private Worker independently require the import deployment switch (963.1526ms)
+✔ Gateway -> private Worker -> managed workspace imports ZIP with CSRF, ownership, conflicts and deletion (462.4039ms)
+✔ ZIP import is disabled by default and strips workspace execution/Git metadata without running code (24.2695ms)
+✔ ZIP rejects traversal, absolute, encoded, NTFS, duplicate case and normalized aliases (6.2651ms)
+✔ ZIP rejects links, special metadata, corruption, zip bombs and bounded limits (1061.695ms)
+✔ GitHub import checks public metadata, redirect hosts and strips the archive root with fixture fetches (3.2716ms)
+✔ GitHub import rejects private/mixed DNS, unsafe URLs/redirects, private repositories and oversized bodies (6.9043ms)
+✔ managed import enforces ownership, revision conflicts, metadata stripping and binary preview through Broker (632.6491ms)
+✔ restricted literal configuration preserves canonical golden cases and every safety gate (66.63ms)
+✔ draft validation, publication, audit and rollback are atomic and published rule versions cannot change (92.6996ms)
+✔ publishing and rollback affect future Core runs while accepted runs retain immutable rule evidence (252.681ms)
+✔ rule management endpoints require administrator CSRF and use validated optimistic drafts (481.5685ms)
+✔ AC-20: snapshot cursor cannot overtake entities committed by a separate SQLite writer (196.2418ms)
+✔ local Docker opt-in rejects public profiles, public origins and mutable images (2.1546ms)
+✔ native file tools, literal search, expected-version and owner checks (398.3833ms)
+✔ file paths reject absolute, encoded, NTFS and traversal forms (0.4793ms)
+✔ template Git baseline supports controlled log/diff/show and rejects flag refs (1399.7136ms)
+✔ hard-linked files are denied before exposing data (145.7674ms)
+✔ isolated copies retain base revision and cannot overwrite concurrent parent changes (738.6363ms)
+✔ copies apply when base revision matches (636.7695ms)
+✔ background event watch, persisted result and explicit cancellation (1790.8757ms)
+✔ ordinary command cancellation reaches the process tree (1057.9414ms)
+✔ broker IPC requires secret, restricts methods and preserves object ownership (211.8665ms)
+✔ disabled public executor fails closed, docker options fixed with no host mounts (183.4298ms)
+✔ retention removes managed roots, copies and prevents later access (417.2314ms)
+✔ deleting a trusted-local session preserves the original project (40.843ms)
+ℹ tests 88
+ℹ suites 0
+ℹ pass 88
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 84970.9551
+$ pnpm typecheck && vite build --config apps/web/vite.config.ts
+$ tsc --noEmit
+vite v7.3.1 building client environment for production...
+transforming...
+✓ 2034 modules transformed.
+rendering chunks...
+computing gzip size...
+../../dist/web/index.html                   0.64 kB │ gzip:   0.44 kB
+../../dist/web/assets/index-CsStQqbl.css   21.21 kB │ gzip:   5.38 kB
+../../dist/web/assets/Admin-DbkDJ0GP.css   22.09 kB │ gzip:   4.83 kB
+../../dist/web/assets/Admin-CqfaI9sc.js    57.03 kB │ gzip:  17.42 kB
+../../dist/web/assets/index-DfnNXtSp.js   460.52 kB │ gzip: 144.97 kB
+✓ built in 15.71s

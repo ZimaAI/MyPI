@@ -6,7 +6,6 @@ test('project ZIP import replaces confirmed workspace and shows binary files saf
 }) => {
   await page.goto('/');
   await page.getByRole('button', { name: '新的对话' }).click();
-  await page.getByRole('button', { name: '创建工作区', exact: true }).click();
   await expect(page).toHaveURL(/\/c\//);
   await page.getByRole('tab', { name: '文件', exact: true }).click();
   await page.getByRole('button', { name: '导入项目', exact: true }).click();
@@ -38,5 +37,8 @@ test('project ZIP import replaces confirmed workspace and shows binary files saf
   await page.reload();
   await page.getByRole('tab', { name: '文件', exact: true }).click();
   await expect(page.locator('.file-tree')).toContainText('src/index.js');
-  await page.screenshot({ path: 'docs/evidence/screenshots/chat-import.png', fullPage: true });
+  await page.screenshot({
+    path: 'docs/evidence/screenshots/empty-workspace-import.png',
+    fullPage: true,
+  });
 });

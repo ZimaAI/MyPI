@@ -12,7 +12,7 @@ export const WORKSPACE_TEMPLATES = [
     description: '离线可运行的 Node.js 函数与单元测试',
   },
   { id: 'web-starter', name: '静态网页', description: 'HTML、CSS、JavaScript 页面模板' },
-  { id: 'empty', name: '空白项目', description: '从 README 开始创建项目' },
+  { id: 'empty', name: '空白项目', description: '不预置项目文件' },
 ] as const;
 export function templateFiles(id = 'javascript-starter'): Snapshot {
   if (id === 'javascript-starter' || id === 'node-starter' || id === 'default')
@@ -34,7 +34,7 @@ export function templateFiles(id = 'javascript-starter'): Snapshot {
       'style.css': 'body { max-width: 48rem; margin: 4rem auto; font-family: system-ui; }\n',
       'app.js': "console.log('MyPI workspace ready');\n",
     });
-  if (id === 'empty') return encode({ 'README.md': '# MyPI workspace\n' });
+  if (id === 'empty') return {};
   throw new Error('INVALID_TEMPLATE');
 }
 /** Creates a clean baseline repository without invoking host Git or loading any host config/hooks. */

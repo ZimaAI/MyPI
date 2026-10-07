@@ -285,7 +285,7 @@ test('worker archive preserves files, export rejects truncation, deletion purges
   try {
     const conversation = await worker.services.createConversation(
       'owner',
-      { mode: 'explicit', templateId: 'empty' },
+      { mode: 'explicit', templateId: 'javascript-starter' },
       'request-key-123456',
     );
     await sandbox.execute({

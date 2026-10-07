@@ -587,81 +587,6 @@ strong {
   font-weight: 600;
   letter-spacing: 1.6px;
 }
-.welcome h1 {
-  font-size: 32px;
-  font-weight: 650;
-  letter-spacing: -1.2px;
-  line-height: 1.43;
-  margin: 12px 0 17px;
-}
-.welcome h1 span {
-  color: var(--primary);
-}
-.welcome-intro {
-  font-size: 14px;
-  color: var(--muted);
-  line-height: 1.85;
-}
-.examples {
-  display: grid;
-  gap: 12px;
-  margin-top: 28px;
-}
-.example {
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  border: 1px solid var(--border);
-  border-radius: 11px;
-  padding: 15px 16px;
-  text-align: left;
-  background: #fff;
-  transition:
-    border-color 0.15s,
-    background 0.15s;
-}
-.example:hover {
-  border-color: #8cbaa9;
-  background: #fbfefc;
-}
-.example-icon {
-  width: 35px;
-  height: 35px;
-  border-radius: 9px;
-  background: #f3f6f8;
-  color: #677d90;
-  display: grid;
-  place-items: center;
-}
-.example > span:nth-child(2) {
-  flex: 1;
-  min-width: 0;
-}
-.example strong {
-  display: block;
-  font-size: 13px;
-  line-height: 1.6;
-}
-.example small {
-  display: block;
-  color: var(--muted);
-  margin-top: 1px;
-}
-.example > svg {
-  color: #a0adba;
-}
-.welcome-foot {
-  display: flex;
-  gap: 19px;
-  margin-top: 23px;
-  color: var(--soft);
-  font-size: 12px;
-}
-.welcome-foot span {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
 .composer-area {
   padding: 16px 28px 14px;
   flex-shrink: 0;
@@ -669,28 +594,6 @@ strong {
   width: 100%;
   margin: auto;
   background: #fff;
-}
-.cap-shortcuts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-bottom: 10px;
-}
-.cap-shortcuts button {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  background: #f7f9fa;
-  border: 1px solid #e8ecf0;
-  border-radius: 6px;
-  padding: 4px 8px;
-  font-size: 12px;
-  color: #67788b;
-}
-.cap-shortcuts button:hover {
-  background: var(--mint);
-  color: var(--primary);
-  border-color: #cce1d6;
 }
 .composer {
   border: 1px solid #d5dedf;
@@ -1257,38 +1160,6 @@ strong {
   background: #fcfdfd;
   border-radius: 0 0 15px 15px;
 }
-.template-options {
-  display: grid;
-  gap: 10px;
-  margin-top: 18px;
-}
-.template-options label {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  cursor: pointer;
-}
-.template-options label.chosen {
-  border-color: #8bb8a6;
-  background: #f2f9f5;
-}
-.template-options input {
-  accent-color: var(--primary);
-}
-.template-options span {
-  flex: 1;
-}
-.template-options strong,
-.template-options small {
-  display: block;
-}
-.template-options small {
-  color: var(--muted);
-  margin-top: 3px;
-}
 .file-preview {
   border-radius: 8px;
   border: 1px solid var(--border);
@@ -1424,15 +1295,6 @@ table button {
   .welcome {
     padding-top: 45px;
   }
-  .welcome h1 {
-    font-size: 36px;
-  }
-  .examples {
-    margin-top: 34px;
-  }
-  .example {
-    padding: 18px 17px;
-  }
 }
 @media (max-width: 1279px) {
   .chat-grid {
@@ -1468,9 +1330,6 @@ table button {
     max-width: 630px;
     padding-top: 32px;
   }
-  .welcome-intro {
-    max-width: 520px;
-  }
   .thread {
     width: 100%;
   }
@@ -1497,12 +1356,6 @@ table button {
   }
   .welcome {
     padding: 22px 0 8px;
-  }
-  .welcome h1 {
-    font-size: 31px;
-  }
-  .welcome-foot {
-    gap: 12px;
   }
   .composer-area {
     padding: 13px 20px;
@@ -1587,49 +1440,11 @@ table button {
   .welcome-icon svg {
     width: 24px;
   }
-  .welcome h1 {
-    font-size: 29px;
-    margin: 11px 0 13px;
-  }
-  .welcome-intro {
-    font-size: 13px;
-  }
   .eyebrow {
     font-size: 10px;
   }
-  .examples {
-    margin-top: 23px;
-    gap: 10px;
-  }
-  .example {
-    padding: 13px 11px;
-    gap: 10px;
-  }
-  .example strong {
-    font-size: 13px;
-  }
-  .example small {
-    font-size: 11px;
-  }
-  .welcome-foot {
-    font-size: 11px;
-    gap: 11px;
-    margin-top: 19px;
-  }
   .composer-area {
     padding: 11px 15px 12px;
-  }
-  .cap-shortcuts {
-    gap: 5px;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    margin-bottom: 9px;
-  }
-  .cap-shortcuts button {
-    font-size: 11px;
-    white-space: nowrap;
-    padding: 7px;
-    min-height: 35px;
   }
   .composer textarea {
     min-height: 71px;
