@@ -3,8 +3,8 @@ set -euo pipefail
 
 # Diagnose gVisor's rootless systemd D-Bus failure without changing the
 # system/rootful Docker daemon or disabling cgroup resource enforcement.
-if [[ $(id -u) -ne 0 || $# -ne 1 || ! $1 =~ ^sha256:[a-f0-9]{64}$ ]]; then
-  echo 'Usage: sudo bash deployment/probe-runsc-fs-rootless.sh sha256:<sandbox-image-id>' >&2
+if [[ $(id -u) -ne 0 || $# -gt 1 ]]; then
+  echo 'Usage: sudo bash deployment/probe-runsc-fs-rootless.sh [sha256:<sandbox-image-id>]' >&2
   exit 2
 fi
 
@@ -13,6 +13,19 @@ broker_uid=$(id -u mypi-broker)
 config="$broker_home/.config/docker/daemon.json"
 if [[ $broker_home != /home/mypi-broker || $broker_uid != 1004 || ! -f $config ]]; then
   echo 'Unexpected Broker account or Docker configuration; refusing to modify it' >&2
+  exit 1
+fi
+image=${1:-}
+if [[ -z $image ]]; then
+  broker_env="$broker_home/.config/mypi/broker.env"
+  if [[ ! -f $broker_env ]]; then
+    echo 'Broker-only environment file is missing' >&2
+    exit 1
+  fi
+  image=$(awk -F= '$1 == "MYPI_SANDBOX_IMAGE" { print substr($0, index($0, "=") + 1) }' "$broker_env")
+fi
+if [[ ! $image =~ ^sha256:[a-f0-9]{64}$ ]]; then
+  echo 'Broker sandbox image ID must be immutable sha256:...' >&2
   exit 1
 fi
 backup=$(mktemp "$broker_home/.config/docker/daemon.json.probe.XXXXXX")
@@ -90,4 +103,4 @@ runuser -u mypi-broker -- env \
   "DOCKER_HOST=unix:///run/user/$broker_uid/docker.sock" \
   docker run --rm --pull=never --runtime=runsc-fs-probe --network=none \
   --cpus=0.5 --memory=512m --memory-swap=512m --pids-limit=64 \
-  "$1" node -e 'console.log("runsc-fs-probe-ok")'
+  "$image" node -e 'console.log("runsc-fs-probe-ok")'
