@@ -6,6 +6,7 @@ import os from 'node:os';
 import { once } from 'node:events';
 import { TrustedLocalSandbox, BrokerSandboxClient } from '../packages/sandbox-client/src/index.js';
 import { relativePath } from '../packages/sandbox-client/src/engine.js';
+import { templateFiles, withGitBaseline } from '../packages/sandbox-client/src/templates.js';
 import { DockerSandbox, dockerArguments } from '../apps/execution-broker/src/docker.js';
 import { createBrokerServer } from '../apps/execution-broker/src/server.js';
 import { localDockerEnabled } from '../packages/sandbox-client/src/deployment.js';
@@ -101,6 +102,43 @@ async function fixture() {
     },
   };
 }
+test('global managed storage quota is shared across concurrent visitors', async () => {
+  const root = await fs.mkdtemp(path.join(os.tmpdir(), 'mypi-global-quota-test-'));
+  const baseline = withGitBaseline(templateFiles('empty'));
+  const templateBytes = Object.values(baseline).reduce(
+    (sum, encoded) => sum + Buffer.byteLength(encoded, 'base64'),
+    0,
+  );
+  assert.ok(templateBytes > 0);
+  const sandbox = new TrustedLocalSandbox({
+    root,
+    stateRoot: path.join(root, '.mypi'),
+    explicitlyTrusted: true,
+    managedWorkspaces: true,
+    globalManagedBytes: templateBytes * 2 - 1,
+  });
+  try {
+    const results = await Promise.allSettled([
+      sandbox.createWorkspace({
+        principalId: 'visitor-a',
+        conversationId: 'a',
+        templateId: 'empty',
+      }),
+      sandbox.createWorkspace({
+        principalId: 'visitor-b',
+        conversationId: 'b',
+        templateId: 'empty',
+      }),
+    ]);
+    assert.equal(results.filter((result) => result.status === 'fulfilled').length, 1);
+    const rejection = results.find((result) => result.status === 'rejected');
+    assert.equal(rejection?.status, 'rejected');
+    assert.equal((rejection as PromiseRejectedResult).reason.code, 'LIMIT_EXCEEDED');
+  } finally {
+    await sandbox.shutdown();
+    await fs.rm(root, { recursive: true, force: true });
+  }
+});
 test('native file tools, literal search, expected-version and owner checks', async () => {
   const f = await fixture();
   try {

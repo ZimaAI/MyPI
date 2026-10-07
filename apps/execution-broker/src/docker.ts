@@ -84,6 +84,7 @@ export class DockerSandbox extends TrustedLocalSandbox {
       stateRoot: dockerOptions.stateRoot,
       explicitlyTrusted: true,
       managedWorkspaces: true,
+      globalManagedBytes: dockerOptions.lowResourcePublic ? 1024 * 1024 * 1024 : undefined,
     });
   }
   private docker(argv: string[], timeoutMs = 10000): Promise<string> {

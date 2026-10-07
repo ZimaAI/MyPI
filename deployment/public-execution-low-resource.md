@@ -6,7 +6,7 @@
 
 ## 已选资源
 
-显式 `MYPI_PUBLIC_LOW_RESOURCE=true` 时，Broker 同时只允许一个任务容器；每个任务容器为 0.5 CPU、512 MiB 内存且禁 swap、64 PID、128 MiB 工作区 tmpfs。Broker 容器另限 0.5 CPU、512 MiB、128 PID。`deployment/mypi-public.resources.conf` 将 Gateway/Worker 服务合计限制为 1 CPU、1.5 GiB、256 任务。Worker 的全站日上限为 20 次根 Run、60,000 Token；更低的现有上限不会被提高。管理员策略仍应设为全站模型并发 1、每访客并发 1、每日根 Run 3、每日 Token 30,000，并在模型服务商后台设置独立的账单硬限额。所有访客共享唯一的执行槽，忙时收到明确限额失败。
+显式 `MYPI_PUBLIC_LOW_RESOURCE=true` 时，Broker 同时只允许一个任务容器；每个任务容器为 0.5 CPU、512 MiB 内存且禁 swap、64 PID、128 MiB 工作区 tmpfs。Broker 容器另限 0.5 CPU、512 MiB、128 PID，并为所有访客共享的托管文件设置 1 GiB 应用级总额；宿主磁盘仍需独立的容量监控或文件系统配额。`deployment/mypi-public.resources.conf` 将 Gateway/Worker 服务合计限制为 1 CPU、1.5 GiB、256 任务。Worker 的全站日上限为 20 次根 Run、60,000 Token；更低的现有上限不会被提高。管理员策略仍应设为全站模型并发 1、每访客并发 1、每日根 Run 3、每日 Token 30,000，并在模型服务商后台设置独立的账单硬限额。所有访客共享唯一的执行槽，忙时收到明确限额失败。
 
 ## 独立运行时
 

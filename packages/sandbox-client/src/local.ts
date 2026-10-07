@@ -47,6 +47,7 @@ export interface LocalSandboxOptions {
   stateRoot?: string;
   explicitlyTrusted: true;
   managedWorkspaces?: boolean;
+  globalManagedBytes?: number;
 }
 export class TrustedLocalSandbox implements SandboxPort {
   protected workspaces = new Map<string, StoredWorkspace>();
@@ -139,18 +140,19 @@ export class TrustedLocalSandbox implements SandboxPort {
     return { ...value.metadata };
   }
   protected async withStorageLock<T>(principalId: string, operation: () => Promise<T>): Promise<T> {
-    const previous = this.storageLocks.get(principalId) ?? Promise.resolve();
+    const key = this.options.globalManagedBytes ? '\0global' : principalId;
+    const previous = this.storageLocks.get(key) ?? Promise.resolve();
     let release!: () => void;
     const next = new Promise<void>((resolve) => {
       release = resolve;
     });
-    this.storageLocks.set(principalId, next);
+    this.storageLocks.set(key, next);
     await previous;
     try {
       return await operation();
     } finally {
       release();
-      if (this.storageLocks.get(principalId) === next) this.storageLocks.delete(principalId);
+      if (this.storageLocks.get(key) === next) this.storageLocks.delete(key);
     }
   }
   protected async checkStorageQuota(
@@ -160,43 +162,33 @@ export class TrustedLocalSandbox implements SandboxPort {
     copies = 1,
   ): Promise<void> {
     if (!this.options.managedWorkspaces) return;
-    const own = [...this.workspaces.values()].filter(
-      (value) => value.metadata.principalId === principalId,
-    );
-    let bytes =
-      copies *
-      Object.values(incoming).reduce(
-        (sum, encoded) => sum + Buffer.byteLength(encoded, 'base64'),
-        0,
-      );
-    for (const value of own) {
-      if (value.root !== replacingRoot)
-        bytes += Object.values(await snapshot(value.root)).reduce(
-          (sum, encoded) => sum + Buffer.byteLength(encoded, 'base64'),
-          0,
-        );
-      if (value.baseFiles)
-        bytes += Object.values(value.baseFiles).reduce(
-          (sum, encoded) => sum + Buffer.byteLength(encoded, 'base64'),
-          0,
-        );
+    const snapshotBytes = (files: Snapshot) =>
+      Object.values(files).reduce((sum, encoded) => sum + Buffer.byteLength(encoded, 'base64'), 0);
+    const incomingBytes = copies * snapshotBytes(incoming);
+    let principalBytes = incomingBytes;
+    let globalBytes = incomingBytes;
+    for (const value of this.workspaces.values()) {
+      const bytes =
+        (value.root === replacingRoot ? 0 : snapshotBytes(await snapshot(value.root))) +
+        (value.baseFiles ? snapshotBytes(value.baseFiles) : 0);
+      globalBytes += bytes;
+      if (value.metadata.principalId === principalId) principalBytes += bytes;
     }
-    for (const process of this.processes.values())
-      if (process.principalId === principalId) {
-        const root = path.join(this.stateRoot, 'background', process.processId);
-        if (root !== replacingRoot) {
-          try {
-            bytes += Object.values(await snapshot(root)).reduce(
-              (sum, encoded) => sum + Buffer.byteLength(encoded, 'base64'),
-              0,
-            );
-          } catch (error) {
-            if ((error as SandboxError).code !== 'NOT_FOUND') throw error;
-          }
-        }
+    for (const process of this.processes.values()) {
+      const root = path.join(this.stateRoot, 'background', process.processId);
+      if (root === replacingRoot) continue;
+      try {
+        const bytes = snapshotBytes(await snapshot(root));
+        globalBytes += bytes;
+        if (process.principalId === principalId) principalBytes += bytes;
+      } catch (error) {
+        if ((error as SandboxError).code !== 'NOT_FOUND') throw error;
       }
-    if (bytes > 256 * 1024 * 1024)
+    }
+    if (principalBytes > 256 * 1024 * 1024)
       throw new SandboxError('LIMIT_EXCEEDED', '该身份的工作区与副本总量超过 256 MiB');
+    if (this.options.globalManagedBytes && globalBytes > this.options.globalManagedBytes)
+      throw new SandboxError('LIMIT_EXCEEDED', '全站托管工作区存储已达上限');
   }
   async createWorkspace(request: Owner & { templateId?: string }): Promise<Workspace> {
     return this.withStorageLock(request.principalId, () => this.createWorkspaceUnlocked(request));
