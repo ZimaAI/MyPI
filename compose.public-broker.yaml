@@ -20,7 +20,7 @@ services:
       - state:/data/broker
       - /run/user/1004/docker.sock:/var/run/docker.sock
     ports:
-      - '127.0.0.1:14102:4102'
+      - '127.0.0.1:14103:4102'
     cpus: 0.5
     mem_limit: 512m
     memswap_limit: 512m

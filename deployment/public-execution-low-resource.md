@@ -1,6 +1,6 @@
 # 少量访客公网执行：同机独立 rootless Broker
 
-此方案保留现有系统 Nginx 和其他服务的 rootful Docker。`mypi-broker` 是单独的系统用户，仅它自己的 rootless Docker socket 控制任务容器。Gateway/Worker 继续由 `zima` 用户运行，不挂载或读取 Docker socket。Broker 容器仅发布 `127.0.0.1:14102`；已有 MyPI Gateway 仅发布 `127.0.0.1:13080`。公网用户通过现有 HTTPS Nginx 入口访问，不要求额外的个人访问密码。
+此方案保留现有系统 Nginx 和其他服务的 rootful Docker。`mypi-broker` 是单独的系统用户，仅它自己的 rootless Docker socket 控制任务容器。Gateway/Worker 继续由 `zima` 用户运行，不挂载或读取 Docker socket。Broker 容器仅发布 `127.0.0.1:14103`，与当前关闭态 Broker 的 `14102` 端口分开；已有 MyPI Gateway 仅发布 `127.0.0.1:13080`。公网用户通过现有 HTTPS Nginx 入口访问，不要求额外的个人访问密码。
 
 启用公网 Run 仍受根 `AGENTS.md` 的专用环境 SEC-01–SEC-12 实机验收门禁约束。下列步骤可先建立独立环境和运行隔离探针；探针成功本身不等于全部发布验收通过。**保持应用策略 `publicExecutionEnabled=false`，直到完整证据被记录。**
 
@@ -39,7 +39,7 @@ sudo -H -u mypi-broker env XDG_RUNTIME_DIR=/run/user/1004 DOCKER_HOST=unix:///ru
 
 Broker 启动时使用 `PUBLIC_EXECUTION_ENABLED=true`，但在 Gateway/Worker 仍指向旧的关闭态 Broker、应用策略仍关闭时，不会开放公众 Run。探针确认 rootless/runsc、无任务网络、无宿主挂载和秘密、真实 cgroup 限额、所有权、唯一执行槽及取消清理；失败则保持应用关闭态并调查。
 
-探针通过后，把 `MYPI_EXTERNAL_BROKER=true` 和 `MYPI_PUBLIC_LOW_RESOURCE=true` 加到 `~/.config/mypi-public/env`，重启 `mypi-public.service`。确认 `/health/ready` 响应同时具有 `ready:true`、`sandboxEnforced:true`、`publicExecutionEnabled:false`。完成 SEC-01–SEC-12 实机验收、测试默认模型及管理员额度设置后，才在后台把 `publicExecutionEnabled` 打开。任何隔离、模型或额度失败都应保持可见失败。
+探针通过后，把 `MYPI_EXTERNAL_BROKER=true`、`MYPI_BROKER_URL=http://127.0.0.1:14103` 和 `MYPI_PUBLIC_LOW_RESOURCE=true` 加到 `~/.config/mypi-public/env`，重启 `mypi-public.service`。确认 `/health/ready` 响应同时具有 `ready:true`、`sandboxEnforced:true`、`publicExecutionEnabled:false`。完成 SEC-01–SEC-12 实机验收、测试默认模型及管理员额度设置后，才在后台把 `publicExecutionEnabled` 打开。任何隔离、模型或额度失败都应保持可见失败。
 
 ## 回退
 
