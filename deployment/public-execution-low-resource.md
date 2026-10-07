@@ -43,13 +43,9 @@ Broker 启动时使用 `PUBLIC_EXECUTION_ENABLED=true`，但在 Gateway/Worker �
 
 探针通过后，把 `MYPI_EXTERNAL_BROKER=true`、`MYPI_BROKER_URL=http://127.0.0.1:14103` 和 `MYPI_PUBLIC_LOW_RESOURCE=true` 加到 `~/.config/mypi-public/env`，重启 `mypi-public.service`。确认 `/health/ready` 响应同时具有 `ready:true`、`sandboxEnforced:true`、`publicExecutionEnabled:false`。完成 SEC-01–SEC-12 实机验收、测试默认模型及管理员额度设置后，才在后台把 `publicExecutionEnabled` 打开。任何隔离、模型或额度失败都应保持可见失败。
 
-## runsc 与 rootless systemd 故障诊断
+## runsc 与 rootless systemd 故障
 
-在本机，直接任务容器返回 `systemd error: Interactive authentication required`。第一次仅配置 `--systemd-cgroup=false` 的试验仍返回相同错误，说明该配置未改变实际行为。`deployment/probe-runsc-fs-rootless.sh` 仅在 `mypi-broker` 的 Docker 配置中临时增加 `runsc-fs-probe` 和临时包装脚本，过滤最终传给 runsc 的 systemd cgroup 参数，尝试在该用户已委派的 cgroup v2 中运行。它仍要求 Docker CPU、内存及 PID 硬限制，不使用 `--ignore-cgroups`、不切换到 runc，也不修改系统 Docker。脚本结束时恢复原配置、重启该用户的 Docker 并删除临时包装脚本。**即使最小容器能启动，仍必须验证真实 cgroup 限额和完整隔离探针；不得据此直接开放公网执行。**
-
-```sh
-sudo bash deployment/probe-runsc-fs-rootless.sh
-```
+本机的真实任务容器返回 `systemd error: Interactive authentication required`。Docker rootless 报告 cgroup v2/systemd、seccomp 和 rootless，Broker 用户的 `docker.service` 已有 `Delegate=yes`。尝试在临时运行时配置 `--systemd-cgroup=false`，以及用临时包装脚本过滤该参数，均得到相同错误；两次试验均恢复原 Docker 配置。gVisor 上游 [#11543](https://github.com/google/gvisor/issues/11543) 记录了相同错误。此环境不能通过真实容器启动和资源硬限制验收，**不得启用公网 Run**。不使用 `--ignore-cgroups`、测试专用非 root 逃逸参数、普通 runc 或系统 rootful Docker 作为公网执行替代。
 
 ## 回退
 
