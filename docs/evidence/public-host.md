@@ -15,4 +15,7 @@
 - 管理员安装了 `uidmap`，新增无 `docker` 组身份的 `mypi-broker` 用户（UID 1004；独立 subuid/subgid 65,536 个），并启动其独立 rootless Docker。已校验并安装 gVisor `runsc release-20260928.0`，SHA-512 归档值写入 `deployment/install-runsc-rootless.sh`。该脚本仅更改 Broker 用户的 Docker 配置，不改动系统 Docker daemon。
 - 新增显式低资源沙箱配置：一个执行槽，每个容器 0.5 CPU、512 MiB、64 PID、128 MiB 工作区 tmpfs；Broker 0.5 CPU/512 MiB，Gateway/Worker 用户服务 1 CPU/1.5 GiB。Worker 在新配置下把全站额度收紧到每日 20 Run / 60,000 Token。
 - 策略修改前创建一致性 SQLite 备份 `/home/zima/.local/share/mypi-public/backups/before-low-resource-20261007`：31 页，SHA-256 `d6ea3f669549fc19f95e5d3a8da06751361d4261a06beee8b903ec26f561db15`。应用策略已审计更新为版本 2：每访客每日 3 Run / 30,000 Token，模型全局及单访客并发均 1，最多 4 次模型调用、1 个子任务、120 秒后台 TTL；`publicExecution=false` 保持关闭。一个管理员和一个已测试的游客默认模型存在；凭据未输出。
-- 独立 Broker 镜像、真实 rootless/runsc 沙箱、SEC-01–SEC-12 和公网端到端 Run 尚未实测，**不得宣称公网执行已完成**。
+- `mypi-broker` 已在自己的 rootless Docker 中构建固定沙箱镜像 `sha256:e4dabcb10aff5ccc1d784211e3ae7d6feb32723a6a8abdca25ed30961105ab5b`；已准备仅含 Broker token、镜像 ID 与 runsc 的私密环境文件。Broker 改用 `127.0.0.1:14103`，避免与当前关闭态 Broker 的 `14102` 冲突。
+- `pnpm format`、`pnpm verify` 再次通过，后者为 91/91 自动测试及生产构建。新增测试验证跨访客并发创建不能突破 1 GiB 应用级托管文件总额；这不代替宿主磁盘文件系统配额。
+- 首次 Compose 启动两次因 Buildx 错误地读取了不可访问的 `/home/zima/Develop/Projects/MyPI` 构建上下文而失败，未改动该目录权限，也未动系统 Docker。已改为从可读的 `/tmp` 目录直接构建 Broker 镜像，再让 Compose `--no-build` 启动；等待实机结果。
+- 独立 Broker 镜像启动、真实 rootless/runsc 沙箱、SEC-01–SEC-12 和公网端到端 Run 尚未实测，**不得宣称公网执行已完成**。

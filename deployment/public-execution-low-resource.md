@@ -31,7 +31,9 @@ sudo install -d -o mypi-broker -g mypi-broker -m 700 /home/mypi-broker/.config/m
 sudo install -o mypi-broker -g mypi-broker -m 600 \
   "$HOME/.config/mypi-public/broker.env" /home/mypi-broker/.config/mypi/broker.env
 sudo -H -u mypi-broker env XDG_RUNTIME_DIR=/run/user/1004 DOCKER_HOST=unix:///run/user/1004/docker.sock \
-  docker compose -f "$STAGE/compose.public-broker.yaml" up -d --build --wait
+  docker build -f "$STAGE/deployment/Dockerfile.broker-public" -t mypi-broker-public:1.0.0 "$STAGE"
+sudo -H -u mypi-broker env XDG_RUNTIME_DIR=/run/user/1004 DOCKER_HOST=unix:///run/user/1004/docker.sock \
+  docker compose -f "$STAGE/compose.public-broker.yaml" up -d --no-build --wait
 sudo -H -u mypi-broker env XDG_RUNTIME_DIR=/run/user/1004 DOCKER_HOST=unix:///run/user/1004/docker.sock \
   docker compose -f "$STAGE/compose.public-broker.yaml" exec -T broker \
   node --import tsx scripts/smoke-public-execution.ts
