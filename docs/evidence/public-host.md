@@ -20,3 +20,4 @@
 - 首次 Compose 启动两次因 Buildx 错误地读取了不可访问的 `/home/zima/Develop/Projects/MyPI` 构建上下文而失败，未改动该目录权限，也未动系统 Docker。已改为从可读的 `/tmp` 目录直接构建 Broker 镜像，再让 Compose `--no-build` 启动；等待实机结果。
 - 直接构建后，`mypi-public-broker-broker-1` 在独立 rootless Docker 中通过 Compose 健康检查。`127.0.0.1:14103` 私有 RPC 返回 `ready:true, profile:isolated, publicExecutionEnabled:true`，而 Gateway/Worker 仍使用旧的关闭态 Broker，应用策略仍关闭。
 - 从主机调用新 Broker 创建一次性空工作区，首次真实 `bash` 任务在不足一秒内返回 `EXECUTION_ERROR: 沙箱执行中断`；随后删除探针会话。该结果证明健康检查没有覆盖任务容器真正启动；已要求直接 `docker run --runtime=runsc` 获取原始错误。**SEC-03/04/05/10 及完整 SEC-01–SEC-12、公网端到端 Run 均未通过，公网执行不能开启。**
+- 直接 `docker run --runtime=runsc` 的原始错误为 `systemd error: Interactive authentication required`。独立 Docker 报告 `rootless`、seccomp、cgroup v2/systemd；其用户级 `docker.service` 报告 `Delegate=yes`。gVisor 上游 [#11543](https://github.com/google/gvisor/issues/11543) 记录了同样的 rootless/systemd 错误。已准备自动恢复配置的 `runsc-fs-probe` 试验；结果尚未运行或验证，不能将健康检查视为真实隔离通过。

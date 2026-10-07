@@ -43,6 +43,14 @@ Broker 启动时使用 `PUBLIC_EXECUTION_ENABLED=true`，但在 Gateway/Worker �
 
 探针通过后，把 `MYPI_EXTERNAL_BROKER=true`、`MYPI_BROKER_URL=http://127.0.0.1:14103` 和 `MYPI_PUBLIC_LOW_RESOURCE=true` 加到 `~/.config/mypi-public/env`，重启 `mypi-public.service`。确认 `/health/ready` 响应同时具有 `ready:true`、`sandboxEnforced:true`、`publicExecutionEnabled:false`。完成 SEC-01–SEC-12 实机验收、测试默认模型及管理员额度设置后，才在后台把 `publicExecutionEnabled` 打开。任何隔离、模型或额度失败都应保持可见失败。
 
+## runsc 与 rootless systemd 故障诊断
+
+在本机，直接任务容器返回 `systemd error: Interactive authentication required`。`deployment/probe-runsc-fs-rootless.sh` 仅在 `mypi-broker` 的 Docker 配置中临时增加 `runsc-fs-probe`，显式关闭 runsc 自己的 systemd cgroup 驱动，尝试在该用户已委派的 cgroup v2 中运行。它仍要求 Docker CPU、内存及 PID 硬限制，不使用 `--ignore-cgroups`、不切换到 runc，也不修改系统 Docker。脚本结束时恢复原配置并重启该用户的 Docker。**即使最小容器能启动，仍必须验证真实 cgroup 限额和完整隔离探针；不得据此直接开放公网执行。**
+
+```sh
+sudo bash deployment/probe-runsc-fs-rootless.sh sha256:<sandbox-image-id>
+```
+
 ## 回退
 
 先在后台关闭 `publicExecutionEnabled`；然后停止 Broker Compose，并让应用重新指向关闭态 Broker。保留私密环境、SQLite 和 Broker 卷用于调查与备份，不删除其他服务的容器或数据。
