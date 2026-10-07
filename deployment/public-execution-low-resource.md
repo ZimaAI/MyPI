@@ -45,7 +45,7 @@ Broker 启动时使用 `PUBLIC_EXECUTION_ENABLED=true`，但在 Gateway/Worker �
 
 ## runsc 与 rootless systemd 故障诊断
 
-在本机，直接任务容器返回 `systemd error: Interactive authentication required`。`deployment/probe-runsc-fs-rootless.sh` 仅在 `mypi-broker` 的 Docker 配置中临时增加 `runsc-fs-probe`，显式关闭 runsc 自己的 systemd cgroup 驱动，尝试在该用户已委派的 cgroup v2 中运行。它仍要求 Docker CPU、内存及 PID 硬限制，不使用 `--ignore-cgroups`、不切换到 runc，也不修改系统 Docker。脚本结束时恢复原配置并重启该用户的 Docker。**即使最小容器能启动，仍必须验证真实 cgroup 限额和完整隔离探针；不得据此直接开放公网执行。**
+在本机，直接任务容器返回 `systemd error: Interactive authentication required`。第一次仅配置 `--systemd-cgroup=false` 的试验仍返回相同错误，说明该配置未改变实际行为。`deployment/probe-runsc-fs-rootless.sh` 仅在 `mypi-broker` 的 Docker 配置中临时增加 `runsc-fs-probe` 和临时包装脚本，过滤最终传给 runsc 的 systemd cgroup 参数，尝试在该用户已委派的 cgroup v2 中运行。它仍要求 Docker CPU、内存及 PID 硬限制，不使用 `--ignore-cgroups`、不切换到 runc，也不修改系统 Docker。脚本结束时恢复原配置、重启该用户的 Docker 并删除临时包装脚本。**即使最小容器能启动，仍必须验证真实 cgroup 限额和完整隔离探针；不得据此直接开放公网执行。**
 
 ```sh
 sudo bash deployment/probe-runsc-fs-rootless.sh sha256:<sandbox-image-id>

@@ -18,14 +18,42 @@ fi
 backup=$(mktemp "$broker_home/.config/docker/daemon.json.probe.XXXXXX")
 cp -a "$config" "$backup"
 chmod 600 "$backup"
+wrapper=/opt/mypi-runsc/runsc-fs-probe
+if [[ -e $wrapper ]]; then
+  rm -f "$backup"
+  echo 'Probe runtime wrapper already exists; refusing to replace it' >&2
+  exit 1
+fi
 restore() {
-  mv -f "$backup" "$config"
+  local status=0
+  mv -f "$backup" "$config" || status=1
   runuser -u mypi-broker -- env \
     "XDG_RUNTIME_DIR=/run/user/$broker_uid" \
     "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$broker_uid/bus" \
-    systemctl --user restart docker
+    systemctl --user restart docker || status=1
+  rm -f "$wrapper" || status=1
+  return "$status"
 }
 trap restore EXIT
+
+# The daemon.json runtimeArgs override did not change the observed behavior.
+# This probe strips the systemd cgroup flag from runsc's final argv while
+# only that flag while retaining the OCI resource spec and all hard limits.
+cat > "$wrapper" <<'SH'
+#!/usr/bin/env bash
+set -euo pipefail
+args=()
+for arg in "$@"; do
+  case "$arg" in
+    --systemd-cgroup|--systemd-cgroup=true|--systemd-cgroup=false|-systemd-cgroup|-systemd-cgroup=true|-systemd-cgroup=false)
+      ;;
+    *) args+=("$arg") ;;
+  esac
+done
+exec /opt/mypi-runsc/runsc --systemd-cgroup=false "${args[@]}"
+SH
+chown root:root "$wrapper"
+chmod 755 "$wrapper"
 
 python3 - "$config" <<'PY'
 import json
@@ -42,8 +70,7 @@ if runtimes.get('runsc') != {'path': '/opt/mypi-runsc/runsc'}:
 if 'runsc-fs-probe' in runtimes:
     raise SystemExit('Probe runtime already exists; refusing to replace it')
 runtimes['runsc-fs-probe'] = {
-    'path': '/opt/mypi-runsc/runsc',
-    'runtimeArgs': ['--systemd-cgroup=false'],
+    'path': '/opt/mypi-runsc/runsc-fs-probe',
 }
 candidate = target.with_suffix('.json.probe-new')
 candidate.write_text(json.dumps(settings, indent=2) + '\n')
