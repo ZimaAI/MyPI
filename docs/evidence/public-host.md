@@ -18,4 +18,5 @@
 - `mypi-broker` 已在自己的 rootless Docker 中构建固定沙箱镜像 `sha256:e4dabcb10aff5ccc1d784211e3ae7d6feb32723a6a8abdca25ed30961105ab5b`；已准备仅含 Broker token、镜像 ID 与 runsc 的私密环境文件。Broker 改用 `127.0.0.1:14103`，避免与当前关闭态 Broker 的 `14102` 冲突。
 - `pnpm format`、`pnpm verify` 再次通过，后者为 91/91 自动测试及生产构建。新增测试验证跨访客并发创建不能突破 1 GiB 应用级托管文件总额；这不代替宿主磁盘文件系统配额。
 - 首次 Compose 启动两次因 Buildx 错误地读取了不可访问的 `/home/zima/Develop/Projects/MyPI` 构建上下文而失败，未改动该目录权限，也未动系统 Docker。已改为从可读的 `/tmp` 目录直接构建 Broker 镜像，再让 Compose `--no-build` 启动；等待实机结果。
-- 独立 Broker 镜像启动、真实 rootless/runsc 沙箱、SEC-01–SEC-12 和公网端到端 Run 尚未实测，**不得宣称公网执行已完成**。
+- 直接构建后，`mypi-public-broker-broker-1` 在独立 rootless Docker 中通过 Compose 健康检查。`127.0.0.1:14103` 私有 RPC 返回 `ready:true, profile:isolated, publicExecutionEnabled:true`，而 Gateway/Worker 仍使用旧的关闭态 Broker，应用策略仍关闭。
+- 从主机调用新 Broker 创建一次性空工作区，首次真实 `bash` 任务在不足一秒内返回 `EXECUTION_ERROR: 沙箱执行中断`；随后删除探针会话。该结果证明健康检查没有覆盖任务容器真正启动；已要求直接 `docker run --runtime=runsc` 获取原始错误。**SEC-03/04/05/10 及完整 SEC-01–SEC-12、公网端到端 Run 均未通过，公网执行不能开启。**
